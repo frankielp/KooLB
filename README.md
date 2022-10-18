@@ -14,10 +14,20 @@ KoolB is an online marketplace that links people who wish to rent out their hous
 .
 ├── README.md
 ├── docs
-├── pa
-│   └── PA0
-│       └── Proposal- KOOLB.docx
-└── src
+│   ├── analysis and design (software architecture document, UML models, UI design)
+│   │  
+│   ├── management (planning documents, reports (weekly report, project status report, etc.)
+│   │  
+│   ├── requirements (vision document and use cases)
+│   │  
+│   └── test (test plan, test cases, test reports)
+│      
+├── pa (submissions)
+│   ├── PA0
+│       └── Proposal- KOOLB.docx
+│   
+└── src (source code)
+    
 ```
 ## Meeting Minute allocation ## 
 *Every Saturday 20:00*
