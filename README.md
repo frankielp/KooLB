@@ -1,4 +1,5 @@
-# CS300-Group01-KOOLB
+# CS300 - KOOLB
+__Group 01__
 KoolB is an online marketplace that links people who wish to rent out their houses with customers who need to stay in specified areas.
 
 - Platform: Flutter 
