@@ -31,7 +31,7 @@ KoolB is an online marketplace that links people who wish to rent out their hous
 └── src (source code)
     
 ```
-## Meeting Minute allocation ## 
+## Meeting Minute Allocation ## 
 *Every Saturday 20:00*
 - Sprint 01
   - Planning: Vy
