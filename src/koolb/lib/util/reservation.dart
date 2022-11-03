@@ -8,7 +8,5 @@ class Reservation {
   double price;
 
   //Function
-  Reservation(){
-    this.checkin=checkin
-  }
+  Reservation(this.checkin, this.checkout, this.place, this.price);
 }

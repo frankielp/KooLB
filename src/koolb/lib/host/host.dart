@@ -9,4 +9,6 @@ class Host {
   List<Reservation> reservation;
 
   //Function
+  Host(this.name, this.email, this.fb, this.date, this.listing,
+      this.reservation);
 }
