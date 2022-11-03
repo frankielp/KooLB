@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.blue,
+        bottomAppBarColor: Colors.green,
       ),
       home: const RenterPagesNavigation(),
     );
@@ -40,7 +41,7 @@ class _RenterPagesNavigationState extends State<RenterPagesNavigation> {
             label: 'Explore',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.heart_broken),
+            icon: Icon(Icons.favorite),
             label: 'Wishlist',
           ),
           BottomNavigationBarItem(
@@ -52,6 +53,8 @@ class _RenterPagesNavigationState extends State<RenterPagesNavigation> {
             label: 'Profile',
           ),
         ],
+        backgroundColor: Colors.green,
+        fixedColor: Colors.blue,
       ),
     );
   }
