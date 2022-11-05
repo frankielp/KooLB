@@ -11,6 +11,7 @@ import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  //add firebase for app
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
