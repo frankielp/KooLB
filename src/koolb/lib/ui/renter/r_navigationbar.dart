@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:koolb/data/user.dart';
+import 'package:koolb/renter/renter.dart';
+
+class RenterMainPage extends StatelessWidget {
+  const RenterMainPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
 
 class RenterPagesNavigation extends StatefulWidget {
   const RenterPagesNavigation({super.key});
@@ -32,6 +43,14 @@ class _RenterPagesNavigationState extends State<RenterPagesNavigation> {
             label: 'Profile',
           ),
         ],
+      ),
+      body: IconButton(
+        icon: Icon(Icons.plus_one),
+        onPressed: () async {
+          await renter1.addInfoToFirebase();
+          await host1.addInfoToFirebase();
+          await place1.addToFirebase();
+        },
       ),
     );
   }

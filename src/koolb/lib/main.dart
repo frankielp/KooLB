@@ -1,9 +1,22 @@
+import 'dart:js';
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:koolb/firebase_options.dart';
+import 'package:koolb/ui/renter/r_navigationbar.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -19,43 +32,6 @@ class MyApp extends StatelessWidget {
         bottomAppBarColor: Colors.green,
       ),
       home: const RenterPagesNavigation(),
-    );
-  }
-}
-
-class RenterPagesNavigation extends StatefulWidget {
-  const RenterPagesNavigation({super.key});
-
-  @override
-  State<RenterPagesNavigation> createState() => _RenterPagesNavigationState();
-}
-
-class _RenterPagesNavigationState extends State<RenterPagesNavigation> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Explore',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Wishlist',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: 'Message',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.man),
-            label: 'Profile',
-          ),
-        ],
-        backgroundColor: Colors.green,
-        fixedColor: Colors.blue,
-      ),
     );
   }
 }

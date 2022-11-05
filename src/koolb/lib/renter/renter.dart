@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Renter {
   // Constructor
-  String name, username, email, fb;
-  DateTime dob;
+  String name, username, email, fb, dob, country, currency, language;
 
   // String get name => _name;
   // set name(String name) {
@@ -29,5 +30,23 @@ class Renter {
   // }
 
   //Function
-  Renter(this.name, this.username, this.email, this.fb, this.dob);
+  Renter(this.name, this.username, this.email, this.fb, this.dob, this.country,
+      this.currency, this.language);
+
+  /*
+  add information of user to firebase
+   */
+  Future<void> addInfoToFirebase() {
+    return FirebaseFirestore.instance
+        .collection('renter')
+        .add(<String, dynamic>{
+          'name': name,
+          'username': username,
+          'email': email,
+          'fb': fb,
+          'DOB': dob,
+        })
+        .then((value) => print('Renter Added'))
+        .catchError((error) => print('Fail $error'));
+  }
 }
