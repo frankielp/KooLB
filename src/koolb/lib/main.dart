@@ -33,6 +33,7 @@ class RenterPagesNavigation extends StatefulWidget {
 class _RenterPagesNavigationState extends State<RenterPagesNavigation> {
   @override
   Widget build(BuildContext context) {
+<<<<<<< Updated upstream
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
@@ -56,6 +57,10 @@ class _RenterPagesNavigationState extends State<RenterPagesNavigation> {
         backgroundColor: Colors.green,
         fixedColor: Colors.blue,
       ),
+=======
+    return const Scaffold(
+      body: RenterPagesNavigation(),
+>>>>>>> Stashed changes
     );
   }
 }
