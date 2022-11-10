@@ -1,6 +1,6 @@
 class Renter {
   // Constructor
-  String name, username, email, fb;
+  String name, password, email, fb;
   DateTime dob;
 
   // String get name => _name;
@@ -29,5 +29,5 @@ class Renter {
   // }
 
   //Function
-  Renter(this.name, this.username, this.email, this.fb, this.dob);
+  Renter(this.name, this.password, this.email, this.fb, this.dob);
 }

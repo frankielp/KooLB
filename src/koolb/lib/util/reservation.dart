@@ -6,7 +6,9 @@ class Reservation {
   DateTime checkout;
   Place place;
   double price;
+  int noOfGuest, noOfRoom;
 
   //Function
-  Reservation(this.checkin, this.checkout, this.place, this.price);
+  Reservation(this.checkin, this.checkout, this.place, this.price,
+      this.noOfGuest, this.noOfRoom);
 }
