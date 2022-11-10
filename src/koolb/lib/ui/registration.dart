@@ -134,7 +134,7 @@ class _RegisterPageState extends State<RegisterPage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Register'),
+          title: const Text('Register'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
