@@ -16,28 +16,9 @@ class RenterMaps extends StatefulWidget {
 }
 
 class _RenterMapsState extends State<RenterMaps> {
-  late GoogleMapController mapController;
-
-  // final LatLng _center = const LatLng(45.521563, -122.677433);
-  // static const LatLng sourceLocation = LatLng(37.33500926, -122.03272188);
-  // static const LatLng destinationLocation = LatLng(37.33429383, -122.06600055);
-
+  Completer<GoogleMapController> _controller = Completer();
   late LatLng currentLocation;
-  List<Marker> marker = [];
   Set<Marker> markers = new Set();
-
-  void getCurrentLocation() async {
-    geolocator.Position position =
-        await geolocator.Geolocator.getCurrentPosition(
-            desiredAccuracy: geolocator.LocationAccuracy.high);
-    setState(() {
-      currentLocation = LatLng(position.latitude, position.longitude);
-    });
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
 
   void getHotelLocation() {
     markers.add(const Marker(
@@ -56,53 +37,78 @@ class _RenterMapsState extends State<RenterMaps> {
     ));
   }
 
-  @override
-  void initState() {
-    getCurrentLocation();
-    getHotelLocation();
-    // marker.addAll(list);
+  Future<LocationData?> _currentLocation() async {
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
 
-    super.initState();
+    Location location = new Location();
+
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return null;
+      }
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return null;
+      }
+    }
+    return await location.getLocation();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Maps Sample App'),
-          backgroundColor: Colors.green[700],
-        ),
-        body: currentLocation == null
-            ? const Center(child: Text('Loading'))
-            : GoogleMap(
-                onMapCreated: _onMapCreated,
-                initialCameraPosition: CameraPosition(
-                  target: currentLocation,
-                  zoom: 20.5,
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      body: FutureBuilder<LocationData?>(
+        future: _currentLocation(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapchat) {
+          if (snapchat.hasData) {
+            final LocationData currentLocation = snapchat.data;
+            return Stack(
+              children: <Widget>[
+                GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                      target: LatLng(currentLocation.latitude!,
+                          currentLocation.longitude!),
+                      zoom: 14.4746),
+                  mapType: MapType.normal,
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller.complete(controller);
+                  },
+                  markers: getmarkers(currentLocation),
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+                  padding: const EdgeInsets.only(top: 40),
                 ),
-                markers: getmarkers()),
+              ],
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }
 
-  Set<Marker> getmarkers() {
-    //markers to place on map
-    setState(() {
-      getHotelLocation();
-
-      markers.add(
-        Marker(
-          markerId: const MarkerId("currentLocation"),
-          position: currentLocation,
-          infoWindow: const InfoWindow(
-            title: 'You are here',
-          ),
+  Set<Marker> getmarkers(LocationData currentLocation) {
+    markers.clear();
+    markers.add(
+      Marker(
+        markerId: const MarkerId("currentLocation"),
+        position: LatLng(currentLocation.latitude!, currentLocation.longitude!),
+        infoWindow: const InfoWindow(
+          title: 'You are here',
         ),
-      );
-      //add more markers here
-    });
-
+      ),
+    );
+    getHotelLocation();
     return markers;
   }
 }

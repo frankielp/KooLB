@@ -42,6 +42,7 @@ dependencies:
   location: ^4.4.0
   flutter_svg: ^1.1.6
   geolocator: ^9.0.2
+  syncfusion_flutter_maps: ^20.3.52
 
 dev_dependencies:
   flutter_test:
