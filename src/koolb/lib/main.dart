@@ -3,6 +3,18 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'dart:async'; // new
+import 'package:firebase_auth/firebase_auth.dart' // new
+    hide
+        EmailAuthProvider,
+        PhoneAuthProvider; // new
+import 'package:firebase_core/firebase_core.dart'; // new
+import 'package:firebase_ui_auth/firebase_ui_auth.dart'; // new
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart'; // new
+import 'firebase_options.dart'; // new
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -12,30 +24,34 @@ import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'package:koolb/firebase_options.dart';
 import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'package:provider/provider.dart';
+import 'package:koolb/ui/admin/ad_navigation_bar.dart';
+import 'package:koolb/ui/host/h_navigation_bar.dart';
+import 'package:koolb/ui/renter/r_navigationbar.dart';
+import 'ui/registration.dart';
+import 'firebase_options.dart';
 
 void main() async {
-  //add firebase for app
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  runApp(MyApp());
+  runApp(const KoolB());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class KoolB extends StatelessWidget {
+  const KoolB({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'KooLB',
       theme: ThemeData(
         primaryColor: Colors.blue,
         bottomAppBarColor: Colors.green,
       ),
-      home: const MyHomePage(title: "Home Page"),
+      // home: const MyHomePage(title: "Home Page"),
+      home: SigninPage(),
     );
   }
 }
@@ -52,8 +68,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: RenterPagesNavigation(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: const AdminPagesNavigator(),
     );
   }
 }
