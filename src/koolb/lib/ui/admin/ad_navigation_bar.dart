@@ -24,7 +24,7 @@ class _AdminPagesNavigatorState extends State<AdminPagesNavigator> {
 
   int currentPage = 0;
 
-  void onTap(int index){
+  void onTap(int index) {
     setState(() {
       currentPage = index;
     });
@@ -38,9 +38,9 @@ class _AdminPagesNavigatorState extends State<AdminPagesNavigator> {
         unselectedFontSize: 0,
         selectedFontSize: 0,
         type: BottomNavigationBarType.fixed,
-        backgroundColor:Colors.white,
-        onTap: onTap,    
-        currentIndex: currentPage,    
+        backgroundColor: Colors.white,
+        onTap: onTap,
+        currentIndex: currentPage,
         selectedItemColor: Colors.black54,
         unselectedItemColor: Colors.grey.withOpacity(0.5),
         showSelectedLabels: false,

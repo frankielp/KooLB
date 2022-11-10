@@ -1,12 +1,26 @@
+import 'dart:js';
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:koolb/ui/admin/ad_navigation_bar.dart';
 import 'package:koolb/ui/host/h_navigation_bar.dart';
 import 'package:koolb/ui/renter/r_navigationbar.dart';
+import 'package:koolb/firebase_options.dart';
+import 'package:koolb/ui/renter/r_navigationbar.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  //add firebase for app
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -36,7 +50,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
