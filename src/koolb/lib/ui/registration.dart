@@ -23,82 +23,103 @@ class SigninPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Firebase Authentication'),
+        title: const Text('Sign in'),
       ),
       body: FutureBuilder(
         future: _initializeFirebase(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Column(
-              children: [
-                Text('Sign In'),
-              ],
+            return Center(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                      controller: _emailTextController,
+                      focusNode: _focusEmail,
+                      validator: (value) =>
+                          Validator.validateEmail(email: value!),
+                      decoration: InputDecoration(
+                        hintText: "Email",
+                        errorBorder: UnderlineInputBorder(
+                          borderRadius: BorderRadius.circular(6.0),
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    TextFormField(
+                      controller: _passwordTextController,
+                      focusNode: _focusPassword,
+                      obscureText: true,
+                      validator: (value) =>
+                          Validator.validatePassword(password: value!),
+                      decoration: InputDecoration(
+                        hintText: "Password",
+                        errorBorder: UnderlineInputBorder(
+                          borderRadius: BorderRadius.circular(6.0),
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                User? user =
+                                    await FireAuth.signInUsingEmailPassword(
+                                        email: _emailTextController.text,
+                                        password: _passwordTextController.text,
+                                        context: context);
+                                if (user != null) {
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              // ProfilePage(user: user)),
+                                              MyHomePage(
+                                                  title: user.displayName!)));
+                                }
+                              }
+                            },
+                            child: const Text(
+                              'Sign in',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => RegisterPage()),
+                              );
+                            },
+                            child: const Text(
+                              'Register',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
             );
           }
-          return Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: _emailTextController,
-                  focusNode: _focusEmail,
-                  validator: (value) => Validator.validateEmail(email: value!),
-                ),
-                SizedBox(height: 8.0),
-                TextFormField(
-                  controller: _passwordTextController,
-                  focusNode: _focusPassword,
-                  obscureText: true,
-                  validator: (value) =>
-                      Validator.validatePassword(password: value!),
-                ),
-                SizedBox(height: 8.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            User? user =
-                                await FireAuth.signInUsingEmailPassword(
-                                    email: _emailTextController.text,
-                                    password: _passwordTextController.text,
-                                    context: context);
-                            if (user != null) {
-                              Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          // ProfilePage(user: user)),
-                                          MyHomePage(
-                                              title: user.displayName!)));
-                            }
-                          }
-                        },
-                        child: Text(
-                          'Sign In',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => RegisterPage()),
-                          );
-                        },
-                        child: Text(
-                          'Register',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
+          return Column(
+            children: const [
+              Text('SIGN IN'),
+            ],
           );
         },
       ),
@@ -156,13 +177,13 @@ class _RegisterPageState extends State<RegisterPage> {
                           hintText: "Name",
                           errorBorder: UnderlineInputBorder(
                             borderRadius: BorderRadius.circular(6.0),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Colors.red,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 16.0),
+                      const SizedBox(height: 16.0),
                       TextFormField(
                         controller: _emailTextController,
                         focusNode: _focusEmail,
@@ -173,13 +194,13 @@ class _RegisterPageState extends State<RegisterPage> {
                           hintText: "Email",
                           errorBorder: UnderlineInputBorder(
                             borderRadius: BorderRadius.circular(6.0),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Colors.red,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 16.0),
+                      const SizedBox(height: 16.0),
                       TextFormField(
                         controller: _passwordTextController,
                         focusNode: _focusPassword,
@@ -191,13 +212,13 @@ class _RegisterPageState extends State<RegisterPage> {
                           hintText: "Password",
                           errorBorder: UnderlineInputBorder(
                             borderRadius: BorderRadius.circular(6.0),
-                            borderSide: BorderSide(
+                            borderSide: const BorderSide(
                               color: Colors.red,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 32.0),
+                      const SizedBox(height: 32.0),
                       _isProcessing
                           ? CircularProgressIndicator()
                           : Row(
@@ -237,8 +258,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                         }
                                       }
                                     },
-                                    child: Text(
-                                      'Sign up',
+                                    child: const Text(
+                                      'sign up',
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
