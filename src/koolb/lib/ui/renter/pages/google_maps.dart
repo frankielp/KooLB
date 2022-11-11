@@ -5,6 +5,9 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart' as geolocator;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../../../place/place.dart';
 
 void main() => runApp(const RenterMaps());
 
@@ -20,21 +23,32 @@ class _RenterMapsState extends State<RenterMaps> {
   late LatLng currentLocation;
   Set<Marker> markers = new Set();
 
-  void getHotelLocation() {
-    markers.add(const Marker(
-      markerId: MarkerId("1"),
-      position: LatLng(37.33500926, -122.03272188),
-      infoWindow: InfoWindow(
-        title: 'Hotel 1',
-      ),
-    ));
-    markers.add(const Marker(
-      markerId: MarkerId("2"),
-      position: LatLng(27.7137735, 85.315626),
-      infoWindow: InfoWindow(
-        title: 'Hotel 2',
-      ),
-    ));
+  final _collectionRef = FirebaseFirestore.instance.collection('place');
+
+  Future<void> getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+
+    // Get data from docs and convert map to List
+    final allData = querySnapshot.docs;
+    allData.forEach((document) {
+      GeoPoint position = document.get('position');
+      String name = document.get('name');
+      markers.add(Marker(
+        markerId: MarkerId(name),
+        position: LatLng(position.latitude, position.longitude),
+        infoWindow: InfoWindow(
+          title: 'Hotel $name',
+        ),
+      ));
+    });
+  }
+
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
   }
 
   Future<LocationData?> _currentLocation() async {
@@ -98,7 +112,6 @@ class _RenterMapsState extends State<RenterMaps> {
   }
 
   Set<Marker> getmarkers(LocationData currentLocation) {
-    markers.clear();
     markers.add(
       Marker(
         markerId: const MarkerId("currentLocation"),
@@ -108,7 +121,6 @@ class _RenterMapsState extends State<RenterMaps> {
         ),
       ),
     );
-    getHotelLocation();
     return markers;
   }
 }
