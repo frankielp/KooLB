@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../place/place.dart';
 
-void main() => runApp(const RenterMaps());
+// void main() => runApp(const RenterMaps());
 
 class RenterMaps extends StatefulWidget {
   const RenterMaps({super.key});
