@@ -7,7 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../place/place.dart';
+import 'package:koolb/place/place.dart';
 
 // void main() => runApp(const RenterMaps());
 
@@ -43,7 +43,6 @@ class _RenterMapsState extends State<RenterMaps> {
       ));
     });
   }
-
 
   @override
   void initState() {

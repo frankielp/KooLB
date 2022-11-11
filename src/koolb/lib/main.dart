@@ -12,7 +12,9 @@ import 'package:firebase_core/firebase_core.dart'; // new
 import 'package:firebase_ui_auth/firebase_ui_auth.dart'; // new
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:koolb/ui/welcoming_page.dart';
+import 'package:koolb/ui/renter/pages/google_maps.dart';
+import 'package:koolb/ui/renter/pages/setting_page.dart';
+// import 'package:koolb/ui/welcoming_page.dart';
 import 'package:provider/provider.dart'; // new
 import 'firebase_options.dart'; // new
 import 'package:firebase_core/firebase_core.dart';
@@ -52,7 +54,7 @@ class KoolB extends StatelessWidget {
         bottomAppBarColor: Colors.green,
       ),
       // home: const MyHomePage(title: "Home Page"),
-      home: RenterPagesNavigation(),
+      home: SettingPage(),
     );
   }
 }
