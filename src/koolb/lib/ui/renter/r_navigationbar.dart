@@ -5,19 +5,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:koolb/ui/renter/pages/chat_page.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/home_page.dart';
-import 'package:koolb/ui/renter/pages/profile_page.dart';
+import 'package:koolb/ui/renter/pages/setting_page.dart';
 import 'package:koolb/ui/renter/pages/wishlist_page.dart';
 import 'package:koolb/data/user.dart';
 import 'package:koolb/renter/renter.dart';
-
-class RenterMainPage extends StatelessWidget {
-  const RenterMainPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
 
 class RenterPagesNavigation extends StatefulWidget {
   const RenterPagesNavigation({super.key});
@@ -31,7 +22,7 @@ class _RenterPagesNavigationState extends State<RenterPagesNavigation> {
     const RenterMaps(),
     const WishlistPage(),
     const ChatPage(),
-    const ProfilePage(),
+    const SettingPage(),
   ];
 
   int currentPage = 0;
