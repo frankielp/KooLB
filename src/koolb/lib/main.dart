@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
+// import 'package:koolb/ui/welcoming_page.dart';
 import 'package:provider/provider.dart'; // new
 import 'firebase_options.dart'; // new
 import 'package:firebase_core/firebase_core.dart';
