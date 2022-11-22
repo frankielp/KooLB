@@ -1,5 +1,5 @@
 // import 'dart:js';
-import 'dart:async';
+// import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,10 +11,13 @@ import 'package:firebase_auth/firebase_auth.dart' // new
 import 'package:firebase_core/firebase_core.dart'; // new
 import 'package:firebase_ui_auth/firebase_ui_auth.dart'; // new
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
 // import 'package:koolb/ui/welcoming_page.dart';
+import 'package:koolb/ui/splash_screen.dart';
 import 'package:provider/provider.dart'; // new
 import 'firebase_options.dart'; // new
 import 'package:firebase_core/firebase_core.dart';
@@ -48,13 +51,27 @@ class KoolB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'KooLB',
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: AppBarTheme(
+          color: Colors.white,
+          elevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          iconTheme: const IconThemeData(color: Colors.black),
+          titleTextStyle: const TextTheme(
+            headline6: TextStyle(color: labelColor, fontSize: 18),
+          ).headline6,
+        ),
+        visualDensity: VisualDensity.adaptivePlatformDensity,
         primaryColor: Colors.blue,
         bottomAppBarColor: Colors.green,
       ),
       // home: const MyHomePage(title: "Home Page"),
-      home: SettingPage(),
+      home: const MyHomePage(
+        title: '',
+      ),
     );
   }
 }
@@ -75,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: const AdminPagesNavigator(),
+      body: const SplashScreen(),
     );
   }
 }

@@ -29,6 +29,18 @@ const blue = Color(0xFF509BE4);
 const cyan = Color(0xFF4ac2dc);
 const darkerGreen = Color(0xFFb0d96d);
 
+const LightBlue = Color(0xFFA7C6D9);
+const DarkBlue = Color(0xFF033540);
+const TealBlue = Color(0xFF1D6373);
+const DarkGreen = Color(0xFF1E4030);
+const LightGreen = Color(0xFF798C6C);
+const NaturalBlue = Color(0xFF4244e6);
+const BabyBlue = Color(0xFF93b3fb);
+const SkyBlue = Color(0xFF6e7ff7);
+const Turquois = Color(0xFF04ADBF);
+const LightBlue2 = Color(0xFFd7f5ff);
+const BlueJean = Color(0xFF32599a);
+
 const listColors = [
   green,
   purple,
