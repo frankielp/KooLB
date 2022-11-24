@@ -148,9 +148,10 @@ class SplashContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Column(
       children: <Widget>[
-        const SizedBox(height: 90),
+        const SizedBox(height: 50),
         Text(
           text,
           style: const TextStyle(
@@ -163,6 +164,7 @@ class SplashContent extends StatelessWidget {
         SizedBox(height: 10,),
         Image.asset(
           image,
+          height: size.height*0.4,
         ),
         SizedBox(height: 10,),
         Text(
