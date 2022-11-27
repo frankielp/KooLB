@@ -1,5 +1,4 @@
 //import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -20,6 +19,11 @@ class _SearchState extends State<Search> {
   late LocationData? _currentPosition;
   Location location = new Location();
 
+  String countryValue = "";
+  String cityValue = "";
+  String stateValue = "";
+  String address = "";
+  
   @override
   void initState() {
     fetchLocation();
@@ -27,10 +31,6 @@ class _SearchState extends State<Search> {
     super.initState();
   }
 
-  String countryValue = "";
-  String cityValue = "";
-  String stateValue = "";
-  String address = "";
   @override
   Widget build(BuildContext context) {
     //safe screen
