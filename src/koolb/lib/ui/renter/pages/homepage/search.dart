@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -15,9 +16,56 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  String countryValue = "";
+  String cityValue = "";
+  String stateValue = "";
+  String address = "";
   @override
   Widget build(BuildContext context) {
-    return Container();
+    //safe screen
+    return Column(
+      children: <Widget>[
+        // location
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            //text
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Text('Where to go?'),
+            ),
+            //choose location
+            SelectState(
+              onCountryChanged: (value) {
+                setState(() {
+                  countryValue = value;
+                });
+              },
+              onStateChanged: (value) {
+                setState(() {
+                  stateValue = value;
+                });
+              },
+              onCityChanged: (value) {
+                setState(() {
+                  cityValue = value;
+                });
+              },
+            ),
+
+            ///print newly selected country state and city in Text Widget
+            TextButton(
+                onPressed: () {
+                  setState(() {
+                    address = "$cityValue, $countryValue";
+                  });
+                },
+                child: Text("Print Data")),
+            Text(address)
+          ],
+        ),
+      ],
+    );
   }
 }
 
@@ -46,7 +94,7 @@ Set<Accommodation> sortAccommodation(Set<Accommodation> accommodation,
     accommodations.sort((a, b) => a.price.compareTo(b.price));
   } else if (sortByRating) {
     accommodations.sort((a, b) => a.rating.compareTo(b.rating));
-  } 
+  }
   // else if (sortByDistance) {
   //   accommodations.sort((a, b) => Geolocator.distanceBetween(
   //           a.location.latitude,
