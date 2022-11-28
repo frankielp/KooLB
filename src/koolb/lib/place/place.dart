@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/src/foundation/key.dart';
 import 'package:koolb/host/host.dart';
 
 class Place {
@@ -14,7 +15,7 @@ class Place {
 //add kinh độ vĩ độ
   GeoPoint position;
   //Function
-  Place(this._name, this.position);
+  Place(this._name, this.position, {Key? key});
 
   Future<void> addToFirebase() {
     return FirebaseFirestore.instance

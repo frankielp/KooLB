@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
+import 'package:koolb/ui/renter/pages/homepage/search.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
 // import 'package:koolb/ui/welcoming_page.dart';
 import 'package:koolb/ui/splash_screen.dart';
@@ -92,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: const SplashScreen(),
+      body: const Search(),
     );
   }
 }
