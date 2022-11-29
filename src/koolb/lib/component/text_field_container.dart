@@ -13,10 +13,10 @@ class TextFieldContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      width: size.width * 0.8,
-      height: size.height * 0.075,
-      margin: EdgeInsets.symmetric(vertical: 10),
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      width: size.width * 0.85,
+      height: size.height * 0.08,
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       decoration: BoxDecoration(
         color: LightBlue2,
         borderRadius: BorderRadius.circular(29),

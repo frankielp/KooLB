@@ -75,7 +75,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SignInScreen()));
+                                builder: (context) => SignInScreen()));
                       },
                     ),
                     const Spacer(),
