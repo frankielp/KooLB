@@ -6,8 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'dart:async'; // new
 import 'package:firebase_auth/firebase_auth.dart' // new
     hide
-        EmailAuthProvider,
-        PhoneAuthProvider; // new
+    EmailAuthProvider,
+    PhoneAuthProvider; // new
 import 'package:firebase_core/firebase_core.dart'; // new
 import 'package:firebase_ui_auth/firebase_ui_auth.dart'; // new
 import 'package:flutter/material.dart';
@@ -38,6 +38,8 @@ import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'ui/registration.dart';
 import 'firebase_options.dart';
 import 'package:koolb/ui/sign_in_screen.dart' as SignInPage;
+import 'package:koolb/ui/sign_in_with_facebook_screen.dart';
+import 'package:koolb/util/fire_auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,28 +55,40 @@ class KoolB extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'KooLB',
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(
-          color: Colors.white,
-          elevation: 0,
-          systemOverlayStyle: SystemUiOverlayStyle.light,
-          iconTheme: const IconThemeData(color: Colors.black),
-          titleTextStyle: const TextTheme(
-            headline6: TextStyle(color: labelColor, fontSize: 18),
-          ).headline6,
-        ),
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        primaryColor: Colors.blue,
-        bottomAppBarColor: Colors.green,
-      ),
-      // home: const MyHomePage(title: "Home Page"),
-      home: const MyHomePage(
-        title: '',
-      ),
+    return MultiProvider(
+        providers: [
+          Provider<FireAuth>(
+            create: (_) => FireAuth(FirebaseAuth.instance),
+          ),
+          StreamProvider(
+            create: (context) => context.read<FireAuth>().authState,
+            initialData: null,
+          )
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'KooLB',
+          theme: ThemeData(
+            scaffoldBackgroundColor: Colors.white,
+            appBarTheme: AppBarTheme(
+              color: Colors.white,
+              elevation: 0,
+              systemOverlayStyle: SystemUiOverlayStyle.light,
+              iconTheme: const IconThemeData(color: Colors.black),
+              titleTextStyle: const TextTheme(
+                headline6: TextStyle(color: labelColor, fontSize: 18),
+              ).headline6,
+            ),
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            primaryColor: Colors.blue,
+            bottomAppBarColor: Colors.green,
+          ),
+          // home: const MyHomePage(title: "Home Page"),
+          // home: const MyHomePage(
+          //   title: '',
+          // ),
+          home: AuthWrapper(),
+        )
     );
   }
 }
@@ -91,12 +105,35 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    // ACCESS THE USER
+    final user = context.read<FireAuth>().user;
+    final userID = user.uid;
+    print("User ID: " + userID);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: SplashScreen(),
     );
+  }
+}
+
+class AuthWrapper extends StatelessWidget{
+  const AuthWrapper({Key? key}): super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // Any value of user changes, the fireBaseUser will get to know and AuthWrapper will change
+    // It means that the build function is rerun
+    final fireBaseUser = context.watch<User?>(); // To constantly listen to any changes in the user's value
+
+    if(fireBaseUser != null){ // The user has logged in or signed up => we have user's value -> Go to my homepage
+      print(fireBaseUser.uid);
+      print("Logged in"); // Print out that the user has logged in
+      return const MyHomePage(title: "");
+    }
+    return const SignInWithFacebook(); // Testing with signing in via facebook
   }
 }
 
@@ -113,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-      
+
 //       bottomNavigationBar: BottomNavigationBar(
 //         items: const <BottomNavigationBarItem>[
 //           BottomNavigationBarItem(

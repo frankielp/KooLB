@@ -1,7 +1,25 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:koolb/component/showSnackbar.dart';
 
 class FireAuth {
+  final FirebaseAuth _auth;
+  FireAuth(this._auth);
+
+  // GET USER DATA
+  // This method should be called only when the user is logged in
+  // So, this is the authentication user
+  User get user => _auth.currentUser!;
+
+  // STATE PERSISTENCE STREAM
+  // To get detail of user
+  Stream<User?> get authState => FirebaseAuth.instance.authStateChanges();
+
+  // REGISTER WITH EMAIL PASSWORD
   static Future<User?> registerUsingEmailPassword({
     required String name,
     required String email,
@@ -65,5 +83,29 @@ class FireAuth {
     User? refreshedUser = auth.currentUser;
 
     return refreshedUser;
+  }
+
+  // FACEBOOK SIGN IN
+  Future<void> signInWithFacebook(BuildContext context) async{
+    try{
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      final OAuthCredential facebookAuthCredential =
+      FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+      await _auth.signInWithCredential(facebookAuthCredential);
+
+    } on FirebaseAuthException catch(e){
+      showSnackBar(context, e.message!);
+    }
+  }
+
+  // SIGN OUT
+  Future<void> signOut(BuildContext context) async{
+    try{
+      await _auth.signOut();
+    }on FirebaseAuthException catch(e){
+      showSnackBar(context, e.message!);
+    }
   }
 }
