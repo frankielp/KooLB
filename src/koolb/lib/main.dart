@@ -16,9 +16,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/homepage/search.dart';
+import 'package:koolb/ui/renter/pages/homepage/search_tmp.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
 // import 'package:koolb/ui/welcoming_page.dart';
 import 'package:koolb/ui/splash_screen.dart';
+import 'package:koolb/util/load_data.dart';
 import 'package:provider/provider.dart'; // new
 import 'firebase_options.dart'; // new
 import 'package:firebase_core/firebase_core.dart';
@@ -38,6 +40,7 @@ import 'ui/registration.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  loadData();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -93,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: const Search(),
+      body: Search(),
     );
   }
 }
