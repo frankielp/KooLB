@@ -13,8 +13,14 @@ import '../component/text_field_container.dart';
 import '../util/fire_auth.dart';
 import '../util/validator.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
   bool _passwordVisible = false;
 
   final _emailTextController = TextEditingController();
@@ -36,148 +42,158 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: FutureBuilder(
         future: _initializeFirebase(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Container(
+          if (snapshot.hasData) {
+            return SizedBox(
               width: double.infinity,
-              height: size.height,
+              height: size.height - keyboardHeight,
               child: Form(
                 key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Text(
-                      "SIGN IN",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: cyan,
-                      ),
-                    ),
-                    Image.asset(
-                      "assets/images/signin.png",
-                      height: size.height * 0.35,
-                    ),
-                    TextFieldContainer(
-                      child: TextFormField(
-                        controller: _emailTextController,
-                        focusNode: _focusEmail,
-                        validator: (value) => Validator.validateEmail(
-                          email: value!,
-                        ),
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Email",
-                          icon: const Icon(
-                            Icons.person,
-                            color: LightBlue,
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            borderSide: const BorderSide(
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    TextFieldContainer(
-                      child: TextFormField(
-                        controller: _passwordTextController,
-                        focusNode: _focusPassword,
-                        obscureText: !_passwordVisible,
-                        validator: (value) => Validator.validatePassword(
-                          password: value!,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "Password",
-                          icon: const Icon(
-                            Icons.lock,
-                            color: LightBlue,
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _passwordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: LightBlue,
-                            ),
-                            onPressed: () {
-                              _passwordVisible = !_passwordVisible;
-                            },
-                          ),
-                          border: InputBorder.none,
-                          errorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            borderSide: const BorderSide(
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: size.height * 0.02,
-                    ),
-                    SizedBox(
-                      width: size.width * 0.8,
-                      height: size.height * 0.05,
-                      child: TextButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            User? user =
-                                await FireAuth.signInUsingEmailPassword(
-                                    email: _emailTextController.text,
-                                    password: _passwordTextController.text,
-                                    context: context);
-                            if (user != null) {
-                              Navigator.of(context)
-                                  .pushReplacement(MaterialPageRoute(
-                                builder: (context) =>
-                                    // ProfilePage(user: user)),
-                                    HomePage(title: user.displayName!),
-                              ));
-                            }
-                          }
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(BlueJean),
-                          shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(29))),
-                        ),
-                        child: const Text(
-                          "LOGIN",
+                child: Container(
+                  alignment: Alignment.center,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        const Text(
+                          "SIGN IN",
                           style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            color: cyan,
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    AlreadyHaveAccountCheck(
-                      press: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const SignUpScreen();
-                            },
+                        Image.asset(
+                          "assets/images/signin.png",
+                          height: size.height * 0.35,
+                        ),
+                        TextFieldContainer(
+                          child: TextFormField(
+                            controller: _emailTextController,
+                            focusNode: _focusEmail,
+                            validator: (value) => Validator.validateEmail(
+                              email: value!,
+                            ),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Email",
+                              icon: const Icon(
+                                Icons.person,
+                                color: LightBlue,
+                              ),
+                              errorBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(6.0),
+                                borderSide: const BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
                           ),
-                        );
-                      },
+                        ),
+                        TextFieldContainer(
+                          child: TextFormField(
+                            controller: _passwordTextController,
+                            focusNode: _focusPassword,
+                            obscureText: !_passwordVisible,
+                            validator: (value) => Validator.validatePassword(
+                              password: value!,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Password",
+                              icon: const Icon(
+                                Icons.lock,
+                                color: LightBlue,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _passwordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: LightBlue,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _passwordVisible = !_passwordVisible;
+                                  });
+                                },
+                              ),
+                              border: InputBorder.none,
+                              errorBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(6.0),
+                                borderSide: const BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        SizedBox(
+                          width: size.width * 0.85,
+                          height: size.height * 0.05,
+                          child: TextButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                User? user =
+                                    await FireAuth.signInUsingEmailPassword(
+                                        email: _emailTextController.text,
+                                        password: _passwordTextController.text,
+                                        context: context);
+                                if (user != null) {
+                                  Navigator.of(context)
+                                      .pushReplacement(MaterialPageRoute(
+                                    builder: (context) =>
+                                        // ProfilePage(user: user)),
+                                        HomePage(title: user.displayName!),
+                                  ));
+                                }
+                              }
+                            },
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(BlueJean),
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(29))),
+                            ),
+                            child: const Text(
+                              "LOGIN",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        AlreadyHaveAccountCheck(
+                          press: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return const SignUpScreen();
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        OrDivider(),
+                        const RowOfSocialIcons(),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    OrDivider(),
-                    const RowOfSocialIcons(),
-                  ],
+                  ),
                 ),
               ),
             );
