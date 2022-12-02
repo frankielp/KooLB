@@ -1,176 +1,79 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:koolb/decoration/widget.dart';
-import 'package:koolb/decoration/color.dart';
+import 'package:koolb/user/renter.dart';
 
 class SettingPage extends StatefulWidget {
-  const SettingPage({Key? key}) : super(key: key);
+  const SettingPage({super.key});
 
   @override
-  _SettingPageState createState() => _SettingPageState();
+  State<SettingPage> createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
-  var profile = {
-    'image':
-        'https://images.pexels.com/photos/618833/pexels-photo-618833.jpeg?cs=srgb&dl=pexels-sagui-andrea-618833.jpg&fm=jpg'
-  };
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: appBgColor,
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              backgroundColor: appBarColor,
-              pinned: true,
-              snap: true,
-              floating: true,
-              title: getAppBar(),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => buildBody(),
-                childCount: 1,
-              ),
-            )
-          ],
-        ));
-  }
-
-  Widget getAppBar() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Setting",
-                  style: TextStyle(
-                      color: textColor,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-          ),
-          IconBox(
-            child: SvgPicture.asset(
-              "/icons/edit.svg",
-              width: 18,
-              height: 18,
-            ),
-            bgColor: appBgColor,
-          ),
-        ],
+    return new Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [Profile()],
       ),
     );
   }
+}
 
-  Widget buildBody() {
-    return SingleChildScrollView(
-      padding: EdgeInsets.only(right: 20, top: 10),
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(left: 20),
-            child: Column(
-              children: <Widget>[
-                CustomImage(
-                  profile["image"]!,
-                  width: 80,
-                  height: 80,
-                  radius: 50,
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                Text(
-                  "Frankie",
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(
-                  "+12 345 6789",
-                  style: TextStyle(
-                    color: labelColor,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 40),
-          SettingItem(
-              title: "General Setting",
-              leadingIcon: Icons.settings,
-              leadingIconColor: orange,
-              onTap: () {}),
-          SizedBox(height: 10),
-          SettingItem(
-              title: "Bookings",
-              leadingIcon: Icons.bookmark_border,
-              leadingIconColor: blue,
-              onTap: () {}),
-          SizedBox(height: 10),
-          SettingItem(
-              title: "Favorites",
-              leadingIcon: Icons.favorite,
-              leadingIconColor: red,
-              onTap: () {}),
-          SizedBox(height: 10),
-          SettingItem(
-              title: "Privacy",
-              leadingIcon: Icons.privacy_tip_outlined,
-              leadingIconColor: green,
-              onTap: () {}),
-          SizedBox(height: 10),
-          SettingItem(
-            title: "Log Out",
-            leadingIcon: Icons.logout_outlined,
-            leadingIconColor: Colors.grey.shade400,
-            onTap: () {
-              showConfirmLogout();
-            },
-          ),
-          SizedBox(height: 10),
-        ],
-      ),
-    );
-  }
-
-  showConfirmLogout() {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) => CupertinoActionSheet(
-        message: Text("Would you like to log out?"),
-        actions: [
-          CupertinoActionSheetAction(
-            onPressed: () {},
+Widget ProfileHeader() {
+  return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    Container(
+      color: Colors.white,
+      height: 80.0,
+      width: 50.0,
+    ),
+    CircleAvatar(
+        radius: 35.0,
+        backgroundColor: Colors.black,
+        backgroundImage: NetworkImage(''),
+        child: Text('Frankie')),
+    Container(
+      color: Colors.white,
+      height: 80.0,
+      width: 50.0,
+    ),
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+            alignment: Alignment.center,
+            color: Colors.black,
+            height: 40.0,
+            width: 200.0,
             child: Text(
-              "Log Out",
-              style: TextStyle(color: actionColor),
-            ),
-          )
-        ],
-        cancelButton: CupertinoActionSheetAction(
-          child: Text("Cancel"),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
+              'Name',
+              style: TextStyle(color: Colors.white),
+            )),
+        Container(
+            alignment: Alignment.center,
+            color: Colors.white,
+            height: 40.0,
+            width: 200.0,
+            child: Text('Additional Info'))
+      ],
+    )
+  ]);
+}
+
+Widget Profile() {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Container(
+        alignment: Alignment.center,
+        color: Colors.white,
+        height: 40.0,
+        width: 40.0,
       ),
-    );
-  }
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [],
+      ),
+    ],
+  );
 }
