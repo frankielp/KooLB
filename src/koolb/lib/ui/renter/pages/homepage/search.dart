@@ -1,6 +1,3 @@
-//import 'dart:html';
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -11,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/accommodation/category.dart' as Category;
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/decoration/widget.dart';
 import 'package:koolb/util/helper.dart';
 import 'package:koolb/util/load_data.dart';
 import 'package:location/location.dart';
@@ -24,24 +22,30 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  final TextEditingController _numRoomsController = TextEditingController();
+  final TextEditingController _numAdultsController = TextEditingController();
+  final TextEditingController _numChildrenController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
   late LocationData? _currentPosition;
   Location location = new Location();
+
   String? countryValue;
   String? cityValue;
   List<String> cities = <String>[];
   bool countrySelected = false;
   DateTime start = DateTime.now();
   DateTime end = DateTime.now();
+  int _numRoom = 1;
+  int _numChildren = 1;
+  int _numAdults = 0;
+
   Color dateButtonColor = BlueJean;
   static const defaultDivider = Divider(
     thickness: 0.5,
     color: cyan,
   );
-  final TextEditingController _numRooms = TextEditingController();
-  final TextEditingController _numAdults = TextEditingController();
-  final TextEditingController _numChildren = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -51,6 +55,36 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+    // List<Category.Category> tmp = [];
+    // tmp.add(Category.Category.Homestead);
+    // Accommodation a1 = Accommodation(
+    //     tmp,
+    //     0.5,
+    //     4.5,
+    //     1,
+    //     1,
+    //     1,
+    //     [DateTime(2022, 12, 1, 0, 0), DateTime(2023, 1, 1, 0, 0)],
+    //     [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
+    //     'Việt Nam',
+    //     'An Giang',
+    //     'a1',
+    //     GeoPoint(16.456661, 107.5960929));
+    // Accommodation a2 = Accommodation(
+    //     tmp,
+    //     0.5,
+    //     4.5,
+    //     1,
+    //     1,
+    //     1,
+    //     [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
+    //     [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
+    //     'Việt Nam',
+    //     'An Giang',
+    //     'a2',
+    //     GeoPoint(16.456661, 107.5960929));
+    // a1.addInfoToDatabase();
+    // a2.addInfoToDatabase();
     //safe screen
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -233,7 +267,7 @@ class _SearchState extends State<Search> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.5,
                         child: TextFormField(
-                          controller: _numRooms,
+                          controller: _numRoomsController,
                           maxLength: 6,
                           textInputAction: TextInputAction.next,
                           keyboardType: const TextInputType.numberWithOptions(
@@ -273,7 +307,7 @@ class _SearchState extends State<Search> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.5,
                         child: TextFormField(
-                            controller: _numAdults,
+                            controller: _numAdultsController,
                             maxLength: 6,
                             textInputAction: TextInputAction.next,
                             keyboardType: const TextInputType.numberWithOptions(
@@ -313,7 +347,7 @@ class _SearchState extends State<Search> {
                         width: MediaQuery.of(context).size.width * 0.5,
                         child: TextFormField(
                           maxLength: 6,
-                          controller: _numChildren,
+                          controller: _numChildrenController,
                           textInputAction: TextInputAction.next,
                           keyboardType: const TextInputType.numberWithOptions(
                             signed: false,
@@ -339,9 +373,13 @@ class _SearchState extends State<Search> {
                   if (_formKey.currentState!.validate()) {
                     final snackBar = SnackBar(
                         content: Text(
-                            'Num rooms: $_numRooms.text, num adults: $_numAdults.text, num children: $_numChildren.text'));
+                            'Num rooms: ${_numRoomsController.text}, num adults: ${_numAdultsController.text}, num children: ${_numChildrenController.text}'));
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   }
+                  _numRoom = int.parse(_numRoomsController.text);
+                  _numAdults = int.parse(_numAdultsController.text);
+                  _numChildren = int.parse(_numChildrenController.text);
+                  _getAccommodation();
                 },
               )
             ],
@@ -356,7 +394,7 @@ class _SearchState extends State<Search> {
       return 'You must fill this.';
     }
     final n = num.parse(value);
-    if (n is double || n is Float) {
+    if (n is! int) {
       return 'The number must be an integer';
     }
     if (n < minValue) {
@@ -444,5 +482,32 @@ class _SearchState extends State<Search> {
         _currentPosition = currentLocation;
       });
     });
+  }
+
+  Future<Set<Accommodation>> _getAccommodation() async {
+    Set<Accommodation> ret =
+        await Accommodation.getAccommodationBasedOnDatabase(
+            countryValue!,
+            cityValue!,
+            int.parse(_numRoomsController.text),
+            int.parse(_numAdultsController.text),
+            int.parse(_numChildrenController.text),
+            start,
+            end);
+
+    return ret;
+  }
+
+  bool _isDurationAvailable(DateTime start, DateTime end, List<DateTime> starts,
+      List<DateTime> ends) {
+    int n = starts.length;
+    bool ret = true;
+
+    for (int i = 0; i < n; ++i) {
+      ret &= ((start.isAfter(starts[i]) && start.isBefore(ends[i])) ||
+          (end.isAfter(starts[i]) && end.isBefore(ends[i])));
+    }
+
+    return ret;
   }
 }
