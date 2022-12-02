@@ -21,7 +21,7 @@ class _RenterPagesNavigationState extends State<RenterPagesNavigation> {
   List pages = [
     const RenterMaps(),
     const WishlistPage(),
-    const ChatPage(),
+    chatPage(),
     const SettingPage(),
   ];
 
