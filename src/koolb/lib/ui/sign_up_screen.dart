@@ -43,6 +43,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return GestureDetector(
       onTap: () {
         _focusName.unfocus();
@@ -50,196 +51,195 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _focusPassword.unfocus();
       },
       child: Scaffold(
-        body: Container(
+        resizeToAvoidBottomInset: false,
+        body: SizedBox(
           width: double.infinity,
-          height: size.height,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                "SIGN UP",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: cyan,
-                ),
-              ),
-              Image.asset(
-                "assets/images/signup.png",
-                height: size.height * 0.35,
-              ),
-              Form(
-                key: _registerFormKey,
-                child: Column(
-                  children: [
-                    TextFieldContainer(
-                      child: TextFormField(
-                        controller: _nameTextController,
-                        focusNode: _focusName,
-                        validator: (value) => Validator.validateName(
-                          name: value!,
-                        ),
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Name",
-                          icon: const Icon(
-                            Icons.text_fields,
-                            color: LightBlue,
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            borderSide: const BorderSide(
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
-                      ),
+          height: size.height - keyboardHeight,
+          child: Container(
+            alignment: Alignment.center,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text(
+                    "SIGN UP",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: cyan,
                     ),
-                    TextFieldContainer(
-                      child: TextFormField(
-                        controller: _emailTextController,
-                        focusNode: _focusEmail,
-                        validator: (value) => Validator.validateEmail(
-                          email: value!,
-                        ),
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: "Email",
-                          icon: const Icon(
-                            Icons.person,
-                            color: LightBlue,
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            borderSide: const BorderSide(
-                              color: Colors.red,
+                  ),
+                  Image.asset(
+                    "assets/images/signup.png",
+                    height: size.height * 0.35,
+                  ),
+                  Form(
+                    key: _registerFormKey,
+                    child: Column(
+                      children: [
+                        TextFieldContainer(
+                          child: TextFormField(
+                            controller: _nameTextController,
+                            focusNode: _focusName,
+                            validator: (value) => Validator.validateName(
+                              name: value!,
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    TextFieldContainer(
-                      child: TextFormField(
-                        controller: _passwordTextController,
-                        focusNode: _focusPassword,
-                        obscureText: !_passwordVisible,
-                        validator: (value) => Validator.validatePassword(
-                          password: value!,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "Password",
-                          icon: const Icon(
-                            Icons.lock,
-                            color: LightBlue,
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _passwordVisible
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
-                              color: LightBlue,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _passwordVisible = !_passwordVisible;
-                              });
-                            },
-                          ),
-                          border: InputBorder.none,
-                          errorBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(6.0),
-                            borderSide: const BorderSide(
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: size.height * 0.008,
-              ),
-              _isProcessing
-                  ? const CircularProgressIndicator()
-                  : SizedBox(
-                      width: size.width * 0.8,
-                      height: size.height * 0.05,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextButton(
-                              onPressed: () async {
-                                setState(() {
-                                  _isProcessing = true;
-                                });
-
-                                if (_registerFormKey.currentState!.validate()) {
-                                  User? user =
-                                      await FireAuth.registerUsingEmailPassword(
-                                    name: _nameTextController.text,
-                                    email: _emailTextController.text,
-                                    password: _passwordTextController.text,
-                                  );
-
-                                  setState(() {
-                                    _isProcessing = false;
-                                  });
-
-                                  if (user != null) {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            // ProfilePage(user: user),
-                                            HomePage(title: user.displayName!),
-                                      ),
-                                      ModalRoute.withName('/'),
-                                    );
-                                  }
-                                }
-                              },
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(BlueJean),
-                                shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(29))),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Name",
+                              icon: const Icon(
+                                Icons.text_fields,
+                                color: LightBlue,
                               ),
-                              child: const Text(
-                                "REGISTER",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
+                              errorBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(6.0),
+                                borderSide: const BorderSide(
+                                  color: Colors.red,
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        TextFieldContainer(
+                          child: TextFormField(
+                            controller: _emailTextController,
+                            focusNode: _focusEmail,
+                            validator: (value) => Validator.validateEmail(
+                              email: value!,
+                            ),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Email",
+                              icon: const Icon(
+                                Icons.person,
+                                color: LightBlue,
+                              ),
+                              errorBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(6.0),
+                                borderSide: const BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        TextFieldContainer(
+                          child: TextFormField(
+                            controller: _passwordTextController,
+                            focusNode: _focusPassword,
+                            obscureText: !_passwordVisible,
+                            validator: (value) => Validator.validatePassword(
+                              password: value!,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "Password",
+                              icon: const Icon(
+                                Icons.lock,
+                                color: LightBlue,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _passwordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                  color: LightBlue,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _passwordVisible = !_passwordVisible;
+                                  });
+                                },
+                              ),
+                              border: InputBorder.none,
+                              errorBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(6.0),
+                                borderSide: const BorderSide(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-              SizedBox(
-                height: size.height * 0.02,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.008,
+                  ),
+                  _isProcessing
+                      ? const CircularProgressIndicator()
+                      : SizedBox(
+                          width: size.width * 0.85,
+                          height: size.height * 0.05,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextButton(
+                                  onPressed: () async {
+                                    setState(() {
+                                      _isProcessing = true;
+                                    });
+
+                                    if (_registerFormKey.currentState!
+                                        .validate()) {
+                                      User? user = await FireAuth
+                                          .registerUsingEmailPassword(
+                                        name: _nameTextController.text,
+                                        email: _emailTextController.text,
+                                        password: _passwordTextController.text,
+                                      );
+
+                                      setState(() {
+                                        _isProcessing = false;
+                                      });
+
+                                      if (user != null) {
+                                        Navigator.of(context)
+                                            .pushReplacement(MaterialPageRoute(
+                                          builder: (context) =>
+                                              // ProfilePage(user: user)),
+                                              HomePage(
+                                                  title: user.displayName!),
+                                        ));
+                                      }
+                                    }
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(BlueJean),
+                                    shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(29))),
+                                  ),
+                                  child: const Text(
+                                    "REGISTER",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  AlreadyHaveAccountCheck(
+                    login: false,
+                    press: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  SizedBox(
+                    height: size.height * 0.005,
+                  ),
+                  OrDivider(),
+                  const RowOfSocialIcons(),
+                ],
               ),
-              AlreadyHaveAccountCheck(
-                login: false,
-                press: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return SignInScreen();
-                      },
-                    ),
-                  );
-                },
-              ),
-              SizedBox(
-                height: size.height * 0.005,
-              ),
-              OrDivider(),
-              const RowOfSocialIcons(),
-            ],
+            ),
           ),
         ),
       ),

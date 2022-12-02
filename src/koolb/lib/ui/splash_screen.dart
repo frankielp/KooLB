@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:koolb/ui/sign_in_screen.dart';
+import 'package:koolb/ui/sign_in_screen.dart' as SignInPage;
 import '../decoration/color.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -34,56 +34,66 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 5,
-              child: PageView.builder(
-                onPageChanged: ((value) {
-                  setState(() {
-                    currentPage = value;
-                  });
-                }),
-                itemCount: splashText.length,
-                itemBuilder: (context, index) => SplashContent(
-                  text: splashText[index],
-                  subtext: splashSubText[index],
-                  image: splashImage[index],
+    Size size = MediaQuery.of(context).size;
+    final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    return Scaffold(
+      
+      resizeToAvoidBottomInset: false,
+      body: SizedBox(
+        height: size.height - keyboardHeight,
+        width: size.width,
+        child: Container(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 5,
+                child: PageView.builder(
+                  onPageChanged: ((value) {
+                    setState(() {
+                      currentPage = value;
+                    });
+                  }),
+                  itemCount: splashText.length,
+                  itemBuilder: (context, index) => SplashContent(
+                    text: splashText[index],
+                    subtext: splashSubText[index],
+                    image: splashImage[index],
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        splashText.length,
-                        (index) => buildDot(index: index),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          splashText.length,
+                          (index) => buildDot(index: index),
+                        ),
                       ),
-                    ),
-                    Spacer(),
-                    DefaulButton(
-                      text: "Get Started",
-                      press: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignInScreen()));
-                      },
-                    ),
-                    const Spacer(),
-                  ],
+                      Spacer(),
+                      DefaulButton(
+                        text: "Get Started",
+                        press: () {
+                          FocusScope.of(context).unfocus();
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SignInPage.SignInScreen()));
+                        },
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -114,9 +124,10 @@ class DefaulButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return SizedBox(
       width: double.infinity,
-      height: 45,
+      height: size.height * 0.08,
       child: TextButton(
         onPressed: press,
         style: ButtonStyle(
@@ -151,7 +162,7 @@ class SplashContent extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Column(
       children: <Widget>[
-        const SizedBox(height: 50),
+        SizedBox(height: size.height * 0.01),
         Text(
           text,
           style: const TextStyle(
@@ -161,12 +172,16 @@ class SplashContent extends StatelessWidget {
           ),
           textAlign: TextAlign.center,
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: size.height * 0.05,
+        ),
         Image.asset(
           image,
-          height: size.height*0.4,
+          height: size.height * 0.4,
         ),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: size.height * 0.05,
+        ),
         Text(
           subtext,
           style: TextStyle(
