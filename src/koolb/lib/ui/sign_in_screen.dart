@@ -10,8 +10,8 @@ import 'package:koolb/ui/sign_up_screen.dart';
 
 import '../component/already_have_account_check.dart';
 import '../component/text_field_container.dart';
-import '../util/fire_auth.dart';
-import '../util/validator.dart';
+import '../component/fire_auth.dart';
+import '../component/validator.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});

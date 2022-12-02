@@ -10,8 +10,8 @@ import '../component/row_of_social_icons.dart';
 import '../component/text_field_container.dart';
 import '../decoration/color.dart';
 import '../main.dart';
-import '../util/fire_auth.dart';
-import '../util/validator.dart';
+import '../component/fire_auth.dart';
+import '../component/validator.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
