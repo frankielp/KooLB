@@ -1,18 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:koolb/accommodation/accommodation.dart';
-import 'package:koolb/accommodation/category.dart' as Category;
 import 'package:koolb/decoration/color.dart';
-import 'package:koolb/decoration/widget.dart';
+import 'package:koolb/ui/renter/pages/search/result_search.dart';
 import 'package:koolb/util/helper.dart';
 import 'package:koolb/util/load_data.dart';
 import 'package:location/location.dart';
-import 'package:flutter/services.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -22,9 +15,12 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  final TextEditingController _numRoomsController = TextEditingController();
-  final TextEditingController _numAdultsController = TextEditingController();
-  final TextEditingController _numChildrenController = TextEditingController();
+  final TextEditingController _numRoomsController =
+      TextEditingController(text: '1');
+  final TextEditingController _numAdultsController =
+      TextEditingController(text: '1');
+  final TextEditingController _numChildrenController =
+      TextEditingController(text: '0');
 
   final _formKey = GlobalKey<FormState>();
 
@@ -48,43 +44,7 @@ class _SearchState extends State<Search> {
   );
 
   @override
-  void initState() {
-    fetchLocation();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // List<Category.Category> tmp = [];
-    // tmp.add(Category.Category.Homestead);
-    // Accommodation a1 = Accommodation(
-    //     tmp,
-    //     0.5,
-    //     4.5,
-    //     1,
-    //     1,
-    //     1,
-    //     [DateTime(2022, 12, 1, 0, 0), DateTime(2023, 1, 1, 0, 0)],
-    //     [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-    //     'Việt Nam',
-    //     'An Giang',
-    //     'a1',
-    //     GeoPoint(16.456661, 107.5960929));
-    // Accommodation a2 = Accommodation(
-    //     tmp,
-    //     0.5,
-    //     4.5,
-    //     1,
-    //     1,
-    //     1,
-    //     [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-    //     [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-    //     'Việt Nam',
-    //     'An Giang',
-    //     'a2',
-    //     GeoPoint(16.456661, 107.5960929));
-    // a1.addInfoToDatabase();
-    // a2.addInfoToDatabase();
     //safe screen
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -369,7 +329,7 @@ class _SearchState extends State<Search> {
               //search
               ElevatedButton(
                 child: const Text('Search'),
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     final snackBar = SnackBar(
                         content: Text(
@@ -379,7 +339,12 @@ class _SearchState extends State<Search> {
                   _numRoom = int.parse(_numRoomsController.text);
                   _numAdults = int.parse(_numAdultsController.text);
                   _numChildren = int.parse(_numChildrenController.text);
-                  _getAccommodation();
+                  List<Accommodation> result = await _getAccommodation();
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              ResultSearch(resultSearch: result)));
                 },
               )
             ],
@@ -415,77 +380,8 @@ class _SearchState extends State<Search> {
     );
   }
 
-  Set<Accommodation> filterResult(Set<Accommodation> accommodation,
-      List<Category.Category> requirement, double rating, double budget) {
-    accommodation.retainWhere((element) =>
-        filterRequirement(element, requirement, rating, budget) == true);
-    return accommodation;
-  }
-
-  bool filterRequirement(Accommodation accommodation,
-      List<Category.Category> requirement, double rating, double budget) {
-    for (Category.Category categories in requirement) {
-      if (!accommodation.category.contains(categories)) return false;
-    }
-    if (accommodation.rating < rating) return false;
-    if (accommodation.price > budget) return false;
-    return true;
-  }
-
-  Set<Accommodation> sortAccommodation(Set<Accommodation> accommodation,
-      bool sortByPrice, bool sortByRating, bool sortByDistance) {
-    // GeoPoint currentLocation;
-    List<Accommodation> accommodations = accommodation.toList();
-    if (sortByPrice) {
-      accommodations.sort((a, b) => a.price.compareTo(b.price));
-    } else if (sortByRating) {
-      accommodations.sort((a, b) => a.rating.compareTo(b.rating));
-    } else if (sortByDistance && _currentPosition != null) {
-      accommodations.sort((a, b) => Geolocator.distanceBetween(
-              a.location.latitude,
-              a.location.longitude,
-              _currentPosition!.latitude!,
-              _currentPosition!.longitude!)
-          .compareTo(Geolocator.distanceBetween(
-              b.location.latitude,
-              b.location.longitude,
-              _currentPosition!.latitude!,
-              _currentPosition!.longitude!)));
-    }
-    accommodation = accommodations.toSet();
-    return accommodation;
-  }
-
-  fetchLocation() async {
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
-
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
-        return;
-      }
-    }
-
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-
-    _currentPosition = await location.getLocation();
-    location.onLocationChanged.listen((LocationData currentLocation) {
-      setState(() {
-        _currentPosition = currentLocation;
-      });
-    });
-  }
-
-  Future<Set<Accommodation>> _getAccommodation() async {
-    Set<Accommodation> ret =
+  Future<List<Accommodation>> _getAccommodation() async {
+    List<Accommodation> ret =
         await Accommodation.getAccommodationBasedOnDatabase(
             countryValue!,
             cityValue!,

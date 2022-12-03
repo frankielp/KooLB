@@ -146,7 +146,7 @@ class Accommodation extends Place {
         json['location']);
   }
 
-  static Future<Set<Accommodation>> getAccommodationBasedOnDatabase(
+  static Future<List<Accommodation>> getAccommodationBasedOnDatabase(
       String country,
       String city,
       int numRooms,
@@ -202,6 +202,44 @@ class Accommodation extends Place {
     });
 
     print(ret);
-    return ret.toSet();
+    return ret;
+  }
+
+  static Future<List<Accommodation>> getAllAccommodation() async {
+    List<Accommodation> ret = [];
+    QuerySnapshot qn =
+        await FirebaseFirestore.instance.collection('accommodation').get();
+
+    qn.docs.forEach((element) {
+      final map = element.data();
+      List<DateTime> starts = [];
+      element['starts'].forEach((value) {
+        starts.add(value.toDate());
+      });
+      List<DateTime> ends = [];
+      element['ends'].forEach((value) {
+        ends.add(value.toDate());
+      });
+      List<Category.Category> category = [];
+      element['category'].forEach((value) {
+        category.add(Category.Category.values[value]);
+      });
+      ret.add(Accommodation(
+          category,
+          element['price'],
+          element['rating'],
+          element['room'],
+          element['children'],
+          element['adult'],
+          starts,
+          ends,
+          element['country'],
+          element['city'],
+          element['name'],
+          element['location']));
+    });
+
+    print(ret);
+    return ret;
   }
 }
