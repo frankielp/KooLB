@@ -6,7 +6,7 @@ import 'package:koolb/ui/renter/pages/chat_page.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/home_page.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
-import 'package:koolb/ui/renter/pages/wishlist_page.dart';
+import 'package:koolb/ui/renter/pages/wishlist_page/wishlist_page.dart';
 import 'package:koolb/user/renter.dart';
 
 class RenterPagesNavigation extends StatefulWidget {

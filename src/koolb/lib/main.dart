@@ -17,6 +17,7 @@ import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/homepage/search.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
+import 'package:koolb/ui/renter/pages/wishlist_page/wishlist_page.dart';
 import 'package:koolb/ui/sign_up_screen.dart';
 // import 'package:koolb/ui/welcoming_page.dart';
 import 'package:koolb/ui/splash_screen.dart';
@@ -90,11 +91,12 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      // appBar: AppBar(
+      //   title: Text(widget.title),
+      // ),
       // body: SplashScreen(),
-      body: SettingPage(),
+      //body: SettingPage(),
+      body: WishlistPage(),
     );
   }
 }
