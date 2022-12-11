@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/ui/renter/pages/booking/basic_book.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/homepage/search.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
@@ -94,7 +95,13 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       // body: SplashScreen(),
-      body: SettingPage(),
+      body: BasicBook(
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
+        maxAdults: 5,
+        maxChildren: 5,
+        price: 15.0,
+      ),
     );
   }
 }
