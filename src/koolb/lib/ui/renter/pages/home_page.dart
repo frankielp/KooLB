@@ -25,12 +25,12 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<String> icons = [
-    "assets/icons/all.png",
-    "assets/icons/apartment.png",
-    "assets/icons/sharedhouse.png",
-    "assets/icons/hostel.png",
-    "assets/icons/hotel.png",
-    "assets/icons/homestay.png"
+    "icons/all.png",
+    "icons/apartment.png",
+    "icons/sharedhouse.png",
+    "icons/hostel.png",
+    "icons/hotel.png",
+    "icons/homestay.png"
   ];
 
   List<String> images = [
