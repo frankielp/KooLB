@@ -1,10 +1,11 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
+import 'package:koolb/booking/booking.dart';
+
+const renterID = 'HgvSKaOM6uSLK9qrH2ZL';
+const accommodationID = '2dqqQ03SpKWprkE3rKX3';
 
 class BasicBook extends StatefulWidget {
   DateTime startDate;
@@ -400,23 +401,34 @@ class _BasicBookState extends State<BasicBook> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text(
-                      'Cancel',
-                      style: TextStyle(color: Colors.white),
-                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
+                    ),
+                    child: const Text(
+                      'Cancel',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
 
                   OutlinedButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Book',
-                      style: TextStyle(color: Colors.black),
-                    ),
+                    onPressed: () {
+                      Booking booking = Booking(
+                        renterID: renterID,
+                        accommodationID: accommodationID,
+                        checkinDate: widget.startDate,
+                        checkoutDate: widget.endDate,
+                        numAdults: widget.adults,
+                        numChildren: widget.children,
+                      );
+
+                      booking.addInfoToFirebase();
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
+                    ),
+                    child: const Text(
+                      'Book',
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                 ],
@@ -440,7 +452,3 @@ class _BasicBookState extends State<BasicBook> {
     );
   }
 }
-
-
-// checkout date
-                                
