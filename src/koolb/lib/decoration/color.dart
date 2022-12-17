@@ -40,6 +40,7 @@ const SkyBlue = Color(0xFF6e7ff7);
 const Turquois = Color(0xFF04ADBF);
 const LightBlue2 = Color(0xFFd7f5ff);
 const BlueJean = Color(0xFF32599a);
+const LightBlueGrey = Color.fromARGB(255, 125, 178, 196);
 
 const listColors = [
   green,
