@@ -4,7 +4,6 @@ enum Category {
   Hostel,
   Hotel,
   Homestay,
-  Homestead,
   BreakfastIncluded,
   Spa,
   Pool,

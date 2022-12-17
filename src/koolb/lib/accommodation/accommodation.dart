@@ -1,6 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:koolb/accommodation/category.dart' as Category;
 import 'package:koolb/place/place.dart';
 
@@ -144,7 +142,9 @@ class Accommodation extends Place {
         json['location']);
   }
 
-  static Future<Set<Accommodation>> getAccommodationBasedOnDatabase(
+
+  static Future<List<Accommodation>> getAccommodationBasedOnDatabase(
+
       String country,
       String city,
       int numRooms,
@@ -200,6 +200,81 @@ class Accommodation extends Place {
     });
 
     print(ret);
-    return ret.toSet();
+    return ret;
+  }
+
+  static Future<List<Accommodation>> getAllAccommodation() async {
+    List<Accommodation> ret = [];
+    QuerySnapshot qn =
+        await FirebaseFirestore.instance.collection('accommodation').get();
+
+    qn.docs.forEach((element) {
+      final map = element.data();
+      List<DateTime> starts = [];
+      element['starts'].forEach((value) {
+        starts.add(value.toDate());
+      });
+      List<DateTime> ends = [];
+      element['ends'].forEach((value) {
+        ends.add(value.toDate());
+      });
+      List<Category.Category> category = [];
+      element['category'].forEach((value) {
+        category.add(Category.Category.values[value]);
+      });
+      ret.add(Accommodation(
+          category,
+          element['price'],
+          element['rating'],
+          element['room'],
+          element['children'],
+          element['adult'],
+          starts,
+          ends,
+          element['country'],
+          element['city'],
+          element['name'],
+          element['location']));
+    });
+
+    print(ret);
+    return ret;
+  }
+
+  static Future<Accommodation> getAccommodationById(uid) async {
+    var snapshot = await FirebaseFirestore.instance
+        .collection('accommodation')
+        .doc(uid)
+        .get();
+    if (snapshot.exists) {
+      throw Exception('Accommodation does not exist in database');
+    }
+
+    Map<String, dynamic>? data = snapshot.data();
+    List<DateTime> starts = [];
+    data?['starts'].forEach((value) {
+      starts.add(value.toDate());
+    });
+    List<DateTime> ends = [];
+    data?['ends'].forEach((value) {
+      ends.add(value.toDate());
+    });
+    List<Category.Category> category = [];
+    data?['category'].forEach((value) {
+      category.add(Category.Category.values[value]);
+    });
+    double price = data?['price'];
+    double rating = data?['rating'];
+    int room = data?['room'];
+    int children = data?['children'];
+    int adult = data?['adults'];
+    String country = data?['country'];
+    String city = data?['city'];
+    String name = data?['name'];
+    GeoPoint location = data?['location'];
+
+    return Accommodation(category, price, rating, room, children, adult, starts,
+        ends, country, city, name, location);
   }
 }
+
