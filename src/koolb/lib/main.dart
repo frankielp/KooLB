@@ -39,6 +39,8 @@ import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'firebase_options.dart';
 import 'package:koolb/ui/sign_in_screen.dart' as SignInPage;
 
+import 'ui/renter/pages/home_page.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -91,9 +93,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       // body: SplashScreen(),
       body: BasicBook(
         startDate: DateTime.now(),
