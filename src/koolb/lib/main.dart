@@ -39,6 +39,7 @@ import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'ui/registration.dart';
 import 'firebase_options.dart';
 import 'package:koolb/ui/sign_in_screen.dart' as SignInPage;
+import 'package:koolb/ui/renter/pages/notification_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -96,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: chatPage(),
+      body: NotiPage(),
     );
   }
 }
