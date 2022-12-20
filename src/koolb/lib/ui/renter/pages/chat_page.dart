@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
+import 'package:koolb/user/koolUser.dart';
 
 class chatPage extends StatefulWidget {
   @override
@@ -9,6 +10,30 @@ class chatPage extends StatefulWidget {
 
 class _ChatPageState extends State<chatPage> {
   @override
+  List<ChatUsers> chatUsers = [
+    ChatUsers(name: "Jane Russel", messageText: "Awesome Setup", time: "Now"),
+    ChatUsers(
+        name: "Glady's Murphy", messageText: "That's Great", time: "Yesterday"),
+    ChatUsers(
+        name: "Jorge Henry", messageText: "Hey where are you?", time: "31 Mar"),
+    ChatUsers(
+        name: "Philip Fox",
+        messageText: "Busy! Call me in 20 mins",
+        time: "28 Mar"),
+    ChatUsers(
+        name: "Debra Hawkins",
+        messageText: "Thankyou, It's awesome",
+        time: "23 Mar"),
+    ChatUsers(
+        name: "Jacob Pena",
+        messageText: "will update you in evening",
+        time: "17 Mar"),
+    ChatUsers(
+        name: "Andrey Jones",
+        messageText: "Can you please share the file?",
+        time: "24 Feb"),
+    ChatUsers(name: "John Wick", messageText: "How are you?", time: "18 Feb"),
+  ];
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -120,13 +145,11 @@ class _ChatPageState extends State<chatPage> {
 class ConversationList extends StatefulWidget {
   String name;
   String messageText;
-  String imageUrl;
   String time;
   bool isMessageRead;
   ConversationList(
       {required this.name,
       required this.messageText,
-      required this.imageUrl,
       required this.time,
       required this.isMessageRead});
   @override
@@ -145,10 +168,6 @@ class _ConversationListState extends State<ConversationList> {
             Expanded(
               child: Row(
                 children: <Widget>[
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(widget.imageUrl),
-                    maxRadius: 30,
-                  ),
                   SizedBox(
                     width: 16,
                   ),

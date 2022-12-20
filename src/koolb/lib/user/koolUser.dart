@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 
 class KoolUser {
   String name, password, email;
@@ -10,11 +11,7 @@ class KoolUser {
 class ChatUsers {
   String name;
   String messageText;
-  String imageURL;
   String time;
   ChatUsers(
-      {required this.name,
-      required this.messageText,
-      required this.imageURL,
-      required this.time});
+      {required this.name, required this.messageText, required this.time});
 }
