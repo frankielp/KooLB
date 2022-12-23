@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:koolb/booking/booking.dart';
 
-const renterID = 'HgvSKaOM6uSLK9qrH2ZL';
-const accommodationID = '2dqqQ03SpKWprkE3rKX3';
-
 class BasicBook extends StatefulWidget {
+  String accommodationID;
+  String renterID;
   DateTime startDate;
   DateTime endDate;
   int adults;
@@ -17,6 +16,8 @@ class BasicBook extends StatefulWidget {
   double price;
   BasicBook({
     super.key,
+    required this.accommodationID,
+    required this.renterID,
     required this.startDate,
     required this.endDate,
     this.adults = 1,
@@ -413,8 +414,8 @@ class _BasicBookState extends State<BasicBook> {
                   OutlinedButton(
                     onPressed: () {
                       Booking booking = Booking(
-                        renterID: renterID,
-                        accommodationID: accommodationID,
+                        renterID: widget.renterID,
+                        accommodationID: widget.accommodationID,
                         checkinDate: widget.startDate,
                         checkoutDate: widget.endDate,
                         numAdults: widget.adults,

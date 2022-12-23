@@ -3,6 +3,7 @@ import 'package:koolb/accommodation/category.dart' as Category;
 import 'package:koolb/place/place.dart';
 
 class Accommodation extends Place {
+  var id;
   List<Category.Category> _category;
   double _price;
   double _rating;
