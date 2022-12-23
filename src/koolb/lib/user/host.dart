@@ -10,6 +10,6 @@ class Host extends KoolUser {
   List<Reservation> reservation;
 
   //Function
-  Host(super.name, super.password, super.email, this.country, this.language,
-      this.currency, this.listing, this.reservation);
+  Host(super.id, super.name, super.password, super.email, this.country,
+      this.language, this.currency, this.listing, this.reservation);
 }

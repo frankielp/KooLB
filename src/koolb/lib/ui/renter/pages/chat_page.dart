@@ -11,10 +11,10 @@ class chatPage extends StatefulWidget {
 
 class _ChatPageState extends State<chatPage> {
   @override
-  Map<String, List<String>> chatUser = {
-    'name': ['Linh', 'Cat', 'Vy'],
-    'messageText': ['Try dictionary', 'Help', 'Try'],
-    'Time': ['Today 1:30', 'Yesterday', 'Monday 23:00']
+  Map<String, String> chatUser = {
+    'name': 'Linh',
+    'messageText': 'Try dictionary',
+    'Time': 'Today 1:30'
   };
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,15 +113,15 @@ class _ChatPageState extends State<chatPage> {
             ),
             ListView.builder(
               //View list of conversation
-              itemCount: chatUser.length,
+              itemCount: 1,
               shrinkWrap: true,
               padding: EdgeInsets.only(top: 16),
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return ConversationList(
-                  name: chatUser['name'][index],
-                  messageText: chatUser['messageText'][index],
-                  time: chatUser['Time'][index],
+                  name: chatUser['name'].toString(),
+                  messageText: chatUser['messageText'].toString(),
+                  time: chatUser['Time'].toString(),
                   isMessageRead: (index == 0 || index == 3) ? true : false,
                 );
               },

@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
+import 'package:koolb/ui/renter/pages/chat_page.dart';
 
 class NotiPage extends StatefulWidget {
   @override
@@ -21,11 +22,19 @@ class _NotiPageState extends State<NotiPage> {
                 padding: EdgeInsets.only(left: 16, right: 16, top: 10),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Icon(
-                        Icons.forum,
-                        color: Colors.black,
-                        size: 20,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return chatPage();
+                          }));
+                        },
+                        child: Icon(
+                          Icons.forum,
+                          color: Colors.black,
+                          size: 20,
+                        ),
                       ),
                       Icon(
                         Icons.notifications,
