@@ -14,7 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koolb/decoration/color.dart';
-import 'package:koolb/ui/renter/pages/booking/basic_book.dart';
+
+import 'package:koolb/ui/renter/pages/chat_page.dart';
+
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/homepage/search.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
@@ -38,6 +40,8 @@ import 'package:koolb/ui/host/h_navigation_bar.dart';
 import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'firebase_options.dart';
 import 'package:koolb/ui/sign_in_screen.dart' as SignInPage;
+import 'package:koolb/ui/renter/pages/notification_page.dart';
+import 'package:koolb/ui/renter/pages/chatdetail.dart';
 
 import 'ui/renter/pages/home_page.dart';
 

@@ -11,6 +11,7 @@ class Host extends KoolUser {
   late List<Accommodation> _accommodation;
 
   //Function
+
   Host(
       String country,
       String language,
@@ -32,4 +33,5 @@ class Host extends KoolUser {
   String get currency => _currency;
   List<Place> get listing => _listing;
   List<Accommodation> get accommodation => _accommodation;
+
 }
