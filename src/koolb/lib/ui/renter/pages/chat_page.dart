@@ -3,7 +3,7 @@ import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/user/koolUser.dart';
 import 'package:koolb/ui/renter/pages/notification_page.dart';
-import 'package:koolb/ui/renter/pages/chatdetail.dart';
+import 'package:koolb/ui/renter/pages/chat_box.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -155,7 +155,7 @@ class _ConversationListState extends State<ConversationList> {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ChatDetailPage();
+          return ChatBox();
         }));
       },
       child: Container(

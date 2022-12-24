@@ -41,7 +41,6 @@ import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'firebase_options.dart';
 import 'package:koolb/ui/sign_in_screen.dart' as SignInPage;
 import 'package:koolb/ui/renter/pages/notification_page.dart';
-import 'package:koolb/ui/renter/pages/chatdetail.dart';
 
 import 'ui/renter/pages/home_page.dart';
 
@@ -97,14 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: SplashScreen(),
-      body: BasicBook(
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        maxAdults: 5,
-        maxChildren: 5,
-        price: 15.0,
-      ),
+      body: ChatPage(),
     );
   }
 }

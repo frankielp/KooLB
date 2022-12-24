@@ -49,8 +49,6 @@ dependencies:
   cloud_firestore: ^4.0.4
   google_fonts: ^3.0.1
   intl: ^0.17.0
-<<<<<<< Updated upstream
-=======
   flutter_chat_ui: ^1.6.6
   image_picker: ^0.8.6
   open_filex: ^4.3.2
@@ -58,7 +56,6 @@ dependencies:
   uuid: ^3.0.7
   mime: ^1.0.3
 
->>>>>>> Stashed changes
 
 dev_dependencies:
   flutter_test:
