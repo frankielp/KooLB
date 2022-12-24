@@ -1,4 +1,4 @@
-# CS300 - KooLB
+# CS300 - KooLB: Hotel Booking Multiplatform Application
 __Group 01__
 
 KoolB is an online marketplace that links people who wish to rent out their houses with customers who need to stay in specified areas.

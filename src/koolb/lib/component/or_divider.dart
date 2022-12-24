@@ -7,7 +7,7 @@ class OrDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: size.height * 0.001),
       width: size.width * 0.8,
       child: Row(
         children: const <Widget>[
