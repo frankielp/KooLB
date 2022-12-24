@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/src/foundation/key.dart';
-import 'package:koolb/host/host.dart';
+import 'package:koolb/user/host.dart';
 
 class Place {
   //Contructor

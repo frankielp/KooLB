@@ -14,7 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koolb/decoration/color.dart';
+
 import 'package:koolb/ui/renter/pages/chat_page.dart';
+
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/homepage/search.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
@@ -36,11 +38,12 @@ import 'package:provider/provider.dart';
 import 'package:koolb/ui/admin/ad_navigation_bar.dart';
 import 'package:koolb/ui/host/h_navigation_bar.dart';
 import 'package:koolb/ui/renter/r_navigationbar.dart';
-import 'ui/registration.dart';
 import 'firebase_options.dart';
 import 'package:koolb/ui/sign_in_screen.dart' as SignInPage;
 import 'package:koolb/ui/renter/pages/notification_page.dart';
 import 'package:koolb/ui/renter/pages/chatdetail.dart';
+
+import 'ui/renter/pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,7 +77,6 @@ class KoolB extends StatelessWidget {
         primaryColor: Colors.blue,
         bottomAppBarColor: Colors.green,
       ),
-      // home: const MyHomePage(title: "Home Page"),
       home: const MyHomePage(
         title: '',
       ),
@@ -95,50 +97,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+      // body: SplashScreen(),
+      body: BasicBook(
+        startDate: DateTime.now(),
+        endDate: DateTime.now(),
+        maxAdults: 5,
+        maxChildren: 5,
+        price: 15.0,
       ),
-      body: ChatPage(),
     );
   }
 }
-
-
-
-// class RenterPagesNavigation extends StatefulWidget {
-//   const RenterPagesNavigation({super.key});
-
-//   @override
-//   State<RenterPagesNavigation> createState() => _RenterPagesNavigationState();
-// }
-
-// class _RenterPagesNavigationState extends State<RenterPagesNavigation> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-      
-//       bottomNavigationBar: BottomNavigationBar(
-//         items: const <BottomNavigationBarItem>[
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.home),
-//             label: 'Explore',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.favorite),
-//             label: 'Wishlist',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.chat),
-//             label: 'Message',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.man),
-//             label: 'Profile',
-//           ),
-//         ],
-//         backgroundColor: Colors.green,
-//         fixedColor: Colors.blue,
-//       ),
-//     );
-//   }
-// }

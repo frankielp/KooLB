@@ -18,7 +18,7 @@ class RenterPagesNavigation extends StatefulWidget {
 
 class _RenterPagesNavigationState extends State<RenterPagesNavigation> {
   List pages = [
-    //const HomePage(),
+    const HomePage(),
     const WishlistPage(),
     ChatPage(),
     const SettingPage(),
