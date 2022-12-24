@@ -1,11 +1,14 @@
 import 'dart:html';
 import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
+import 'package:koolb/user/koolUser.dart';
 import 'package:koolb/ui/renter/pages/chat_page.dart';
 
 class NotiPage extends StatefulWidget {
+  const NotiPage({super.key});
+
   @override
-  _NotiPageState createState() => _NotiPageState();
+  State<NotiPage> createState() => _NotiPageState();
 }
 
 class _NotiPageState extends State<NotiPage> {
@@ -22,7 +25,7 @@ class _NotiPageState extends State<NotiPage> {
                 padding: EdgeInsets.only(left: 16, right: 16, top: 10),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
+                    children: <Widget>[
                       GestureDetector(
                         onTap: () {
                           Navigator.push(context,
@@ -66,7 +69,7 @@ class _NotiPageState extends State<NotiPage> {
                       child: Row(
                         children: <Widget>[
                           Icon(
-                            Icons.notification_important,
+                            Icons.notifications,
                             color: Colors.black,
                             size: 20,
                           ),
