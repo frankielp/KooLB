@@ -13,7 +13,11 @@ class _ChatPageState extends State<chatPage> {
   @override
   Map<String, String> chatUser = {
     'name': 'Linh',
+<<<<<<< Updated upstream
     'messageText': 'Try dictionary',
+=======
+    'messageText': 'Try Dictionary',
+>>>>>>> Stashed changes
     'Time': 'Today 1:30'
   };
   Widget build(BuildContext context) {
@@ -113,7 +117,11 @@ class _ChatPageState extends State<chatPage> {
             ),
             ListView.builder(
               //View list of conversation
+<<<<<<< Updated upstream
               itemCount: 1,
+=======
+              itemCount: 3,
+>>>>>>> Stashed changes
               shrinkWrap: true,
               padding: EdgeInsets.only(top: 16),
               physics: NeverScrollableScrollPhysics(),
