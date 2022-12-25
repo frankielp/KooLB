@@ -1,4 +1,4 @@
-import 'dart:html';
+// import 'dart:html';
 import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/user/koolUser.dart';
@@ -15,7 +15,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Map<String, String> chatUser = {
     'name': 'Linh',
-    'messageText': 'Try dictionary',
+    'messageText': 'Try Dictionary',
     'Time': 'Today 1:30'
   };
   Widget build(BuildContext context) {
@@ -114,7 +114,6 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
             ListView.builder(
-              //View list of conversation
               itemCount: 1,
               shrinkWrap: true,
               padding: EdgeInsets.only(top: 16),
