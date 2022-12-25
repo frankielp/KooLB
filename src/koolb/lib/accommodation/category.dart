@@ -21,3 +21,15 @@ List<Category> intArrayToListCategory(List<int> a) {
   });
   return ret;
 }
+
+extension ParseToString on Category {
+  String toShortString() {
+    if (this == Category.SharedHome) {
+      return "Shared Home";
+    }
+    if (this == Category.BreakfastIncluded) {
+      return "Breakfast Included";
+    }
+    else return this.toString().split('.').last;
+  }
+}

@@ -111,7 +111,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _handleImageSelection() async {
-    final result = await ImagePicker().pickImage(
+    final result = await ImagePicker().pickImage (
       imageQuality: 70,
       maxWidth: 1440,
       source: ImageSource.gallery,

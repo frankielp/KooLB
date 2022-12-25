@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/accommodation/category.dart' as Category;
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/ui/renter/pages/accommodation_detail.dart';
 
 class AccommodationItem extends StatefulWidget {
   const AccommodationItem({super.key, this.data, this.onTap, this.image});
@@ -21,97 +22,128 @@ class _AccommodationItemState extends State<AccommodationItem> {
 
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        Container(
-          padding:
-              EdgeInsets.only(right: size.width * 0.1, top: size.height * 0.03),
-          height: size.height * 0.5,
-          child: PageView.builder(
-            onPageChanged: ((value) {
-              setState(() {
-                currentPage = value;
-              });
-            }),
-            // itemCount: widget.data["image"].length,
-            itemCount: widget.image.length,
-            itemBuilder: (context, index) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  // widget.data["image"][index],
-                  widget.image[index],
-                  height: size.height * 0.4,
-                  fit: BoxFit.fill,
-                ),
-              );
-            },
-          ),
-        ),
-        Container(
-          padding:
-              EdgeInsets.only(right: size.width * 0.1, top: size.height * 0.04),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              // widget.data["image"].length,
-              widget.image.length,
-              (index) => buildDot(index: index),
+    return GestureDetector(
+      onTap: () {
+        setState(
+          () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return DetailsPage(
+                    category: widget.data.category,
+                    name: widget.data.name,
+                    rating: widget.data.rating,
+                    numRooms: widget.data.room,
+                    description: widget.data.city,
+                    address: '${widget.data.city} ${widget.data.country}',
+                    price: widget.data.price,
+                    numChildren: widget.data.children,
+                    numPeople: widget.data.adult,
+                    images: widget.image,
+                    accommodationID: "widget.data.accommodationID",
+                    isFavorite: false,
+                  );
+                },
+              ),
+            );
+          },
+        );
+      },
+      child: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.only(
+                right: size.width * 0.1, top: size.height * 0.03),
+            height: size.height * 0.5,
+            child: PageView.builder(
+              onPageChanged: ((value) {
+                setState(() {
+                  currentPage = value;
+                });
+              }),
+              // itemCount: widget.data["image"].length,
+              itemCount: widget.image.length,
+              itemBuilder: (context, index) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(
+                    // widget.data["image"][index],
+                    widget.image[index],
+                    height: size.height * 0.4,
+                    fit: BoxFit.fill,
+                  ),
+                );
+              },
             ),
           ),
-          // decoration: BoxDecoration(
-          //   boxShadow: [
-          //     BoxShadow(
-          //       color:
-          //       Colors.black.withOpacity(0.3),
-          //       blurRadius: 5
-          //     )
-          //   ]
-          // ),
-        ),
-        Container(
+          Container(
+            padding: EdgeInsets.only(
+                right: size.width * 0.1, top: size.height * 0.04),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                // widget.data["image"].length,
+                widget.image.length,
+                (index) => buildDot(index: index),
+              ),
+            ),
+            // decoration: BoxDecoration(
+            //   boxShadow: [
+            //     BoxShadow(
+            //       color:
+            //       Colors.black.withOpacity(0.3),
+            //       blurRadius: 5
+            //     )
+            //   ]
+            // ),
+          ),
+          Container(
             width: size.width * 0.5,
             margin: EdgeInsets.only(
                 top: size.height * 0.42, left: size.width * 0.35),
-            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             decoration: BoxDecoration(
               color: LightBlue2,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                    offset: Offset(0, 3),
+                    offset: const Offset(0, 3),
                     color: Colors.black.withOpacity(0.3),
                     blurRadius: 5)
               ],
             ),
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                
                 children: [
                   Text(
                     widget.data.country + ', ' + widget.data.city,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w300,
                       fontStyle: FontStyle.italic,
                       color: Color.fromARGB(255, 111, 110, 110),
                       fontSize: 12,
                     ),
                   ),
-                  SizedBox(height: 3,),
+                  const SizedBox(
+                    height: 3,
+                  ),
                   Text(
                     widget.data.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       color: DarkBlue,
                       fontSize: 15,
                     ),
                   ),
-                  SizedBox(height: 3,),
-                  Row (
+                  const SizedBox(
+                    height: 3,
+                  ),
+                  Row(
                     children: [
-                      Text(
+                      const Text(
                         'Price: ',
                         style: TextStyle(
                           fontSize: 13,
@@ -119,8 +151,8 @@ class _AccommodationItemState extends State<AccommodationItem> {
                         ),
                       ),
                       Text(
-                        '${'\$' + widget.data.price.toString()} night',
-                        style: TextStyle(
+                        '${'\$${widget.data.price}'} night',
+                        style: const TextStyle(
                           fontSize: 13,
                         ),
                       ),
@@ -128,8 +160,10 @@ class _AccommodationItemState extends State<AccommodationItem> {
                   ),
                 ],
               ),
-            )),
-      ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
