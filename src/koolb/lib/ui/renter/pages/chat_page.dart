@@ -3,13 +3,15 @@ import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/user/koolUser.dart';
 import 'package:koolb/ui/renter/pages/notification_page.dart';
+import 'package:koolb/ui/renter/pages/chat_box.dart';
 
-class chatPage extends StatefulWidget {
+class ChatPage extends StatefulWidget {
+  const ChatPage({super.key});
   @override
-  _ChatPageState createState() => _ChatPageState();
+  State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<chatPage> {
+class _ChatPageState extends State<ChatPage> {
   @override
   Map<String, String> chatUser = {
     'name': 'Linh',
@@ -112,8 +114,7 @@ class _ChatPageState extends State<chatPage> {
               ),
             ),
             ListView.builder(
-              //View list of conversation
-              itemCount: 3,
+              itemCount: 1,
               shrinkWrap: true,
               padding: EdgeInsets.only(top: 16),
               physics: NeverScrollableScrollPhysics(),
@@ -151,7 +152,11 @@ class _ConversationListState extends State<ConversationList> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return ChatBox();
+        }));
+      },
       child: Container(
         padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
         child: Row(

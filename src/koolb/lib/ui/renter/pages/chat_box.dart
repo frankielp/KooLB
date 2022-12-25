@@ -7,17 +7,21 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/date_symbol_data_local.dart';
-
 import 'package:path_provider/path_provider.dart';
+import 'package:mime/mime.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:open_filex/open_filex.dart';
+import 'package:uuid/uuid.dart';
 
-class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+class ChatBox extends StatefulWidget {
+  const ChatBox({super.key});
 
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  State<ChatBox> createState() => _ChatBoxState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatBoxState extends State<ChatBox> {
   List<types.Message> _messages = [];
   final _user = const types.User(id: '82091008-a484-4a89-ae75-a22bf8d6f3ac');
 

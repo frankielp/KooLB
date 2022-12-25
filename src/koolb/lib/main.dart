@@ -41,7 +41,6 @@ import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'firebase_options.dart';
 import 'package:koolb/ui/sign_in_screen.dart' as SignInPage;
 import 'package:koolb/ui/renter/pages/notification_page.dart';
-import 'package:koolb/ui/renter/pages/chatdetail.dart';
 
 import 'ui/renter/pages/home_page.dart';
 

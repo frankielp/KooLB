@@ -12,6 +12,10 @@ class NotiPage extends StatefulWidget {
 }
 
 class _NotiPageState extends State<NotiPage> {
+  Map<String, String> Notification = {
+    'Title': 'Top 10 hotels in Berlin',
+    'BriefDescription': 'A trip through the scenery of Berlin'
+  };
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +34,7 @@ class _NotiPageState extends State<NotiPage> {
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return chatPage();
+                            return ChatPage();
                           }));
                         },
                         child: Icon(
@@ -76,16 +80,87 @@ class _NotiPageState extends State<NotiPage> {
                           SizedBox(
                             width: 2,
                           ),
-                          Text(
-                            "Push Notification",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
-                          ),
                         ],
                       ),
                     )
                   ],
                 ),
+              ),
+            ),
+            ListView.builder(
+              //View list of notification
+              itemCount: 1,
+              shrinkWrap: true,
+              padding: EdgeInsets.only(top: 16),
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return NotiViewBuilder(
+                  title: Notification['Title'].toString(),
+                  briefDescrip: Notification['BriefDescrip'].toString(),
+                  isRead: (index == 0 || index == 3) ? true : false,
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class NotiViewBuilder extends StatefulWidget {
+  String title;
+  String briefDescrip;
+  bool isRead;
+  NotiViewBuilder(
+      {required this.title, required this.briefDescrip, required this.isRead});
+
+  @override
+  _NotiListState createState() => _NotiListState();
+}
+
+class _NotiListState extends State<NotiViewBuilder> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            widget.title,
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          SizedBox(
+                            height: 6,
+                          ),
+                          Text(
+                            widget.briefDescrip,
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey.shade600,
+                                fontWeight: widget.isRead
+                                    ? FontWeight.bold
+                                    : FontWeight.normal),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
