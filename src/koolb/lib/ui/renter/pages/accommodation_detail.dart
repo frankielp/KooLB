@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/accommodation/category.dart' as _category;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:koolb/decoration/color.dart';
@@ -8,32 +9,19 @@ import 'package:koolb/ui/renter/pages/booking/basic_book.dart';
 
 class DetailsPage extends StatefulWidget {
   // thêm id
-  final List<_category.Category> category;
-  final String name;
-  final double rating;
   final String description;
-  final int numRooms;
   final String address;
-  final double price;
-  final int numChildren;
-  final int numPeople;
   final List<String> images;
   final String accommodationID;
+  final Accommodation accommodation;
   bool isFavorite;
   DetailsPage({
     Key? key,
-    required this.category,
-    required this.name,
-    required this.rating,
-    required this.numRooms,
     required this.description,
     required this.address,
-    required this.price,
-    required this.numChildren,
-    required this.numPeople,
     required this.images,
     required this.accommodationID,
-    required this.isFavorite,
+    required this.isFavorite, required this.accommodation,
   }) : super(key: key);
 
   @override
@@ -79,7 +67,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       Row(
                         children: [
                           Text(
-                            widget.name,
+                            widget.accommodation.name,
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       fontWeight: FontWeight.bold,
@@ -91,7 +79,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             color: BlueJean,
                           ),
                           Text(
-                            widget.rating.toString(),
+                            widget.accommodation.rating.toString(),
                             style:
                                 Theme.of(context).textTheme.subtitle1!.copyWith(
                                       fontWeight: FontWeight.bold,
@@ -113,7 +101,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                           const Spacer(),
                           Text(
-                            "\$ ${widget.price}",
+                            "\$ ${widget.accommodation.price}",
                             style:
                                 Theme.of(context).textTheme.subtitle2!.copyWith(
                                       color: Colors.black.withOpacity(0.5),
@@ -131,17 +119,17 @@ class _DetailsPageState extends State<DetailsPage> {
                             specWidget(
                               context,
                               Icons.home,
-                              "${widget.numRooms} Rooms",
+                              "${widget.accommodation.room} Rooms",
                             ),
                             specWidget(
                               context,
                               Icons.child_care,
-                              "${widget.numChildren} Children",
+                              "${widget.accommodation.children} Children",
                             ),
                             specWidget(
                               context,
                               Icons.people,
-                              "${widget.numPeople} Adult",
+                              "${widget.accommodation.adult} Adult",
                             ),
                           ],
                         ),
@@ -149,7 +137,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       SizedBox(
                         height: size.height * 0.03,
                       ),
-                      listCategories(widget.category, size),
+                      listCategories(widget.accommodation.category, size),
                       SizedBox(
                         height: size.height * 0.035,
                       ),
@@ -262,11 +250,11 @@ class _DetailsPageState extends State<DetailsPage> {
                               endDate: DateTime.now().add(
                                 Duration(days: 2),
                               ),
-                              adults: widget.numPeople,
-                              children: widget.numChildren,
-                              maxAdults: widget.numPeople,
-                              maxChildren: widget.numChildren,
-                              price: widget.price,
+                              adults: 1,
+                              children: 1,
+                              maxAdults: widget.accommodation.adult,
+                              maxChildren: widget.accommodation.children,
+                              price: widget.accommodation.price,
                             ),
                           ),
                         );

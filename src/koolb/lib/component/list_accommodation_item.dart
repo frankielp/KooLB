@@ -31,18 +31,12 @@ class _AccommodationItemState extends State<AccommodationItem> {
               MaterialPageRoute(
                 builder: (context) {
                   return DetailsPage(
-                    category: widget.data.category,
-                    name: widget.data.name,
-                    rating: widget.data.rating,
-                    numRooms: widget.data.room,
                     description: widget.data.city,
                     address: '${widget.data.city} ${widget.data.country}',
-                    price: widget.data.price,
-                    numChildren: widget.data.children,
-                    numPeople: widget.data.adult,
                     images: widget.image,
                     accommodationID: "widget.data.accommodationID",
                     isFavorite: false,
+                    accommodation: widget.data,
                   );
                 },
               ),
