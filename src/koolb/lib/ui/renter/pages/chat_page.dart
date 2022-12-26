@@ -10,12 +10,12 @@ const thisUserID = 'eNZEIQKDI4chp7eUcWufFqDYbj92';
 const thatUserID = 'eNZEIQKDI4chp7eUcWufFqDYbj92';
 
 DatabaseReference ref = FirebaseDatabase.instance.ref();
-final snapshot = await ref.child('users/$thisUserID').get();
-if (snapshot.exists) {
-    print(snapshot.value);
-} else {
-    print('No data available.');
-}
+// final snapshot = await ref.child('users/$thisUserID').get();
+// if (snapshot.exists) {
+//     print(snapshot.value);
+// } else {
+//     print('No data available.');
+// }
 Map<String, String> chatUser = {
   'name': 'Linh',
   'messageText': 'Try Dictionary',
