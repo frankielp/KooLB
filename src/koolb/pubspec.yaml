@@ -56,9 +56,16 @@ dependencies:
   file_picker: ^5.2.4
   uuid: ^3.0.7
   mime: ^1.0.3
+<<<<<<< Updated upstream
   firebase_analytics: any
   readmore: ^2.2.0
   #firebase_messaging: 6.0.9
+=======
+  firebase_database: ^10.0.8
+
+  # firebase_analytics: any
+  # firebase_messaging: 6.0.9
+>>>>>>> Stashed changes
 
 dev_dependencies:
   flutter_test:
