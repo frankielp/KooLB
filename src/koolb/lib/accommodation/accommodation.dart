@@ -10,6 +10,7 @@ class Accommodation extends Place {
   double _rating;
   int _room;
   int _children;
+  int _guests;
   List<DateTimeRange> _bookedTime;
 
   Accommodation(
@@ -18,6 +19,7 @@ class Accommodation extends Place {
       double rating,
       int room,
       int children,
+      int guest,
       List<DateTimeRange> bookedTime,
       String name,
       GeoPoint location)
@@ -27,6 +29,7 @@ class Accommodation extends Place {
         _room = room,
         _children = children,
         _bookedTime = bookedTime,
+        _guests = guest,
         super(name, location);
 
   List<Category> get category => _category;
