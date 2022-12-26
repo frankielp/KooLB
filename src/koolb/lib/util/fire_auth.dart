@@ -7,6 +7,7 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:koolb/component/showSnackbar.dart';
 
 class FireAuth {
+<<<<<<< Updated upstream:src/koolb/lib/util/fire_auth.dart
   final FirebaseAuth _auth;
   FireAuth(this._auth);
 
@@ -20,6 +21,11 @@ class FireAuth {
   Stream<User?> get authState => FirebaseAuth.instance.authStateChanges();
 
   // REGISTER WITH EMAIL PASSWORD
+=======
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  User? get currentUser => _firebaseAuth.currentUser;
+
+>>>>>>> Stashed changes:src/koolb/lib/component/fire_auth.dart
   static Future<User?> registerUsingEmailPassword({
     required String name,
     required String email,

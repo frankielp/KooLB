@@ -17,6 +17,7 @@ import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/homepage/search.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
+import 'package:koolb/ui/renter/pages/wishlist/wishlist_page.dart';
 import 'package:koolb/ui/sign_up_screen.dart';
 // import 'package:koolb/ui/welcoming_page.dart';
 import 'package:koolb/ui/splash_screen.dart';
@@ -111,10 +112,15 @@ class _MyHomePageState extends State<MyHomePage> {
     print("User ID: " + userID);
 
     return Scaffold(
+<<<<<<< Updated upstream
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: SplashScreen(),
+=======
+      // body: SplashScreen(),
+      body: HomePage()
+>>>>>>> Stashed changes
     );
   }
 }

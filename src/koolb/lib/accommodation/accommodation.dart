@@ -4,8 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:koolb/place/place.dart';
 import '../host/host.dart';
 
+<<<<<<< Updated upstream
 class Accommodation extends Place{
   List<Category> _category;
+=======
+class Accommodation extends Place {
+  var id;
+  List<Category.Category> _category;
+>>>>>>> Stashed changes
   double _price;
   double _rating;
   int _room;
@@ -35,4 +41,226 @@ class Accommodation extends Place{
   List<DateTimeRange> get bookedTime => _bookedTime;
 
   GeoPoint get location => super.position;
+<<<<<<< Updated upstream
 }
+=======
+
+  /*
+  add information of accommodation to firebase
+  */
+  Future<void> addInfoToDatabase() {
+    // List<String> stringStart = [];
+    // _starts.forEach((element) {
+    //   stringStart.add(dateTimeToString(element));
+    // });
+    // List<String> stringEnd = [];
+    // _ends.forEach((element) {
+    //   stringEnd.add(dateTimeToString(element));
+    // });
+    List<int> type = [];
+    category.forEach((element) {
+      type.add(element.index);
+    });
+    return FirebaseFirestore.instance
+        .collection('accommodation')
+        .add(<String, dynamic>{
+          'category': FieldValue.arrayUnion(type),
+          'price': _price,
+          'rating': _rating,
+          'room': _room,
+          'children': _children,
+          'adult': _adult,
+          'country': _country,
+          'city': _city,
+          'starts': FieldValue.arrayUnion(_starts),
+          'ends': FieldValue.arrayUnion(_ends),
+          'name': name,
+          'location': location,
+        })
+        .then((value) => print('Accommodation Added'))
+        .catchError((error) => print('Error $error'));
+  }
+
+
+  Map<String, dynamic> toJson() {
+    List<int> type = [];
+    category.forEach((element) {
+      type.add(element.index);
+    });
+    return {
+      'category': FieldValue.arrayUnion(type),
+      'price': _price,
+      'rating': _rating,
+      'room': _room,
+      'children': _children,
+      'adult': _adult,
+      'country': _country,
+      'city': _city,
+      'starts': FieldValue.arrayUnion(_starts),
+      'ends': FieldValue.arrayUnion(_ends),
+      'name': name,
+      'location': location,
+    };
+  }
+
+  static Accommodation fromJson(Map<String, dynamic> json) {
+    List<Category.Category> category =
+        Category.intArrayToListCategory(json['category']);
+    List<DateTime> starts =
+        json['starts'].forEach((value) => value.toDate()).toList();
+
+    List<DateTime> ends =
+        json['ends'].forEach((value) => value.toDate()).toList();
+
+    return Accommodation(
+        Category.intArrayToListCategory(json['category']),
+        json['price'],
+        json['rating'],
+        json['room'],
+        json['children'],
+        json['adult'],
+        starts,
+        ends,
+        json['country'],
+        json['city'],
+        json['name'],
+        json['location']);
+  }
+
+
+  static Future<List<Accommodation>> getAccommodationBasedOnDatabase(
+
+      String country,
+      String city,
+      int numRooms,
+      int numAdult,
+      int numChildren,
+      DateTime start,
+      DateTime end) async {
+    List<Accommodation> ret = [];
+    QuerySnapshot qn = await FirebaseFirestore.instance
+        .collection('accommodation')
+        .where('country', isEqualTo: country)
+        .where('city', isEqualTo: city)
+        .get();
+
+    qn.docs.forEach((element) {
+      final map = element.data();
+      if (element['room'] < numRooms ||
+          element['adult'] < numAdult ||
+          element['children'] < numChildren) {
+        return;
+      }
+      List<DateTime> starts = [];
+      element['starts'].forEach((value) {
+        starts.add(value.toDate());
+      });
+      List<DateTime> ends = [];
+      element['ends'].forEach((value) {
+        ends.add(value.toDate());
+      });
+      for (int i = 0; i < starts.length; ++i) {
+        if ((start.isAfter(starts[i]) && start.isAfter(ends[i]) ||
+            (end.isAfter(starts[i]) && end.isBefore(ends[i])))) {
+          return;
+        }
+      }
+      List<Category.Category> category = [];
+      element['category'].forEach((value) {
+        category.add(Category.Category.values[value]);
+      });
+      ret.add(Accommodation(
+          category,
+          element['price'],
+          element['rating'],
+          element['room'],
+          element['children'],
+          element['adult'],
+          starts,
+          ends,
+          element['country'],
+          element['city'],
+          element['name'],
+          element['location']));
+    });
+
+    print(ret);
+    return ret;
+  }
+
+  static Future<List<Accommodation>> getAllAccommodation() async {
+    List<Accommodation> ret = [];
+    QuerySnapshot qn =
+        await FirebaseFirestore.instance.collection('accommodation').get();
+
+    qn.docs.forEach((element) {
+      final map = element.data();
+      List<DateTime> starts = [];
+      element['starts'].forEach((value) {
+        starts.add(value.toDate());
+      });
+      List<DateTime> ends = [];
+      element['ends'].forEach((value) {
+        ends.add(value.toDate());
+      });
+      List<Category.Category> category = [];
+      element['category'].forEach((value) {
+        category.add(Category.Category.values[value]);
+      });
+      ret.add(Accommodation(
+          category,
+          element['price'],
+          element['rating'],
+          element['room'],
+          element['children'],
+          element['adult'],
+          starts,
+          ends,
+          element['country'],
+          element['city'],
+          element['name'],
+          element['location']));
+    });
+
+    print(ret);
+    return ret;
+  }
+
+  static Future<Accommodation> getAccommodationById(uid) async {
+    var snapshot = await FirebaseFirestore.instance
+        .collection('accommodation')
+        .doc(uid)
+        .get();
+    if (snapshot.exists) {
+      throw Exception('Accommodation does not exist in database');
+    }
+
+    Map<String, dynamic>? data = snapshot.data();
+    List<DateTime> starts = [];
+    data?['starts'].forEach((value) {
+      starts.add(value.toDate());
+    });
+    List<DateTime> ends = [];
+    data?['ends'].forEach((value) {
+      ends.add(value.toDate());
+    });
+    List<Category.Category> category = [];
+    data?['category'].forEach((value) {
+      category.add(Category.Category.values[value]);
+    });
+    double price = data?['price'];
+    double rating = data?['rating'];
+    int room = data?['room'];
+    int children = data?['children'];
+    int adult = data?['adults'];
+    String country = data?['country'];
+    String city = data?['city'];
+    String name = data?['name'];
+    GeoPoint location = data?['location'];
+
+    return Accommodation(category, price, rating, room, children, adult, starts,
+        ends, country, city, name, location);
+  }
+}
+
+>>>>>>> Stashed changes
