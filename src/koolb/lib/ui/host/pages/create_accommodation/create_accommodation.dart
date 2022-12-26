@@ -32,7 +32,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     fontWeight: FontWeight.bold,
   );
 
-  final _controller = PageController(initialPage: 2);
+  final _controller = PageController(initialPage: 3);
 
   final _kDuration = const Duration(milliseconds: 500);
 
@@ -44,7 +44,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
       _selectingCategory(),
       _selectingLocation(),
       _addBasics(),
-      // const SelectingAmenities(),
+      _addAmenities(),
       // const AddingPhoto(),
       // const SettingTitleDescription(),
       // const SettingPrice(),
@@ -55,6 +55,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
               child: PageView(
@@ -66,8 +67,8 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
             SmoothPageIndicator(
               controller: _controller,
               count: pages.length,
-              effect: WormEffect(
-                dotColor: Colors.grey.shade200,
+              effect: const ExpandingDotsEffect(
+                dotColor: BlueJean,
                 activeDotColor: BlueJean,
               ),
             ),
@@ -131,76 +132,69 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   }
 
   Widget _selectingCategory() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Which of these best describes your place?',
-            style: _defaultHeadingStyle,
-          ),
-          _defaultDivider(),
-          Expanded(child: _chooseDescription()),
-        ],
-      ),
-    );
-  }
-
-  Widget _chooseDescription() {
-    return CustomScrollView(
-      slivers: [
-        SliverGrid.count(
-          crossAxisCount: 1,
-          mainAxisSpacing: 10,
-          childAspectRatio: 10 / 2,
-          children: [
-            _cardViewDescription(
-                Icons.apartment, 'Apartment', Category.Apartment),
-            _cardViewDescription(Icons.hotel, 'Hotel', Category.Hotel),
-            _cardViewDescription(Icons.house, 'Homestay', Category.Homestay),
-          ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Which of these best describes your place?',
+          style: _defaultHeadingStyle,
         ),
+        _defaultDivider(),
+        _cardViewDescription(Icons.apartment, 'Apartment', Category.Apartment),
+        _cardViewDescription(Icons.hotel, 'Hotel', Category.Hotel),
+        _cardViewDescription(
+            Icons.house_siding_outlined, 'Hostel', Category.Hostel),
+        _cardViewDescription(Icons.house, 'Homestay', Category.Homestay),
+        _cardViewDescription(Icons.people, 'Shared Home', Category.SharedHome),
+        _cardViewDescription(
+            Icons.location_city, 'Near City', Category.NearCity),
+        _cardViewDescription(
+            Icons.bedroom_parent, 'Double Room', Category.DoubleRoom),
       ],
     );
   }
 
   Widget _cardViewDescription(IconData icon, String name, Category category) {
-    return Ink(
-      decoration: BoxDecoration(
-        color:
-            category == _bestDescription ? Colors.grey.shade300 : Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          width: 1,
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Ink(
+        width: MediaQuery.of(context).size.width - 20,
+        decoration: BoxDecoration(
+          color: category == _bestDescription
+              ? Colors.grey.shade300
+              : Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            width: 1,
+          ),
         ),
-      ),
-      child: InkWell(
-        splashColor: Colors.grey.shade400,
-        onTap: () {
-          setState(() {
-            _bestDescription = category;
-          });
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                color: Colors.black,
-                size: 24,
-              ),
-              Text(
-                name,
-                textAlign: TextAlign.start,
-                style: const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.w400),
-              )
-            ],
+        child: InkWell(
+          splashColor: Colors.grey.shade400,
+          onTap: () {
+            setState(() {
+              _bestDescription = category;
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(9),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(
+                  icon,
+                  color: Colors.black,
+                  size: 24,
+                ),
+                Text(
+                  name,
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w400),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -421,6 +415,83 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _addAmenities() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Tell guests what your place has to offer',
+              style: _defaultHeadingStyle,
+            ),
+            _defaultDivider(),
+            _cardViewAmenities(Icons.breakfast_dining, 'Breakfast Included',
+                Category.BreakfastIncluded),
+            _cardViewAmenities(Icons.spa, 'Spa', Category.Spa),
+            _cardViewAmenities(Icons.pool, 'Pool', Category.Pool),
+            _cardViewAmenities(Icons.local_parking_rounded, 'Parking Lot',
+                Category.ParkingLot),
+            _cardViewAmenities(
+                Icons.shield, 'High Safety', Category.HighSafety),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _cardViewAmenities(IconData icon, String text, Category category) {
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: Ink(
+        width: MediaQuery.of(context).size.width - 10,
+        decoration: BoxDecoration(
+          color: _categories.contains(category)
+              ? Colors.grey.shade300
+              : Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            width: 1,
+          ),
+        ),
+        child: InkWell(
+          splashColor: Colors.grey.shade400,
+          onTap: () {
+            setState(() {
+              if (_categories.contains(category)) {
+                _categories.remove(category);
+              } else {
+                _categories.add(category);
+              }
+            });
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  color: Colors.black,
+                  size: 24,
+                ),
+                Text(
+                  text,
+                  textAlign: TextAlign.start,
+                  style: const TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w400),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
