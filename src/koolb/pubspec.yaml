@@ -51,6 +51,14 @@ dependencies:
   intl: ^0.17.0
   flutter_chat_ui: ^1.6.6
   carousel_slider: ^4.2.1
+  image_picker: ^0.8.6
+  open_filex: ^4.3.2
+  file_picker: ^5.2.4
+  uuid: ^3.0.7
+  mime: ^1.0.3
+  firebase_analytics: any
+  readmore: ^2.2.0
+  #firebase_messaging: 6.0.9
 
 dev_dependencies:
   flutter_test:
