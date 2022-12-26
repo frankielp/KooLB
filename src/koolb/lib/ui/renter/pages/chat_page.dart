@@ -5,13 +5,13 @@ import 'package:koolb/user/koolUser.dart';
 import 'package:koolb/ui/renter/pages/notification_page.dart';
 import 'package:koolb/ui/renter/pages/chat_box.dart';
 
-class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
+class chatPage extends StatefulWidget {
+  const chatPage({super.key});
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  State<chatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<chatPage> {
   @override
   Map<String, String> chatUser = {
     'name': 'Linh',

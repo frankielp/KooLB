@@ -34,7 +34,7 @@ class _NotiPageState extends State<NotiPage> {
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return ChatPage();
+                            return chatPage();
                           }));
                         },
                         child: Icon(
