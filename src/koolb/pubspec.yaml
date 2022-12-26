@@ -56,8 +56,8 @@ dependencies:
   uuid: ^3.0.7
   mime: ^1.0.3
   firebase_analytics: any
-  firebase_messaging: 6.0.9
-  firebase_core: ^0.4.0
+  readmore: ^2.2.0
+  #firebase_messaging: 6.0.9
 
 dev_dependencies:
   flutter_test:
