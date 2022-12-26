@@ -6,6 +6,7 @@ import 'package:koolb/accommodation/category.dart' as Category;
 import 'package:koolb/component/category_item.dart';
 import 'package:koolb/component/list_accommodation_item.dart';
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/ui/renter/pages/accommodation_detail.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,12 +26,12 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<String> icons = [
-    "icons/all.png",
-    "icons/apartment.png",
-    "icons/sharedhouse.png",
-    "icons/hostel.png",
-    "icons/hotel.png",
-    "icons/homestay.png"
+    "assets/icons/all.png",
+    "assets/icons/apartment.png",
+    "assets/icons/sharedhouse.png",
+    "assets/icons/hostel.png",
+    "assets/icons/hotel.png",
+    "assets/icons/homestay.png"
   ];
 
   List<String> images = [
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Accommodation> accommodations = [
     Accommodation(
-        [Category.Category.Hotel],
+        <Category.Category> [Category.Category.Hotel, Category.Category.BreakfastIncluded],
         0.5,
         4.5,
         1,
@@ -305,14 +306,13 @@ class _HomePageState extends State<HomePage> {
         (index) => AccommodationItem(
               data: filteredaccommodations[index],
               image: images,
-              onTap: () {
-                setState(() {});
-              },
+              onTap: () {},
             ));
     return Container(
       height: size.height * 0.52,
       child: SingleChildScrollView(
-        padding: EdgeInsets.only(left: size.width * 0.05, right: size.width * 0.05),
+        padding:
+            EdgeInsets.only(left: size.width * 0.05, right: size.width * 0.05),
         child: Column(
           children: lists,
         ),
@@ -320,30 +320,44 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Accommodation> displayByCategory(List<Accommodation> filteredaccommodations) {
-    switch(selectedCategory) {
-      case 1: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.Apartment]).toList();
-      }
-      break;
-      case 2: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.SharedHome]).toList();
-      }
-      break;
-      case 3: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.Hostel]).toList();
-      }
-      break;
-      case 4: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.Hotel]).toList();
-      }
-      break;
-      case 5: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.Homestay]).toList();
-      }
-      break;
-      default: 
-      break;
+  List<Accommodation> displayByCategory(
+      List<Accommodation> filteredaccommodations) {
+    switch (selectedCategory) {
+      case 1:
+        {
+          filteredaccommodations = filterResult(
+              accommodations.toSet(), [Category.Category.Apartment]).toList();
+        }
+        break;
+      case 2:
+        {
+          filteredaccommodations = filterResult(
+              accommodations.toSet(), [Category.Category.SharedHome]).toList();
+        }
+        break;
+      case 3:
+        {
+          filteredaccommodations =
+              filterResult(accommodations.toSet(), [Category.Category.Hostel])
+                  .toList();
+        }
+        break;
+      case 4:
+        {
+          filteredaccommodations =
+              filterResult(accommodations.toSet(), [Category.Category.Hotel])
+                  .toList();
+        }
+        break;
+      case 5:
+        {
+          filteredaccommodations =
+              filterResult(accommodations.toSet(), [Category.Category.Homestay])
+                  .toList();
+        }
+        break;
+      default:
+        break;
     }
 
     return filteredaccommodations;
