@@ -21,7 +21,7 @@ class CreateAccommodation extends StatefulWidget {
 }
 
 class _CreateAccommodationState extends State<CreateAccommodation> {
-  List<Category> _categories = [];
+  final List<Category> _categories = [];
   Category _bestDescription = Category.Apartment;
   String? _countryValue;
   String? _cityValue;
@@ -33,14 +33,17 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
 
   File? _imageFile;
   Uint8List _webImageFile = Uint8List(8);
-  TextEditingController _addressController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
   static const TextStyle _defaultHeadingStyle = TextStyle(
     color: Colors.black,
     fontSize: 20,
     fontWeight: FontWeight.bold,
   );
 
-  final _controller = PageController(initialPage: 4);
+  final _controller = PageController(initialPage: 5);
 
   final _kDuration = const Duration(milliseconds: 500);
 
@@ -53,8 +56,8 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
       _selectingLocation(),
       _addBasics(),
       _addAmenities(),
-      _addPhotos()
-      // const SettingTitleDescription(),
+      _addPhotos(),
+      _addTitleAndDescription(),
       // const SettingPrice(),
     ];
 
@@ -297,6 +300,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
 
   Widget _addAddress() {
     return TextFormField(
+      controller: _addressController,
       initialValue: _address,
       decoration: const InputDecoration(
           hintText: 'Building number, street name, wand, district'),
@@ -309,8 +313,6 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
       },
     );
   }
-
-  // bool _validation() {}
 
   Widget _addBasics() {
     return Padding(
@@ -530,44 +532,103 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
             ),
           ),
         ),
-        TextButton(
-          onPressed: () async {
-            XFile? pickedFile =
-                await ImagePicker().pickImage(source: ImageSource.gallery);
-            if (kIsWeb) {
-              var f = await pickedFile?.readAsBytes();
-              setState(() {
-                _webImageFile = f!;
-                _imageFile = File('a');
-              });
-            } else {
-              setState(() {
-                if (pickedFile != null) {
-                  _imageFile = File(pickedFile.path);
-                }
-              });
-            }
-          },
-          child: Text(_imageFile == null
-              ? 'Select from library'
-              : 'Replace from library'),
-        ),
-        if (!kIsWeb)
-          TextButton(
+        Center(
+          child: TextButton(
             onPressed: () async {
               XFile? pickedFile =
-                  await ImagePicker().pickImage(source: ImageSource.camera);
-              setState(() {
-                if (pickedFile != null) {
-                  _imageFile = File(pickedFile.path);
-                }
-              });
+                  await ImagePicker().pickImage(source: ImageSource.gallery);
+              if (kIsWeb) {
+                var f = await pickedFile?.readAsBytes();
+                setState(() {
+                  _webImageFile = f!;
+                  _imageFile = File('a');
+                });
+              } else {
+                setState(() {
+                  if (pickedFile != null) {
+                    _imageFile = File(pickedFile.path);
+                  }
+                });
+              }
             },
             child: Text(_imageFile == null
-                ? 'Select from camera'
-                : 'Replace from camera'),
+                ? 'Select from library'
+                : 'Replace from library'),
+          ),
+        ),
+        if (!kIsWeb)
+          Center(
+            child: TextButton(
+              onPressed: () async {
+                XFile? pickedFile =
+                    await ImagePicker().pickImage(source: ImageSource.camera);
+                setState(() {
+                  if (pickedFile != null) {
+                    _imageFile = File(pickedFile.path);
+                  }
+                });
+              },
+              child: Text(_imageFile == null
+                  ? 'Select from camera'
+                  : 'Replace from camera'),
+            ),
           ),
       ],
     );
   }
+
+  Widget _addTitleAndDescription() {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Now, let's give your tiny home a title",
+            style: _defaultHeadingStyle,
+          ),
+          _defaultDivider(),
+          ConstrainedBox(
+            constraints:
+                BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
+            child: TextField(
+              controller: _titleController,
+              maxLength: 32,
+              decoration: const InputDecoration(
+                hintText: 'Add your house title here',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              ),
+            ),
+          ),
+          const Text(
+            'Create your description',
+            style: _defaultHeadingStyle,
+          ),
+          _defaultDivider(),
+          ConstrainedBox(
+            constraints:
+                BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
+            child: TextField(
+              controller: _descriptionController,
+              keyboardType: TextInputType.multiline,
+              minLines: null,
+              maxLines: null,
+              maxLength: 500,
+              expands: false,
+              decoration: const InputDecoration(
+                hintText: 'Add your house description here',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //TODO: implement price
+
+  //TODO: validation for each page
 }
