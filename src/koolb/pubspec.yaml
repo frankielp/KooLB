@@ -69,6 +69,11 @@ dependencies:
   json_path: ^0.4.2
   timeago: ^3.3.0
   page_transition: ^2.0.9
+  equatable: ^2.0.5
+  firebase_storage: ^11.0.9
+  fluttertoast: ^8.1.2
+  country_code_picker: ^2.0.2
+  flutter_firebase_chat_core: ^1.6.4
 
   # firebase_analytics: any
   # firebase_messaging: 6.0.9
