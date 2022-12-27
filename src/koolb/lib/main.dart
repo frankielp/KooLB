@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/ui/admin/pages/posting.dart';
 import 'package:koolb/ui/host/pages/tips_page.dart';
 
 import 'package:koolb/ui/renter/pages/chat_page.dart';
@@ -97,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RenterPagesNavigation(),
+      body: PostingAdmin(),
     );
   }
 }
