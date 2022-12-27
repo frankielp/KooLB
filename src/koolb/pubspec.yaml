@@ -59,6 +59,7 @@ dependencies:
   mime: ^1.0.3
   # firebase_analytics: any
   readmore: ^2.2.0
+  flutter_quill: ^6.1.11
   #firebase_messaging: 6.0.9
   firebase_database: ^10.0.8
   firebase_analytics: ^10.0.8
