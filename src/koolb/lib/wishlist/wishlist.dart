@@ -20,6 +20,8 @@ class WishlistFolder{
     accommodationIDs = List.from(snapshot.data()['accommodationIDs'].map((doc) => doc.toString()));
   }
 
+
+  // THÊM FOLDER VỚI ITEM VÀO DATABASE
   Future<void> addFolderToDatabase(String accommodationID){
     //accommodationIDs.add(accommodationID);
     return FirebaseFirestore.instance
@@ -38,6 +40,8 @@ class WishlistFolder{
         .catchError((error) => print('Error $error'));
   }
 
+
+  // THÊM 1 ITEM VÀO FOLDER CÓ SẴN
   Future<void> addItemToFolderInDatabase(String accommodationID) async{
     return FirebaseFirestore.instance.collection('wishlist')
         .doc(renterID)
@@ -49,41 +53,4 @@ class WishlistFolder{
     //await folder.update({'accommodationIDs': FieldValue.arrayUnion([accommodationID])});
   }
 
-  Future getFolderById() async{
-    var snapshot = await FirebaseFirestore.instance
-        .collection('wishlist')
-        .doc(renterID)
-        .collection('folders')
-        .doc(id)
-        .get();
-
-    if (!snapshot.exists){
-      throw Exception('Folder does not exist');
-    }
-
-    Map<String, dynamic>? data = snapshot.data();
-    String folderName = data?['folderName'];
-    String leadingUrl = data?['leadingUrl'];
-    List<String> accommodationIDs = [];
-    data?['accommodationIDs'].forEach((value){
-      accommodationIDs.add(value);
-    });
-
-    WishlistFolder wl = WishlistFolder(
-        folderName: folderName,
-        leadingUrl: leadingUrl);
-
-    wl.accommodationIDs = accommodationIDs;
-    return wl;
-  }
-
-  fromSnapshot(doc){
-    folderName = doc.data()['folderName'];
-    leadingUrl = doc.data()['leadingUrl'];
-    List<String> accommodationIDs = [];
-    doc.data()['accommodationIDs'].forEach((value){
-      accommodationIDs.add(value);
-    });
-    this.accommodationIDs = accommodationIDs;
-  }
 }

@@ -73,6 +73,7 @@ class _FolderList extends State<FolderList>{
     );
   }
 
+  // LẤY LIST FOLDER VỚI THÔNG TIN
   Future getUserFoldersList() async{
     var data = await FirebaseFirestore.instance
         .collection('wishlist')
@@ -87,6 +88,8 @@ class _FolderList extends State<FolderList>{
     print(_folders);
   }
 }
+
+
 
 class WishlistPage extends StatefulWidget{
   @override

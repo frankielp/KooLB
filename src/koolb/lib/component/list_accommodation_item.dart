@@ -171,6 +171,10 @@ class HeartIcon extends StatefulWidget{
 class _HeartIcon extends State<HeartIcon> {
   bool favorite = false;
 
+  setFavorite(){
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -180,6 +184,9 @@ class _HeartIcon extends State<HeartIcon> {
           });
           if (favorite == true) {
             onPressedHeartIcon(context, this.widget.data);
+          }
+          else{
+            onPressedRemoveFavorite(context, this.widget.data);
           }
         },
         icon: (favorite == false) ?
@@ -194,37 +201,34 @@ class _HeartIcon extends State<HeartIcon> {
   }
 }
 
-// Widget heartIcon(BuildContext context, data){
-//   bool click = true;
-//   return IconButton(
-//     icon: Padding(
-//       child: const Icon(
-//         Icons.favorite_outline_outlined,
-//         size: 30,
-//         color: Colors.white,
-//       ),
-//     ),
-//     onPressed: (){
-//       onPressedHeartIcon(context, data);
-//     }
-//
-//   );
-// }
+
+// LẤY LIST FOLDER IDS ĐỂ XỬ LÝ REMOVE
+Future<List<String>> getListFolderIDs() async{
+  //Future<List<String>> folderIDs = [];
+  var data = await FirebaseFirestore.instance.collection('wishlist')
+      .doc(renterID)
+      .collection('folders')
+      .get();
+
+  return List.from(data.docs.map((doc) => doc.id));
+}
 
 
-// XU LY REMOVE
-// Future<void> onPressedRemoveFavorite(BuildContext context, data) async{
-//   var data1 = FirebaseFirestore.instance
-//       .collection('wishlist')
-//       .doc(renterID)
-//       .collection('folders')
-//       .get();
-//
-//
-//
-//
-// }
+// REMOVE 1 ITEM FAVORITE
+Future onPressedRemoveFavorite(BuildContext context, data) async{
+  List<String> folderIDs = await getListFolderIDs();
+  CollectionReference folders = await FirebaseFirestore.instance
+                                    .collection('wishlist')
+                                    .doc(renterID)
+                                    .collection('folders');
+  for (int i = 0; i < folderIDs.length; ++i){
+    await folders.doc(folderIDs[i]).update({'accommodationIDs': FieldValue.arrayRemove([data.id])});
+  }
 
+}
+
+
+// KHI ẤN VÀO TRÁI TIM
 onPressedHeartIcon(BuildContext context, data){
   showModalBottomSheet(
       context: context,
@@ -283,12 +287,10 @@ onPressedHeartIcon(BuildContext context, data){
                       thickness: 0.7,
                     ),
                     SizedBox(
-                      height: 300,
+                      height: 500,
                       child: FolderListInSheet(data),
-
                     )
                   ],
-
                 ),
               );
             }
@@ -298,6 +300,7 @@ onPressedHeartIcon(BuildContext context, data){
 }
 
 
+// KHI ẤN TẠO COLLECTION MỚI
 onPressedCreateCollection(BuildContext context, data) {
   createAskDialog(context).then((onValue) {
     WishlistFolder folder = WishlistFolder(folderName: onValue, leadingUrl: data.images[0]);
@@ -306,6 +309,7 @@ onPressedCreateCollection(BuildContext context, data) {
 }
 
 
+// TẠO DIALOG ĐẶT TÊN COLLECTION
 Future<dynamic> createAskDialog(BuildContext context){
   TextEditingController customController = TextEditingController();
 
@@ -337,6 +341,8 @@ Future<dynamic> createAskDialog(BuildContext context){
   );
 }
 
+
+// HIỆN FOLDER LITS TRONG BOTTOM SHEET
 class FolderListInSheet extends FolderList {
   var accommodationItem;
 
