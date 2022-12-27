@@ -4,11 +4,11 @@ import 'color.dart';
 class CompanyItem extends StatelessWidget {
   CompanyItem(
       {Key? key,
-      // required this.data,
-      this.bgColor = Colors.white,
-      this.color = primary,
-      this.selected = false,
-      this.onTap})
+        // required this.data,
+        this.bgColor = Colors.white,
+        this.color = primary,
+        this.selected = false,
+        this.onTap})
       : super(key: key);
   // final data;
   final Color bgColor;
@@ -57,9 +57,9 @@ class CompanyItem extends StatelessWidget {
           ),
           Expanded(
               child: Text(
-            'test type',
-            style: TextStyle(fontSize: 12, color: darker),
-          )),
+                'test type',
+                style: TextStyle(fontSize: 12, color: darker),
+              )),
           Visibility(
             visible: selected,
             child: Container(
@@ -77,13 +77,13 @@ class CompanyItem extends StatelessWidget {
 class CustomImage extends StatelessWidget {
   const CustomImage(this.name,
       {this.width = 100,
-      this.height = 100,
-      this.bgColor,
-      this.borderWidth = 0,
-      this.borderColor,
-      this.trBackground = false,
-      this.isNetwork = true,
-      this.radius = 50});
+        this.height = 100,
+        this.bgColor,
+        this.borderWidth = 0,
+        this.borderColor,
+        this.trBackground = false,
+        this.isNetwork = true,
+        this.radius = 50});
   final String name;
   final double width;
   final double height;
@@ -149,20 +149,20 @@ class CategoryItem extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Icon(data["icon"],
-                size: 25, color: selected ? Colors.white : Colors.black),
-            SizedBox(
-              height: 5,
-            ),
-            Expanded(
-              child: Text(
-                data["name"],
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                    fontSize: 13, color: selected ? Colors.white : darker),
-              ),
-            ),
+            // Icon(data["icon"],
+            //     size: 25, color: selected ? Colors.white : Colors.black),
+            // SizedBox(
+            //   height: 5,
+            // ),
+            // Expanded(
+            //   child: Text(
+            //     data["name"],
+            //     maxLines: 1,
+            //     overflow: TextOverflow.ellipsis,
+            //     style: TextStyle(
+            //         fontSize: 13, color: selected ? Colors.white : darker),
+            //   ),
+            // ),
             // Visibility(
             //     visible: selected,
             //     child: Container(
@@ -182,11 +182,11 @@ class CategoryItem extends StatelessWidget {
 class CustomTextBox extends StatelessWidget {
   CustomTextBox(
       {Key? key,
-      this.hint = "",
-      this.prefix,
-      this.suffix,
-      this.controller,
-      this.readOnly = false})
+        this.hint = "",
+        this.prefix,
+        this.suffix,
+        this.controller,
+        this.readOnly = false})
       : super(key: key);
   final String hint;
   final Widget? prefix;
@@ -229,11 +229,11 @@ class CustomTextBox extends StatelessWidget {
 class IconBox extends StatelessWidget {
   IconBox(
       {Key? key,
-      required this.child,
-      this.bgColor,
-      this.onTap,
-      this.borderColor = Colors.transparent,
-      this.radius = 50})
+        required this.child,
+        this.bgColor,
+        this.onTap,
+        this.borderColor = Colors.transparent,
+        this.radius = 50})
       : super(key: key);
   final Widget child;
   final Color borderColor;
@@ -363,10 +363,10 @@ class SettingItem extends StatelessWidget {
   final GestureTapCallback? onTap;
   const SettingItem(
       {Key? key,
-      required this.title,
-      this.onTap,
-      this.leadingIcon,
-      this.leadingIconColor = Colors.white})
+        required this.title,
+        this.onTap,
+        this.leadingIcon,
+        this.leadingIconColor = Colors.white})
       : super(key: key);
 
   @override
@@ -394,54 +394,54 @@ class SettingItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: leadingIcon != null
                 ? [
-                    Container(
-                      padding: EdgeInsets.all(7),
-                      decoration: BoxDecoration(
-                        color: cardColor,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: shadowColor.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 1,
-                            offset: Offset(0, 1), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: Icon(
-                        leadingIcon,
-                        size: 24,
-                        color: leadingIconColor,
-                      ),
+              Container(
+                padding: EdgeInsets.all(7),
+                decoration: BoxDecoration(
+                  color: cardColor,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: shadowColor.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 1,
+                      offset: Offset(0, 1), // changes position of shadow
                     ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: labelColor,
-                      size: 14,
-                    )
-                  ]
-                : [
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      color: labelColor,
-                      size: 14,
-                    )
                   ],
+                ),
+                child: Icon(
+                  leadingIcon,
+                  size: 24,
+                  color: leadingIconColor,
+                ),
+              ),
+              SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: labelColor,
+                size: 14,
+              )
+            ]
+                : [
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+              Icon(
+                Icons.arrow_forward_ios,
+                color: labelColor,
+                size: 14,
+              )
+            ],
           ),
         ),
       ),

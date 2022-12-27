@@ -3,7 +3,9 @@ import 'package:koolb/accommodation/category.dart' as Category;
 import 'package:koolb/place/place.dart';
 
 class Accommodation extends Place {
+  var id = 'M7UaWOhoYNZXPtQTwHcN';
   List<Category.Category> _category;
+  List<String> _images;
   double _price;
   double _rating;
   int _room;
@@ -16,6 +18,7 @@ class Accommodation extends Place {
 
   Accommodation(
       List<Category.Category> category,
+      List<String> images,
       double price,
       double rating,
       int room,
@@ -28,6 +31,7 @@ class Accommodation extends Place {
       String name,
       GeoPoint location)
       : _category = category,
+        _images = images,
         _price = price,
         _rating = rating,
         _room = room,
@@ -40,6 +44,8 @@ class Accommodation extends Place {
         super(name, location);
 
   List<Category.Category> get category => _category;
+
+  List<String> get images => _images;
 
   double get price => _price;
 
@@ -80,19 +86,20 @@ class Accommodation extends Place {
     return FirebaseFirestore.instance
         .collection('accommodation')
         .add(<String, dynamic>{
-          'category': FieldValue.arrayUnion(type),
-          'price': _price,
-          'rating': _rating,
-          'room': _room,
-          'children': _children,
-          'adult': _adult,
-          'country': _country,
-          'city': _city,
-          'starts': FieldValue.arrayUnion(_starts),
-          'ends': FieldValue.arrayUnion(_ends),
-          'name': name,
-          'location': location,
-        })
+      'category': FieldValue.arrayUnion(type),
+      'images': FieldValue.arrayUnion(_images),
+      'price': _price,
+      'rating': _rating,
+      'room': _room,
+      'children': _children,
+      'adult': _adult,
+      'country': _country,
+      'city': _city,
+      'starts': FieldValue.arrayUnion(_starts),
+      'ends': FieldValue.arrayUnion(_ends),
+      'name': name,
+      'location': location,
+    })
         .then((value) => print('Accommodation Added'))
         .catchError((error) => print('Error $error'));
   }
@@ -104,6 +111,7 @@ class Accommodation extends Place {
     });
     return {
       'category': FieldValue.arrayUnion(type),
+      'images': FieldValue.arrayUnion(_images),
       'price': _price,
       'rating': _rating,
       'room': _room,
@@ -120,15 +128,18 @@ class Accommodation extends Place {
 
   static Accommodation fromJson(Map<String, dynamic> json) {
     List<Category.Category> category =
-        Category.intArrayToListCategory(json['category']);
+    Category.intArrayToListCategory(json['category']);
     List<DateTime> starts =
-        json['starts'].forEach((value) => value.toDate()).toList();
+    json['starts'].forEach((value) => value.toDate()).toList();
 
     List<DateTime> ends =
-        json['ends'].forEach((value) => value.toDate()).toList();
+    json['ends'].forEach((value) => value.toDate()).toList();
+
+    List<String> images = json['images'].toList();
 
     return Accommodation(
         Category.intArrayToListCategory(json['category']),
+        images,
         json['price'],
         json['rating'],
         json['room'],
@@ -184,8 +195,15 @@ class Accommodation extends Place {
       element['category'].forEach((value) {
         category.add(Category.Category.values[value]);
       });
+
+      List<String> images = [];
+      element['images'].forEach((value){
+        images.add(value);
+      });
+
       ret.add(Accommodation(
           category,
+          images,
           element['price'],
           element['rating'],
           element['room'],
@@ -206,7 +224,7 @@ class Accommodation extends Place {
   static Future<List<Accommodation>> getAllAccommodation() async {
     List<Accommodation> ret = [];
     QuerySnapshot qn =
-        await FirebaseFirestore.instance.collection('accommodation').get();
+    await FirebaseFirestore.instance.collection('accommodation').get();
 
     qn.docs.forEach((element) {
       final map = element.data();
@@ -222,8 +240,14 @@ class Accommodation extends Place {
       element['category'].forEach((value) {
         category.add(Category.Category.values[value]);
       });
+
+      List<String> images = [];
+      element['images'].forEach((value){
+        images.add(value);
+      });
       ret.add(Accommodation(
           category,
+          images,
           element['price'],
           element['rating'],
           element['room'],
@@ -246,7 +270,7 @@ class Accommodation extends Place {
         .collection('accommodation')
         .doc(uid)
         .get();
-    if (snapshot.exists) {
+    if (!snapshot.exists) {
       throw Exception('Accommodation does not exist in database');
     }
 
@@ -263,17 +287,26 @@ class Accommodation extends Place {
     data?['category'].forEach((value) {
       category.add(Category.Category.values[value]);
     });
+
+    List<String> images = [];
+    data?['images'].forEach((value){
+      images.add(value);
+    });
+
     double price = data?['price'];
     double rating = data?['rating'];
     int room = data?['room'];
     int children = data?['children'];
-    int adult = data?['adults'];
+    int adult = 0;
+    if (data?['adults'] != null)
+      adult = data?['adults'];
+
     String country = data?['country'];
     String city = data?['city'];
     String name = data?['name'];
     GeoPoint location = data?['location'];
 
-    return Accommodation(category, price, rating, room, children, adult, starts,
+    return Accommodation(category, images, price, rating, room, children, adult, starts,
         ends, country, city, name, location);
   }
 }
