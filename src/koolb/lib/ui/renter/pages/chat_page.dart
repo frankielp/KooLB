@@ -1,9 +1,26 @@
 // import 'dart:html';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/user/koolUser.dart';
 import 'package:koolb/ui/renter/pages/notification_page.dart';
 import 'package:koolb/ui/renter/pages/chat_box.dart';
+
+const thisUserID = 'eNZEIQKDI4chp7eUcWufFqDYbj92';
+const thatUserID = 'eNZEIQKDI4chp7eUcWufFqDYbj92';
+
+DatabaseReference ref = FirebaseDatabase.instance.ref();
+// final snapshot = await ref.child('users/$thisUserID').get();
+// if (snapshot.exists) {
+//     print(snapshot.value);
+// } else {
+//     print('No data available.');
+// }
+Map<String, String> chatUser = {
+  'name': 'Linh',
+  'messageText': 'Try Dictionary',
+  'Time': 'Today 1:30'
+};
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -13,11 +30,6 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   @override
-  Map<String, String> chatUser = {
-    'name': 'Linh',
-    'messageText': 'Try Dictionary',
-    'Time': 'Today 1:30'
-  };
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(

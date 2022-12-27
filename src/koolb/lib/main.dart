@@ -21,6 +21,7 @@ import 'package:koolb/ui/renter/pages/chat_page.dart';
 
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/homepage/search.dart';
+import 'package:koolb/ui/renter/pages/profile_page.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
 import 'package:koolb/ui/sign_up_screen.dart';
 // import 'package:koolb/ui/welcoming_page.dart';
