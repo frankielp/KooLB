@@ -1,14 +1,20 @@
+import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_web/image_picker_web.dart';
 import 'package:koolb/accommodation/category.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/util/load_data.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class CreateAccommodation extends StatefulWidget {
-  CreateAccommodation({super.key});
+  String hostID;
+  CreateAccommodation({super.key, required this.hostID});
 
   @override
   State<CreateAccommodation> createState() => _CreateAccommodationState();
@@ -25,6 +31,8 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   int _guests = 1;
   int _children = 0;
 
+  File? _imageFile;
+  Uint8List _webImageFile = Uint8List(8);
   TextEditingController _addressController = TextEditingController();
   static const TextStyle _defaultHeadingStyle = TextStyle(
     color: Colors.black,
@@ -32,7 +40,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     fontWeight: FontWeight.bold,
   );
 
-  final _controller = PageController(initialPage: 3);
+  final _controller = PageController(initialPage: 4);
 
   final _kDuration = const Duration(milliseconds: 500);
 
@@ -45,7 +53,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
       _selectingLocation(),
       _addBasics(),
       _addAmenities(),
-      // const AddingPhoto(),
+      _addPhotos()
       // const SettingTitleDescription(),
       // const SettingPrice(),
     ];
@@ -493,6 +501,73 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _addPhotos() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Add some photos for your tiny home',
+          style: _defaultHeadingStyle,
+        ),
+        _defaultDivider(),
+        Expanded(
+          child: Center(
+            child: Container(
+              child: _imageFile == null
+                  ? const Text('Select your image')
+                  : Container(
+                      child: kIsWeb
+                          ? Image.memory(
+                              _webImageFile,
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(_imageFile!, fit: BoxFit.fill),
+                    ),
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () async {
+            XFile? pickedFile =
+                await ImagePicker().pickImage(source: ImageSource.gallery);
+            if (kIsWeb) {
+              var f = await pickedFile?.readAsBytes();
+              setState(() {
+                _webImageFile = f!;
+                _imageFile = File('a');
+              });
+            } else {
+              setState(() {
+                if (pickedFile != null) {
+                  _imageFile = File(pickedFile.path);
+                }
+              });
+            }
+          },
+          child: Text(_imageFile == null
+              ? 'Select from library'
+              : 'Replace from library'),
+        ),
+        if (!kIsWeb)
+          TextButton(
+            onPressed: () async {
+              XFile? pickedFile =
+                  await ImagePicker().pickImage(source: ImageSource.camera);
+              setState(() {
+                if (pickedFile != null) {
+                  _imageFile = File(pickedFile.path);
+                }
+              });
+            },
+            child: Text(_imageFile == null
+                ? 'Select from camera'
+                : 'Replace from camera'),
+          ),
+      ],
     );
   }
 }

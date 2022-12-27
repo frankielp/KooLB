@@ -50,6 +50,8 @@ dependencies:
   google_fonts: ^3.0.1
   smooth_page_indicator: ^1.0.0+2
   dropdown_search: ^5.0.5
+  image_picker: ^0.8.6
+  image_picker_web: ^3.0.0+1
 
 dev_dependencies:
   flutter_test:
