@@ -5,19 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:koolb/user/koolUser.dart';
 import 'package:koolb/ui/renter/pages/notification_page.dart';
 import 'package:koolb/ui/renter/pages/chat_box.dart';
+import 'package:koolb/user/renter.dart';
 
 const thisUserID = 'eNZEIQKDI4chp7eUcWufFqDYbj92';
 const thatUserID = 'eNZEIQKDI4chp7eUcWufFqDYbj92';
 
-DatabaseReference ref = FirebaseDatabase.instance.ref();
-// final snapshot = await ref.child('users/$thisUserID').get();
-// if (snapshot.exists) {
-//     print(snapshot.value);
-// } else {
-//     print('No data available.');
-// }
 Map<String, String> chatUser = {
-  'name': 'Linh',
+  'name': 'linh',
   'messageText': 'Try Dictionary',
   'Time': 'Today 1:30'
 };

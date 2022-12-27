@@ -142,9 +142,7 @@ class Accommodation extends Place {
         json['location']);
   }
 
-
   static Future<List<Accommodation>> getAccommodationBasedOnDatabase(
-
       String country,
       String city,
       int numRooms,
@@ -277,4 +275,3 @@ class Accommodation extends Place {
         ends, country, city, name, location);
   }
 }
-
