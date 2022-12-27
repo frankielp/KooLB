@@ -63,11 +63,21 @@ class _HelpCenterPageState extends State<HelpCenter> {
                   subtitle: Text(
                     'In case you need any urgent help, please contact to us via this mobile phone',
                     textAlign: TextAlign.center,
+                    textScaleFactor: 1.2,
                   ),
                 ),
                 ListTile(
                   title: Text(
-                      'Or if you are willing to find some frequent questions, please make yourself to the FAQ section for further information. Thank you.'),
+                    'Email: lpnquynh20@apcs.fitus.edu.vn',
+                    textAlign: TextAlign.center,
+                    textScaleFactor: 1.5,
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Or if you are willing to find some frequent questions, please make yourself to the FAQ section for further information. Thank you.',
+                    textAlign: TextAlign.center,
+                  ),
                 )
               ],
             ),
