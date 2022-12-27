@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:pubspec/pubspec.dart';
 
 class AboutUs extends StatefulWidget {
+  const AboutUs({super.key});
   @override
   State<AboutUs> createState() => _AboutUsPageState();
 }

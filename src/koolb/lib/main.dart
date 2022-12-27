@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/ui/renter/pages/Help_center.dart';
 
 import 'package:koolb/ui/renter/pages/chat_page.dart';
 
@@ -96,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AboutUs(),
+      body: HelpCenter(),
     );
   }
 }
