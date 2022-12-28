@@ -30,24 +30,29 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   String? _address;
   int _guests = 1;
   int _children = 0;
-
+  double _price = 10;
   File? _imageFile;
   Uint8List _webImageFile = Uint8List(8);
+
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-
-  static const TextStyle _defaultHeadingStyle = TextStyle(
+  late TextEditingController _priceController;
+  final TextStyle _defaultHeadingStyle = const TextStyle(
     color: Colors.black,
     fontSize: 20,
     fontWeight: FontWeight.bold,
   );
-
-  final _controller = PageController(initialPage: 5);
-
+  final _controller = PageController(initialPage: 6);
   final _kDuration = const Duration(milliseconds: 500);
-
   final _kCurve = Curves.ease;
+  final _minPrice = 10.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _priceController = TextEditingController(text: '$_price');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +63,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
       _addAmenities(),
       _addPhotos(),
       _addTitleAndDescription(),
-      // const SettingPrice(),
+      _addPrice(),
     ];
 
     return Scaffold(
@@ -147,7 +152,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Which of these best describes your place?',
           style: _defaultHeadingStyle,
         ),
@@ -229,7 +234,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Where's your place located?",
             style: _defaultHeadingStyle,
           ),
@@ -321,7 +326,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Share some basics about your place',
             style: _defaultHeadingStyle,
           ),
@@ -437,7 +442,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Tell guests what your place has to offer',
               style: _defaultHeadingStyle,
             ),
@@ -511,7 +516,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Add some photos for your tiny home',
           style: _defaultHeadingStyle,
         ),
@@ -583,7 +588,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Now, let's give your tiny home a title",
             style: _defaultHeadingStyle,
           ),
@@ -601,7 +606,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
               ),
             ),
           ),
-          const Text(
+          Text(
             'Create your description',
             style: _defaultHeadingStyle,
           ),
@@ -629,6 +634,106 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   }
 
   //TODO: implement price
+  Widget _addPrice() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Now, set your price',
+          style: _defaultHeadingStyle,
+        ),
+        _defaultDivider(),
+        Material(
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                //button set price
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      splashRadius: 20.0,
+                      disabledColor: Colors.grey.shade400,
+                      color: Colors.black,
+                      onPressed: _price <= _minPrice
+                          ? null
+                          : () {
+                              setState(() {
+                                _price = double.parse(_priceController.text);
+                                _price = max(_minPrice, _price - 1);
+                                _priceController.text = '$_price';
+                              });
+                            },
+                      icon: const Icon(
+                        Icons.remove_circle,
+                      ),
+                    ),
+                    Center(
+                      child: Row(
+                        children: [
+                          IntrinsicWidth(
+                            child: TextField(
+                              onChanged: (value) {
+                                if (value != null && value.length > 0)
+                                  setState(() {
+                                    _price = double.parse(value);
+                                  });
+                              },
+                              controller: _priceController,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                signed: false,
+                                decimal: true,
+                              ),
+                              decoration: InputDecoration(isDense: true),
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          const Text('\$'),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      splashRadius: 20.0,
+                      onPressed: () {
+                        setState(() {
+                          _price = double.parse(_priceController.text);
+                          _price += 1;
+                          _priceController.text = '$_price';
+                        });
+                      },
+                      icon: const Icon(
+                        Icons.add_circle,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                const Center(
+                  child: Text(
+                    'per night',
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   //TODO: validation for each page
 }
