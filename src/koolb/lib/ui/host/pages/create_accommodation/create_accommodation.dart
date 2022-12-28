@@ -636,99 +636,109 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   //TODO: implement price
   Widget _addPrice() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
       children: [
         Text(
           'Now, set your price',
           style: _defaultHeadingStyle,
         ),
         _defaultDivider(),
-        Material(
-          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                //button set price
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    IconButton(
-                      splashRadius: 20.0,
-                      disabledColor: Colors.grey.shade400,
-                      color: Colors.black,
-                      onPressed: _price <= _minPrice
-                          ? null
-                          : () {
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Material(
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      //button set price
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            splashRadius: 20.0,
+                            disabledColor: Colors.grey.shade400,
+                            color: Colors.black,
+                            onPressed: _price <= _minPrice
+                                ? null
+                                : () {
+                                    setState(() {
+                                      _price =
+                                          double.parse(_priceController.text);
+                                      _price = max(_minPrice, _price - 1);
+                                      _priceController.text = '$_price';
+                                    });
+                                  },
+                            icon: const Icon(
+                              Icons.remove_circle,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              IntrinsicWidth(
+                                child: TextField(
+                                  onChanged: (value) {
+                                    if (value.isNotEmpty) {
+                                      setState(() {
+                                        _price = double.parse(value);
+                                      });
+                                    }
+                                  },
+                                  controller: _priceController,
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                    signed: false,
+                                    decimal: true,
+                                  ),
+                                  decoration: InputDecoration(isDense: true),
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              const Text('\$'),
+                            ],
+                          ),
+                          IconButton(
+                            splashRadius: 20.0,
+                            onPressed: () {
                               setState(() {
                                 _price = double.parse(_priceController.text);
-                                _price = max(_minPrice, _price - 1);
+                                _price += 1;
                                 _priceController.text = '$_price';
                               });
                             },
-                      icon: const Icon(
-                        Icons.remove_circle,
-                      ),
-                    ),
-                    Center(
-                      child: Row(
-                        children: [
-                          IntrinsicWidth(
-                            child: TextField(
-                              onChanged: (value) {
-                                if (value != null && value.length > 0)
-                                  setState(() {
-                                    _price = double.parse(value);
-                                  });
-                              },
-                              controller: _priceController,
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                signed: false,
-                                decimal: true,
-                              ),
-                              decoration: InputDecoration(isDense: true),
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w600),
+                            icon: const Icon(
+                              Icons.add_circle,
+                              color: Colors.black,
                             ),
                           ),
-                          const Text('\$'),
                         ],
                       ),
-                    ),
-                    IconButton(
-                      splashRadius: 20.0,
-                      onPressed: () {
-                        setState(() {
-                          _price = double.parse(_priceController.text);
-                          _price += 1;
-                          _priceController.text = '$_price';
-                        });
-                      },
-                      icon: const Icon(
-                        Icons.add_circle,
-                        color: Colors.black,
+                      const SizedBox(
+                        height: 5.0,
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                const Center(
-                  child: Text(
-                    'per night',
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400),
+                      const Center(
+                        child: Text(
+                          'per night',
+                          style: TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.w400),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
