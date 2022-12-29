@@ -21,6 +21,7 @@ class CreateAccommodation extends StatefulWidget {
 }
 
 class _CreateAccommodationState extends State<CreateAccommodation> {
+  //variable of accommodation
   final List<Category> _categories = [];
   Category _bestDescription = Category.Apartment;
   String? _countryValue;
@@ -34,9 +35,10 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   File? _imageFile;
   Uint8List _webImageFile = Uint8List(8);
 
+  //controller
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
+  late TextEditingController _titleController;
+  late TextEditingController _descriptionController;
   late TextEditingController _priceController;
   final TextStyle _defaultHeadingStyle = const TextStyle(
     color: Colors.black,
@@ -47,25 +49,37 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   final _kDuration = const Duration(milliseconds: 500);
   final _kCurve = Curves.ease;
   final _minPrice = 10.0;
+  late List<Widget> pages = [
+    _selectingCategory(),
+    _selectingLocation(),
+    _addBasics(),
+    _addAmenities(),
+    _addPhotos(),
+    _addTitleAndDescription(),
+    _addPrice(),
+  ];
+
+  int _currentPage = 6;
+  String? _message;
 
   @override
   void initState() {
     super.initState();
     _priceController = TextEditingController(text: '$_price');
+    _titleController = TextEditingController();
+    _titleController.addListener(() {
+      _verifyPage();
+      setState(() {});
+    });
+    _descriptionController = TextEditingController();
+    _descriptionController.addListener(() {
+      _verifyPage();
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> pages = [
-      _selectingCategory(),
-      _selectingLocation(),
-      _addBasics(),
-      _addAmenities(),
-      _addPhotos(),
-      _addTitleAndDescription(),
-      _addPrice(),
-    ];
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -74,10 +88,13 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              child: PageView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _controller,
-                children: pages,
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _controller,
+                  children: pages,
+                ),
               ),
             ),
             SmoothPageIndicator(
@@ -104,8 +121,10 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         children: [
           // back button
           TextButton(
-            onPressed: _moveBackPage,
+            onPressed: _currentPage == 0 ? null : _moveBackPage,
             style: TextButton.styleFrom(
+              backgroundColor:
+                  _currentPage == 0 ? Colors.grey.shade500 : Colors.white,
               padding: const EdgeInsets.all(18.0),
               side: const BorderSide(color: Colors.black, width: 1),
               textStyle: const TextStyle(
@@ -120,10 +139,17 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
           //next button
 
           TextButton(
-            onPressed: _moveNextPage,
+            onPressed: _verifyPage() || _currentPage == pages.length - 1
+                ? () {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(SnackBar(content: Text(_message!)));
+                  }
+                : _moveNextPage,
             style: TextButton.styleFrom(
               padding: const EdgeInsets.all(18.0),
-              backgroundColor: Colors.black,
+              backgroundColor: _verifyPage() || _currentPage == pages.length - 1
+                  ? Colors.grey.shade300
+                  : Colors.black,
               textStyle: const TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -141,10 +167,16 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
 
   void _moveBackPage() {
     _controller.previousPage(duration: _kDuration, curve: _kCurve);
+    setState(() {
+      _currentPage--;
+    });
   }
 
   void _moveNextPage() {
     _controller.nextPage(duration: _kDuration, curve: _kCurve);
+    setState(() {
+      _currentPage = min(pages.length - 1, _currentPage + 1);
+    });
   }
 
   Widget _selectingCategory() {
@@ -225,24 +257,18 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   }
 
   Widget _selectingLocation() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
-        horizontal: 12.0,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Where's your place located?",
-            style: _defaultHeadingStyle,
-          ),
-          _defaultDivider(),
-          _selectingCountryAndCity(),
-          _addAddress(),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Where's your place located?",
+          style: _defaultHeadingStyle,
+        ),
+        _defaultDivider(),
+        _selectingCountryAndCity(),
+        _addAddress(),
+      ],
     );
   }
 
@@ -315,6 +341,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
               const SnackBar(content: Text('You must add your address!'));
           ScaffoldMessenger.of(context).showSnackBar(message);
         }
+        return null;
       },
     );
   }
@@ -341,41 +368,39 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                   style: TextStyle(fontSize: 18),
                 ),
                 // guests
-                Container(
-                  child: Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _guests = max(1, _guests - 1);
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.remove_circle,
-                            color: Colors.black,
-                          )),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        _guests >= 17 ? '16+' : '$_guests',
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _guests = min(17, _guests + 1);
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.add_circle,
-                            color: Colors.black,
-                          ))
-                    ],
-                  ),
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _guests = max(1, _guests - 1);
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.remove_circle,
+                          color: Colors.black,
+                        )),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      _guests >= 17 ? '16+' : '$_guests',
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _guests = min(17, _guests + 1);
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.add_circle,
+                          color: Colors.black,
+                        ))
+                  ],
                 )
               ],
             ),
@@ -390,41 +415,39 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                   style: TextStyle(fontSize: 18),
                 ),
                 // children
-                Container(
-                  child: Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _children = max(0, _children - 1);
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.remove_circle,
-                            color: Colors.black,
-                          )),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        _children >= 17 ? '16+' : '$_children',
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _children = min(17, _children + 1);
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.add_circle,
-                            color: Colors.black,
-                          ))
-                    ],
-                  ),
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _children = max(0, _children - 1);
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.remove_circle,
+                          color: Colors.black,
+                        )),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      _children >= 17 ? '16+' : '$_children',
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _children = min(17, _children + 1);
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.add_circle,
+                          color: Colors.black,
+                        ))
+                  ],
                 )
               ],
             ),
@@ -699,8 +722,9 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                                     signed: false,
                                     decimal: true,
                                   ),
-                                  decoration: InputDecoration(isDense: true),
-                                  style: TextStyle(
+                                  decoration:
+                                      const InputDecoration(isDense: true),
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w600),
                                 ),
@@ -745,5 +769,77 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     );
   }
 
-  //TODO: validation for each page
+  //TODO: review pages
+  Widget _reviewPages() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Review your accommodation',
+          style: _defaultHeadingStyle,
+        ),
+        _defaultDivider(),
+        Container(
+          decoration: BoxDecoration(),
+        ),
+      ],
+    );
+  }
+
+  bool _verifyPage() {
+    switch (_currentPage) {
+      case 1:
+        _message = _verifyAddressPage();
+        if (_message == null) {
+          return false;
+        }
+        break;
+      case 4:
+        _message = _verifyImagePage();
+        if (_message == null) {
+          return false;
+        }
+        break;
+      case 5:
+        _message = _verifyTitleAndDescription();
+        if (_message == null) {
+          return false;
+        }
+        break;
+      default:
+        return false;
+    }
+    return true;
+  }
+
+  String? _verifyAddressPage() {
+    if (_countryValue == null) {
+      return 'You must choose a country.';
+    }
+    if (_cityValue == null) {
+      return 'You must choose a city.';
+    }
+    if (_address == null) {
+      return 'You must enter address.';
+    }
+    return null;
+  }
+
+  String? _verifyImagePage() {
+    if (_imageFile == null) {
+      return "Please select a image";
+    }
+    return null;
+  }
+
+  String? _verifyTitleAndDescription() {
+    if (_titleController.text.isEmpty) {
+      return "Please give your accommodation a name.";
+    }
+    if (_descriptionController.text.isEmpty) {
+      return "Pleaser give your accommodation a description.";
+    }
+    return null;
+  }
 }
