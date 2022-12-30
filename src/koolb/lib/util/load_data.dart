@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:koolb/data/countries_and_cities.dart';
 
-Map<String, List<String>> countriesAndCities = <String, List<String>>{};
 List<String> countries = <String>[];
 
 void loadData() {
@@ -12,12 +11,9 @@ void loadData() {
 }
 
 List<String> getCountries() {
-  var map = jsonDecode(jsonCountriesAndCities);
-  Map data = map;
-
   var res = <String>[];
 
-  data.forEach((key, value) {
+  countriesAndCities.forEach((key, value) {
     res.add(key);
   });
 
@@ -26,7 +22,7 @@ List<String> getCountries() {
 
 // get list of countries and their cities
 Map<String, List<String>> getCities() {
-  var map = jsonDecode(jsonCountriesAndCities);
+  var map = countriesAndCities;
   Map data = map;
 
   var res = data.map((key, value) =>

@@ -6,8 +6,10 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_picker_for_web/image_picker_for_web.dart';
 import 'package:image_picker_web/image_picker_web.dart';
 import 'package:koolb/accommodation/category.dart';
+import 'package:koolb/data/countries_and_cities.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/util/load_data.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -26,60 +28,90 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   Category _bestDescription = Category.Apartment;
   String? _countryValue;
   String? _cityValue;
-  List<String> _cities = <String>[];
+  List<String> _cities = [];
   bool _countrySelected = false;
-  String? _address;
+  String? _addressValue;
   int _guests = 1;
   int _children = 0;
   double _price = 10;
   File? _imageFile;
-  Uint8List _webImageFile = Uint8List(8);
+  late Uint8List _webImageFile;
 
   //controller
-  final TextEditingController _addressController = TextEditingController();
+  late TextEditingController _addressController;
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
   late TextEditingController _priceController;
+  late TextEditingController _countryController;
+  late TextEditingController _cityController;
   final TextStyle _defaultHeadingStyle = const TextStyle(
     color: Colors.black,
     fontSize: 20,
     fontWeight: FontWeight.bold,
   );
-  final _controller = PageController(initialPage: 6);
+
+  final _controller = PageController(initialPage: 4);
   final _kDuration = const Duration(milliseconds: 500);
   final _kCurve = Curves.ease;
   final _minPrice = 10.0;
-  late List<Widget> pages = [
-    _selectingCategory(),
-    _selectingLocation(),
-    _addBasics(),
-    _addAmenities(),
-    _addPhotos(),
-    _addTitleAndDescription(),
-    _addPrice(),
-  ];
+  late List<Widget> pages;
 
-  int _currentPage = 6;
+  int _currentPage = 4;
   String? _message;
 
   @override
   void initState() {
     super.initState();
     _priceController = TextEditingController(text: '$_price');
+
     _titleController = TextEditingController();
     _titleController.addListener(() {
       _verifyPage();
       setState(() {});
     });
+
     _descriptionController = TextEditingController();
     _descriptionController.addListener(() {
       _verifyPage();
       setState(() {});
     });
+
+    _countryController = TextEditingController();
+    _countryController.addListener(() {
+      _verifyPage();
+      setState(() {
+        _countryValue = _countryController.text;
+      });
+    });
+
+    _cityController = TextEditingController();
+    _cityController.addListener(() {
+      _verifyPage();
+      setState(() {
+        _cityValue = _cityController.text;
+      });
+    });
+
+    _addressController = TextEditingController();
+    _addressController.addListener(() {
+      _verifyPage();
+      setState(() {
+        _addressValue = _addressController.text;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    pages = [
+      _selectingCategory(),
+      _selectingLocation(),
+      _addBasics(),
+      _addAmenities(),
+      _addPhotos(),
+      _addTitleAndDescription(),
+      _addPrice(),
+    ];
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -142,7 +174,8 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
             onPressed: _verifyPage() || _currentPage == pages.length - 1
                 ? () {
                     ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text(_message!)));
+                      ..removeCurrentSnackBar()
+                      ..showSnackBar(SnackBar(content: Text(_message!)));
                   }
                 : _moveNextPage,
             style: TextButton.styleFrom(
@@ -272,9 +305,11 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     );
   }
 
+//bug chọn city khó quá ko sửa nổi
   Widget _selectingCountryAndCity() {
     return Row(
       children: [
+        //select country
         Expanded(
           child: DropdownSearch<String>(
             popupProps: const PopupProps.menu(
@@ -291,19 +326,20 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
             items: countries,
             onChanged: ((String? value) {
               setState(() {
-                _cities = countriesAndCities[value]!;
                 _cityValue = null;
                 _countrySelected = true;
                 _countryValue = value!;
-                print(
-                    "Selected country: $_countryValue\nCountry selected: $_countrySelected\nCities: $_cities");
+                _cities = countriesAndCities[_countryValue]!;
               });
+              print(
+                  "Selected country: $_countryValue\nCountry selected: $_countrySelected\nCities: ${countriesAndCities[_countryValue]!}");
             }),
           ),
         ),
         const SizedBox(
           width: 20,
         ),
+        // select city
         Expanded(
           child: DropdownSearch<String>(
             popupProps: const PopupProps.menu(
@@ -329,20 +365,53 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     );
   }
 
+  //select country với city tạm
+  // Widget _selectingCountryAndCity() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       //Country
+  //       const Text(
+  //         "Add the country",
+  //         style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
+  //       ),
+  //       TextField(
+  //         controller: _countryController,
+  //         maxLength: 15,
+  //       ),
+  //       _defaultDivider(),
+  //       // city
+  //       const Text(
+  //         "Add the city",
+  //         style: TextStyle(fontSize: 17, fontWeight: FontWeight.w300),
+  //       ),
+  //       TextField(
+  //         controller: _cityController,
+  //         maxLength: 15,
+  //       ),
+  //     ],
+  //   );
+  // }
+
   Widget _addAddress() {
-    return TextFormField(
-      controller: _addressController,
-      initialValue: _address,
-      decoration: const InputDecoration(
-          hintText: 'Building number, street name, wand, district'),
-      validator: (value) {
-        if (value == null) {
-          var message =
-              const SnackBar(content: Text('You must add your address!'));
-          ScaffoldMessenger.of(context).showSnackBar(message);
-        }
-        return null;
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('Address'),
+        TextFormField(
+          controller: _addressController,
+          decoration: const InputDecoration(
+              hintText: 'Building number, street name, wand, district'),
+          validator: (value) {
+            if (value == null) {
+              var message =
+                  const SnackBar(content: Text('You must add your address!'));
+              ScaffoldMessenger.of(context).showSnackBar(message);
+            }
+            return null;
+          },
+        ),
+      ],
     );
   }
 
@@ -535,6 +604,9 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   }
 
   Widget _addPhotos() {
+    print('Outside\n');
+    print(_imageFile?.path);
+    print(_imageFile == null ? 'No image selected yet' : _webImageFile);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -562,23 +634,35 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         ),
         Center(
           child: TextButton(
-            onPressed: () async {
-              XFile? pickedFile =
-                  await ImagePicker().pickImage(source: ImageSource.gallery);
-              if (kIsWeb) {
-                var f = await pickedFile?.readAsBytes();
-                setState(() {
-                  _webImageFile = f!;
-                  _imageFile = File('a');
-                });
-              } else {
-                setState(() {
-                  if (pickedFile != null) {
-                    _imageFile = File(pickedFile.path);
+            onPressed: kIsWeb
+                ? () async {
+                    final tmp = await ImagePickerWeb.getImageAsBytes();
+                    setState(() {
+                      _webImageFile = tmp!;
+                      _imageFile = File('a');
+                      print('Inside\n');
+                      print(_imageFile?.path);
+                      print(_imageFile == null
+                          ? 'No image selected yet'
+                          : _webImageFile);
+                    });
                   }
-                });
-              }
-            },
+                : () async {
+                    XFile? pickedFile = await ImagePicker()
+                        .pickImage(source: ImageSource.gallery);
+                    setState(() {
+                      if (pickedFile != null) {
+                        _imageFile = File(pickedFile.path);
+                      }
+                    });
+                  },
+            // onPressed: () async {
+            //   if (kIsWeb) {
+            //
+            //   } else {
+            //
+            //   }
+            // },
             child: Text(_imageFile == null
                 ? 'Select from library'
                 : 'Replace from library'),
@@ -781,7 +865,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         ),
         _defaultDivider(),
         Container(
-          decoration: BoxDecoration(),
+          decoration: const BoxDecoration(),
         ),
       ],
     );
@@ -791,36 +875,35 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     switch (_currentPage) {
       case 1:
         _message = _verifyAddressPage();
-        if (_message == null) {
-          return false;
-        }
         break;
+
       case 4:
         _message = _verifyImagePage();
-        if (_message == null) {
-          return false;
-        }
         break;
+
       case 5:
         _message = _verifyTitleAndDescription();
-        if (_message == null) {
-          return false;
-        }
         break;
+
       default:
-        return false;
+        if (_currentPage == pages.length - 1) {
+          _message = "It is the end of progress.";
+        } else {
+          _message = null;
+        }
     }
-    return true;
+
+    return _message != null;
   }
 
   String? _verifyAddressPage() {
-    if (_countryValue == null) {
+    if (_countryController.text.isEmpty) {
       return 'You must choose a country.';
     }
-    if (_cityValue == null) {
+    if (_cityController.text.isEmpty) {
       return 'You must choose a city.';
     }
-    if (_address == null) {
+    if (_addressController.text.isEmpty) {
       return 'You must enter address.';
     }
     return null;
