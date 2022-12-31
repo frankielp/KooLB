@@ -9,6 +9,7 @@ class Renter extends KoolUser {
   String _country, _language, _currency, _profileImg;
   late List<Place> _listing;
   late List<Accommodation> _accommodation;
+  String wishlistID = 'VMQJ07D0VEl8zLIv6RsR';
 
 
   //Function

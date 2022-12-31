@@ -6,14 +6,17 @@ import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/renter/pages/wishlist/wishlist_page.dart';
 
 import '../wishlist/wishlist.dart';
+import 'package:koolb/main.dart';
 
-const renterID = 'HgvSKaOM6uSLK9qrH2ZL';
+//const renterID = 'HgvSKaOM6uSLK9qrH2ZL';
 
 class AccommodationItem extends StatefulWidget {
-  const AccommodationItem({super.key, this.data, this.onTap});
+  AccommodationItem({super.key, this.data, this.onTap, required this.isFavorite});
 
   final data;
   final GestureTapCallback? onTap;
+  bool isFavorite;
+  //List<String> favoriteInfo;
 
   @override
   State<AccommodationItem> createState() => _AccommodationItemState();
@@ -24,6 +27,7 @@ class _AccommodationItemState extends State<AccommodationItem> {
   int currentPage = 0;
 
   Widget build(BuildContext context) {
+    //print("AccommodationItem build: ${this.widget.favoriteInfo} ${DateTime.now()}");
     Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
@@ -78,7 +82,7 @@ class _AccommodationItemState extends State<AccommodationItem> {
               top: size.height * 0.035,
               left: size.width * 0.62
           ),
-          child: HeartIcon(this.widget.data),
+          child: HeartIcon(this.widget.data, this.widget.isFavorite),
         ),
         Container(
             width: size.width * 0.5,
@@ -160,7 +164,9 @@ class _AccommodationItemState extends State<AccommodationItem> {
 
 class HeartIcon extends StatefulWidget{
   var data;
-  HeartIcon(this.data);
+  bool isFavorite;
+  //List<String> favoriteInfo;
+  HeartIcon(this.data, this.isFavorite);
 
   @override
   State<StatefulWidget> createState() {
@@ -169,62 +175,74 @@ class HeartIcon extends StatefulWidget{
 }
 
 class _HeartIcon extends State<HeartIcon> {
-  bool favorite = false;
-
-  setFavorite(){
-
-  }
-
   @override
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: () {
           setState(() {
-            favorite = !favorite;
+            //_favorite = !_favorite;
+            this.widget.isFavorite = !this.widget.isFavorite;
           });
-          if (favorite == true) {
+          if (this.widget.isFavorite == true) {
             onPressedHeartIcon(context, this.widget.data);
           }
           else{
             onPressedRemoveFavorite(context, this.widget.data);
           }
         },
-        icon: (favorite == false) ?
+        icon: (this.widget.isFavorite == false) ?
         Icon(Icons.favorite_outline_outlined, size: 30, color: Colors.white,) :
         Icon(Icons.favorite, size: 30, color: Colors.red)
     );
-    // const Icon((favorite = false)?
-    //   Icons.favorite_outline_outlined : Icons.favorite,
-    //   size: 30,
-    //   color: Colors.white,
-    // ),
   }
-}
-
-
-// LẤY LIST FOLDER IDS ĐỂ XỬ LÝ REMOVE
-Future<List<String>> getListFolderIDs() async{
-  //Future<List<String>> folderIDs = [];
-  var data = await FirebaseFirestore.instance.collection('wishlist')
-      .doc(renterID)
-      .collection('folders')
-      .get();
-
-  return List.from(data.docs.map((doc) => doc.id));
 }
 
 
 // REMOVE 1 ITEM FAVORITE
 Future onPressedRemoveFavorite(BuildContext context, data) async{
-  List<String> folderIDs = await getListFolderIDs();
-  CollectionReference folders = await FirebaseFirestore.instance
+  var snapshot = await FirebaseFirestore.instance
                                     .collection('wishlist')
-                                    .doc(renterID)
-                                    .collection('folders');
-  for (int i = 0; i < folderIDs.length; ++i){
-    await folders.doc(folderIDs[i]).update({'accommodationIDs': FieldValue.arrayRemove([data.id])});
+                                    .doc(renter.wishlistID)
+                                    .get();
+
+  List<WishlistFolder> folders = List.from(snapshot.data()?['folders'].map((doc) => WishlistFolder.fromSnapshot(doc)));
+
+  WishlistFolder newFolder = WishlistFolder("", "");
+  WishlistFolder oldFolder = WishlistFolder("", "");
+
+  for (int i = 0; i < folders.length; ++i){
+    if (folders[i].accommodationIDs.contains(data.id)) {
+      oldFolder = WishlistFolder(folders[i].folderName, folders[i].leadingUrl);
+      oldFolder.accommodationIDs = List<String>.from(folders[i].accommodationIDs);
+      oldFolder.folderNumber = folders[i].folderNumber;
+
+      folders[i].accommodationIDs.remove(data.id);
+      newFolder = folders[i];
+
+      print(oldFolder.accommodationIDs);
+      print(newFolder.accommodationIDs);
+      break;
+    }
   }
 
+  await FirebaseFirestore.instance.collection('wishlist')
+      .doc(renter.wishlistID)
+      .update({'folders': FieldValue.arrayRemove(convertListFolderToJson([oldFolder]))})
+      .then((value) => print("Remove old folder"));
+
+  if (newFolder.accommodationIDs.isEmpty == false) {
+    await FirebaseFirestore.instance.collection('wishlist')
+        .doc(renter.wishlistID)
+        .update({'folders': FieldValue.arrayUnion(convertListFolderToJson([newFolder]))})
+        .then((value) {
+      showSnackBar(context, "Remove this item from your ${oldFolder.folderName} collection.");
+      print("Updated new folder");
+    });
+  }
+  else{
+    showSnackBar(context, "Your collection ${oldFolder.folderName} has been deleted.");
+    print("Your folder is deleted");
+  }
 }
 
 
@@ -241,7 +259,7 @@ onPressedHeartIcon(BuildContext context, data){
       builder: (BuildContext context){
         return DraggableScrollableSheet(
             expand: false,
-            initialChildSize: 0.4,
+            initialChildSize: 0.75,
             maxChildSize: 0.9,
             minChildSize: 0.32,
             builder: (context, srollController){
@@ -262,7 +280,8 @@ onPressedHeartIcon(BuildContext context, data){
                       leading: IconButton(
                         icon: Icon(Icons.close),
                         onPressed: (){
-                          // CODE
+                          // CODE CLOSE BOTTOM SHEET
+                          Navigator.pop(context);
                         },
                       ),
                       title: Text('Your wish list'),
@@ -287,8 +306,8 @@ onPressedHeartIcon(BuildContext context, data){
                       thickness: 0.7,
                     ),
                     SizedBox(
-                      height: 500,
-                      child: FolderListInSheet(data),
+                      height: 700,
+                      child: FolderListInSheet(data, renter.wishlistID),
                     )
                   ],
                 ),
@@ -301,11 +320,17 @@ onPressedHeartIcon(BuildContext context, data){
 
 
 // KHI ẤN TẠO COLLECTION MỚI
-onPressedCreateCollection(BuildContext context, data) {
-  createAskDialog(context).then((onValue) {
-    WishlistFolder folder = WishlistFolder(folderName: onValue, leadingUrl: data.images[0]);
-    folder.addFolderToDatabase(data.id);
-  });
+Future<dynamic> onPressedCreateCollection(BuildContext context, data) {
+  return createAskDialog(context).then((onValue) {
+    if (onValue != null) {
+      WishlistFolder folder = WishlistFolder(onValue, data.images[0]);
+      WishlistFolder.countFolder += 1;
+      folder.addFolderToDatabase(context, data.id, renter);
+  }
+    // else if (onValue == null){
+    //   Navigator.pop(context);
+    // }
+  }).then((value) => Navigator.pop(context));
 }
 
 
@@ -315,6 +340,9 @@ Future<dynamic> createAskDialog(BuildContext context){
 
   return showDialog(context: context, builder: (context){
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(32.0))
+      ),
       title: ListTile(
         leading: IconButton(
             onPressed: (){
@@ -345,12 +373,13 @@ Future<dynamic> createAskDialog(BuildContext context){
 // HIỆN FOLDER LITS TRONG BOTTOM SHEET
 class FolderListInSheet extends FolderList {
   var accommodationItem;
+  var wishlistID;
 
-  FolderListInSheet(this.accommodationItem);
+  FolderListInSheet(this.accommodationItem, this.wishlistID);
 
   @override
   onTapFolder(WishlistFolder folder, BuildContext context) {
-    folder.addItemToFolderInDatabase(accommodationItem.id);
+    folder.addItemToFolderInDatabase(context, folder, accommodationItem.id, wishlistID);
   }
 }
 

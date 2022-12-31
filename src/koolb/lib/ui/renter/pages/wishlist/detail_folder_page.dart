@@ -19,7 +19,7 @@ class DetailFolder extends StatefulWidget{
 }
 
 class _DetailFolder extends State<DetailFolder> {
-  List<Accommodation> accommodationItems = [];
+  List<Accommodation> accommodations = [];
 
   @override
   void didChangeDependencies() {
@@ -37,15 +37,15 @@ class _DetailFolder extends State<DetailFolder> {
       //     .doc(this.widget.folder.accommodationIDs[i])
       //     .get();
       //
-
       Future accommodation = Accommodation.getAccommodationById(this.widget.folder.accommodationIDs[i]);
       lst.add(await accommodation);
     }
     setState(() {
       //accommodationItems = List.from(this.widget.folder.accommodationIDs.map((id) => Accommodation.getAccommodationById(id)));
-      accommodationItems = lst;
+      accommodations = lst;
     });
     print("Yessssssssss");
+    print(this.widget.folder.accommodationIDs);
     //print(accommodationItems[0].images);
   }
 
@@ -60,7 +60,7 @@ class _DetailFolder extends State<DetailFolder> {
               child: ListView.builder(
                   itemCount: folder.accommodationIDs.length,
                   itemBuilder: (context, index) {
-                    Accommodation accommodation = accommodationItems[index];
+                    Accommodation accommodation = accommodations[index];
                     // List<String> images = folder.accommodationIDs[index].data
                     //     .images;
                     return Card(
@@ -73,6 +73,7 @@ class _DetailFolder extends State<DetailFolder> {
                                 .size
                                 .width * 0.05),
                             child: AccommodationItem(
+                              isFavorite: folder.accommodationIDs.contains(accommodation.id),
                               data: accommodation,
                               //image: images,
                             )

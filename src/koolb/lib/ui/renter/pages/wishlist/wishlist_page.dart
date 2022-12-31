@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:koolb/ui/renter/pages/wishlist/folder_wishlist.dart';
 import '../../../../decoration/color.dart';
+import '../../../../main.dart';
 import '../../../../wishlist/wishlist.dart';
 import 'detail_folder_page.dart';
 
@@ -43,29 +43,34 @@ class _FolderList extends State<FolderList>{
             WishlistFolder folder = _folders[index];
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Card(
-                child: ListTile(
-                  title: Text(
-                    folder.folderName.toString(),
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20
-                    ),),
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(5.0),
-                    child: Image.network(folder.leadingUrl.toString(),
-                      height: 100.0,
-                      width: 60.0,
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  onTap: (){
-                    this.widget.onTapFolder(folder, context);
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(builder: (context) => DetailFolder(folder)));
-                  },
-                ),
+              child: Column(
+                  children: [
+                    ListTile(
+                        title: Text(
+                          folder.folderName.toString(),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20
+                          ),),
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(5.0),
+                          child: Image.network(folder.leadingUrl.toString(),
+                            height: 100.0,
+                            width: 60.0,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                        onTap: (){
+                          this.widget.onTapFolder(folder, context);
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(builder: (context) => DetailFolder(folder)));
+                        },
+                      ),
+                    Divider()
+                  ],
+
+
               ),
             );
           }
@@ -75,20 +80,23 @@ class _FolderList extends State<FolderList>{
 
   // LẤY LIST FOLDER VỚI THÔNG TIN
   Future getUserFoldersList() async{
-    var data = await FirebaseFirestore.instance
+    var snapshot = await FirebaseFirestore.instance
         .collection('wishlist')
-        .doc(renterID)
-        .collection('folders')
-        .orderBy('folderName')
+        .doc(renter.wishlistID)
         .get();
 
+    if (snapshot != null)
+      print("snapshot not null");
+    else
+      print("snapshot is null");
+
     setState(() {
-      _folders = List.from(data.docs.map((doc) => WishlistFolder.fromSnapshot(doc)));
+      _folders = List.from(snapshot.data()?['folders'].map((doc) => WishlistFolder.fromSnapshot(doc)));
     });
     print(_folders);
+    print("yesssss");
   }
 }
-
 
 
 class WishlistPage extends StatefulWidget{

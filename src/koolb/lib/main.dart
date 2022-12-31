@@ -22,6 +22,7 @@ import 'package:koolb/ui/renter/pages/wishlist/wishlist_page.dart';
 import 'package:koolb/ui/sign_up_screen.dart';
 // import 'package:koolb/ui/welcoming_page.dart';
 import 'package:koolb/ui/splash_screen.dart';
+import 'package:koolb/user/renter.dart';
 import 'package:koolb/wishlist/wishlist.dart';
 import 'package:provider/provider.dart'; // new
 import 'firebase_options.dart'; // new
@@ -41,6 +42,8 @@ import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'firebase_options.dart';
 import 'package:koolb/ui/sign_in_screen.dart' as SignInPage;
 import 'package:koolb/ui/host/pages/tips_page.dart';
+
+Renter renter = Renter("", "", "", "", [], [], "", "", "HgvSKaOM6uSLK9qrH2ZL");
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

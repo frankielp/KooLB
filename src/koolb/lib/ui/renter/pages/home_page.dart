@@ -6,8 +6,12 @@ import 'package:koolb/accommodation/category.dart' as Category;
 //import 'package:koolb/component/category_item.dart';
 import 'package:koolb/component/list_accommodation_item.dart';
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/wishlist/wishlist.dart';
 
 import '../../../decoration/widget.dart';
+import '../../../main.dart';
+
+const renterID = 'HgvSKaOM6uSLK9qrH2ZL';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required String title});
@@ -17,6 +21,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<String> favoriteAccommodationIDs = [];
+
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    getUserFavoriteListIDs();
+  }
+
+  Future getUserFavoriteListIDs() async {
+    List<String> tmp = [];
+    var data = await FirebaseFirestore.instance
+          .collection('wishlist')
+          .doc(renter.wishlistID)
+          .get();
+
+    List<WishlistFolder> folders = List.from(data.data()?['folders'].map((doc) => WishlistFolder.fromSnapshot(doc)));
+
+    for (int i = 0; i < folders.length; ++i){
+      tmp = List.from(tmp)..addAll(folders[i].accommodationIDs);
+    }
+    setState(() {
+      favoriteAccommodationIDs = tmp;
+      //print(favoriteAccommodationIDs);
+    });
+  }
+
   List<String> categories = [
     "All",
     "Apartment",
@@ -277,7 +307,7 @@ class _HomePageState extends State<HomePage> {
             // listAccommodation(),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: listAccommodation(),
+              child: listAccommodation(favoriteAccommodationIDs),
             ),
           ],
         ),
@@ -322,13 +352,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  listAccommodation() {
+  listAccommodation(List<String> favoriteAccommodationIDs) {
     Size size = MediaQuery.of(context).size;
     List<Accommodation> filteredaccommodations = accommodations;
+    //print(List.from(accommodations.map((e) => e.id)));
     filteredaccommodations = displayByCategory(filteredaccommodations);
     List<Widget> lists = List.generate(
         filteredaccommodations.length,
             (index) => AccommodationItem(
+          isFavorite: favoriteAccommodationIDs.contains(filteredaccommodations[index].id),
           data: filteredaccommodations[index],
           //image: images,
           onTap: () {
