@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -5,44 +7,31 @@ import 'package:koolb/place/place.dart';
 import '../user/host.dart';
 
 class Accommodation extends Place {
-  List<Category> _category;
-  double _price;
-  double _rating;
-  int _room;
-  int _children;
-  int _guests;
-  List<DateTimeRange> _bookedTime;
+  late String id;
+  String description;
+  List<Category> category;
+  double price;
+  late double rating;
+  int room;
+  int children;
+  int guests;
+  late List<DateTimeRange> bookedTime;
+  late String link;
 
   Accommodation(
-      List<Category> category,
-      double price,
-      double rating,
-      int room,
-      int children,
-      int guest,
-      List<DateTimeRange> bookedTime,
-      String name,
-      GeoPoint location)
-      : _category = category,
-        _price = price,
-        _rating = rating,
-        _room = room,
-        _children = children,
-        _bookedTime = bookedTime,
-        _guests = guest,
-        super(name, location);
+      {required this.description,
+      required this.category,
+      required this.price,
+      required this.room,
+      required this.children,
+      required this.guests,
+      GeoPoint? location,
+      String? title})
+      : super(title!, location!);
 
-  List<Category> get category => _category;
+  //TODO: upload to firestore
 
-  double get price => _price;
+  //TODO: up to firebase
 
-  double get rating => _rating;
-
-  int get room => _room;
-
-  int get children => _children;
-
-  List<DateTimeRange> get bookedTime => _bookedTime;
-
-  GeoPoint get location => super.position;
+  //TODO: get accommodation from database
 }

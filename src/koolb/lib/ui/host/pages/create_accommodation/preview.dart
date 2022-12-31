@@ -1,8 +1,7 @@
 import 'dart:io';
-import 'dart:js';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
 
 abstract class ParentPreview extends StatelessWidget {
   String title;
@@ -13,6 +12,7 @@ abstract class ParentPreview extends StatelessWidget {
   String address;
   String city;
   String country;
+  double price;
 
   ParentPreview(
       {super.key,
@@ -23,9 +23,11 @@ abstract class ParentPreview extends StatelessWidget {
       required this.description,
       required this.address,
       required this.city,
-      required this.country});
+      required this.country,
+      required this.price});
 
   Widget accommodationImage(double height);
+  onDismissible(DismissDirection direction);
 
   Widget _defaultDivider() {
     return const Divider(
@@ -38,7 +40,7 @@ abstract class ParentPreview extends StatelessWidget {
     return Text(
       title,
       style: const TextStyle(
-          color: Colors.black, fontSize: 20, fontWeight: FontWeight.w500),
+          color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
     );
   }
 
@@ -46,7 +48,7 @@ abstract class ParentPreview extends StatelessWidget {
     return Text(
       'Hosted by $hostName',
       style: const TextStyle(
-          color: Colors.black, fontSize: 17, fontWeight: FontWeight.w300),
+          color: Colors.black, fontSize: 17, fontWeight: FontWeight.w700),
     );
   }
 
@@ -72,10 +74,28 @@ abstract class ParentPreview extends StatelessWidget {
         const Text(
           'Location',
           style: TextStyle(
-              color: Colors.black, fontSize: 17, fontWeight: FontWeight.w300),
+              color: Colors.black, fontSize: 17, fontWeight: FontWeight.w700),
         ),
         Text(
           '$address, $city, $country',
+          style: const TextStyle(color: Colors.black, fontSize: 17),
+        ),
+      ],
+    );
+  }
+
+  Widget priceText() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Price',
+          style: TextStyle(
+              color: Colors.black, fontSize: 17, fontWeight: FontWeight.w700),
+        ),
+        Text(
+          '$price \$ night',
           style: const TextStyle(color: Colors.black, fontSize: 17),
         ),
       ],
@@ -86,6 +106,9 @@ abstract class ParentPreview extends StatelessWidget {
     return Dismissible(
       key: const Key('key'),
       direction: DismissDirection.down,
+      onDismissed: ((direction) {
+        onDismissible(direction);
+      }),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
@@ -101,6 +124,7 @@ abstract class ParentPreview extends StatelessWidget {
             _defaultDivider(),
             descriptionText(),
             _defaultDivider(),
+            _defaultDivider(),
             locationText(),
           ],
         ),
@@ -111,28 +135,32 @@ abstract class ParentPreview extends StatelessWidget {
 
 class PreviewForMobile extends ParentPreview {
   File image;
+  late BuildContext _context;
 
-  PreviewForMobile(
-      {super.key,
-      required this.image,
-      required super.title,
-      required super.hostName,
-      required super.numAdults,
-      required super.numChildren,
-      required super.description,
-      required super.address,
-      required super.city,
-      required super.country});
-
+  PreviewForMobile({
+    super.key,
+    required this.image,
+    required super.title,
+    required super.hostName,
+    required super.numAdults,
+    required super.numChildren,
+    required super.description,
+    required super.address,
+    required super.city,
+    required super.country,
+    required super.price,
+  });
   @override
   Widget accommodationImage(double height) {
-    return SizedBox(
-      height: height,
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-        child: Image.file(
-          image,
-          fit: BoxFit.cover,
+    return Center(
+      child: SizedBox(
+        height: height,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          child: Image.file(
+            image,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
@@ -140,6 +168,7 @@ class PreviewForMobile extends ParentPreview {
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -151,9 +180,87 @@ class PreviewForMobile extends ParentPreview {
           ),
         ],
       ),
-      body: super.main(MediaQuery.of(context).size.height / 2),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: super.main(MediaQuery.of(context).size.height / 2),
+      ),
     );
+  }
+
+  @override
+  onDismissible(DismissDirection direction) {
+    switch (direction) {
+      case DismissDirection.down:
+        Navigator.pop(_context);
+        break;
+      default:
+    }
   }
 }
 
-// class 
+// preview for web
+class PreviewForWeb extends ParentPreview {
+  Uint8List image;
+  late BuildContext _context;
+
+  PreviewForWeb({
+    super.key,
+    required this.image,
+    required super.title,
+    required super.hostName,
+    required super.numAdults,
+    required super.numChildren,
+    required super.description,
+    required super.address,
+    required super.city,
+    required super.country,
+    required super.price,
+  });
+
+  @override
+  Widget accommodationImage(double height) {
+    return Center(
+      child: SizedBox(
+        height: height,
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          child: Image.memory(
+            image,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _context = context;
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.close),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: super.main(MediaQuery.of(context).size.height / 2),
+      ),
+    );
+  }
+
+  @override
+  onDismissible(DismissDirection direction) {
+    switch (direction) {
+      case DismissDirection.down:
+        Navigator.pop(_context);
+        break;
+      default:
+    }
+  }
+}
