@@ -16,8 +16,8 @@ import 'package:koolb/util/load_data.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class CreateAccommodation extends StatefulWidget {
-  String hostID;
-  CreateAccommodation({super.key, required this.hostID});
+  String hostName;
+  CreateAccommodation({super.key, required this.hostName});
 
   @override
   State<CreateAccommodation> createState() => _CreateAccommodationState();
@@ -891,7 +891,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                           ? PreviewForWeb(
                               image: _webImageFile,
                               title: _titleController.text,
-                              hostName: 'asdfasdf',
+                              hostName: widget.hostName,
                               numAdults: _guests,
                               numChildren: _children,
                               description: _descriptionController.text,
@@ -903,7 +903,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                           : PreviewForMobile(
                               image: _imageFile!,
                               title: _titleController.text,
-                              hostName: 'asdf',
+                              hostName: widget.hostName,
                               numAdults: _guests,
                               numChildren: _children,
                               description: _descriptionController.text,
@@ -1043,10 +1043,11 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     return null;
   }
 
-  void _addAccommodationToFirebase() {
+  Future<void> _addAccommodationToFirebase() async {
     _categories.add(_bestDescription);
+    String accommodationID;
     if (kIsWeb) {
-      Accommodation.addAccommodationToFirebaseWeb(
+      accommodationID = await Accommodation.addAccommodationToFirebaseWeb(
         title: _titleController.text,
         description: _descriptionController.text,
         price: _price,
@@ -1060,7 +1061,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         children: _children,
       );
     } else {
-      Accommodation.addAccommodationToFirebaseMobile(
+      accommodationID = await Accommodation.addAccommodationToFirebaseMobile(
           title: _titleController.text,
           description: _descriptionController.text,
           price: _price,
@@ -1073,10 +1074,10 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
           adults: _guests,
           children: _children);
     }
-    _showAlertDone();
+    _showAlertDone(accommodationID);
   }
 
-  void _showAlertDone() {
+  void _showAlertDone(String accommodationID) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -1085,7 +1086,9 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         actions: [
           TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context, {
+                  'accommodationID': accommodationID,
+                });
               },
               child: const Text('Continue')),
         ],
