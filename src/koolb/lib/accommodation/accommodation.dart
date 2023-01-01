@@ -20,7 +20,8 @@ class Accommodation extends Place {
   int room;
   int children;
   int guests;
-  late List<DateTimeRange> bookedTime;
+  late List<DateTime> starts;
+  late List<DateTime> ends;
   late String imageLink;
 
   Accommodation({
@@ -37,11 +38,7 @@ class Accommodation extends Place {
     required this.guests,
   }) : super(title, location);
 
-  get starts => null;
-
-  get ends => null;
-
-  get location => null;
+  get location => super.position;
 
   //TODO: upload to firestore
 
