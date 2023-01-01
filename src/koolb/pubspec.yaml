@@ -74,7 +74,11 @@ dependencies:
   fluttertoast: ^8.1.2
   country_code_picker: ^2.0.2
   flutter_firebase_chat_core: ^1.6.4
+
   flutter_facebook_auth: ^5.0.7
+
+  syncfusion_flutter_charts: ^20.4.41
+
 
   # firebase_analytics: any
   # firebase_messaging: 6.0.9
