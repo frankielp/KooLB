@@ -26,25 +26,19 @@ extension ParseToString on Category {
   String toShortString() {
     if (this == Category.SharedHome) {
       return "Shared Home";
-    }
-    else if (this == Category.BreakfastIncluded) {
+    } else if (this == Category.BreakfastIncluded) {
       return "Breakfast Included";
-    }
-    else if (this == Category.ParkingLot) {
+    } else if (this == Category.ParkingLot) {
       return "Parking Lot";
-    }
-    else if (this == Category.AirConditioning) {
+    } else if (this == Category.AirConditioning) {
       return "Air Conditioning";
-    }
-    else if (this == Category.DoubleRoom) {
+    } else if (this == Category.DoubleRoom) {
       return "Double Room";
-    }
-    else if (this == Category.HighSafety) {
+    } else if (this == Category.HighSafety) {
       return "High Safety";
-    }
-    else if (this == Category.NearCity) {
+    } else if (this == Category.NearCity) {
       return "Near City";
-    }
-    else return this.toString().split('.').last;
+    } else
+      return this.toString().split('.').last;
   }
 }

@@ -21,7 +21,8 @@ class DetailsPage extends StatefulWidget {
     required this.address,
     required this.images,
     required this.accommodationID,
-    required this.isFavorite, required this.accommodation,
+    required this.isFavorite,
+    required this.accommodation,
   }) : super(key: key);
 
   @override
@@ -129,7 +130,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             specWidget(
                               context,
                               Icons.people,
-                              "${widget.accommodation.adult} Adult",
+                              "${widget.accommodation.guests} Adult",
                             ),
                           ],
                         ),
@@ -252,7 +253,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               ),
                               adults: 1,
                               children: 1,
-                              maxAdults: widget.accommodation.adult,
+                              maxAdults: widget.accommodation.guests,
                               maxChildren: widget.accommodation.children,
                               price: widget.accommodation.price,
                             ),
