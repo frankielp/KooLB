@@ -84,7 +84,7 @@ abstract class ParentPreview extends StatelessWidget {
     );
   }
 
-  Widget priceText() {
+  Widget _priceText() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +95,7 @@ abstract class ParentPreview extends StatelessWidget {
               color: Colors.black, fontSize: 17, fontWeight: FontWeight.w700),
         ),
         Text(
-          '$price \$ night',
+          '$price\$ night',
           style: const TextStyle(color: Colors.black, fontSize: 17),
         ),
       ],
@@ -124,6 +124,7 @@ abstract class ParentPreview extends StatelessWidget {
             _defaultDivider(),
             descriptionText(),
             _defaultDivider(),
+            _priceText(),
             _defaultDivider(),
             locationText(),
           ],

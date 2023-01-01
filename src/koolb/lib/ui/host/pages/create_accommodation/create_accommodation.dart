@@ -160,19 +160,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                       ..showSnackBar(SnackBar(content: Text(_message!)));
                   }
                 : _currentPage == pages.length - 1
-                    ? () async {
-                        try {
-                          _addAccommodationToFirebase();
-                        } on FirebaseException catch (e) {
-                          print(e);
-                          const snackBar = SnackBar(
-                              content: Text(
-                                  'Something went wrong, please try again'));
-                          ScaffoldMessenger.of(context)
-                            ..removeCurrentSnackBar()
-                            ..showSnackBar(snackBar);
-                        }
-                      }
+                    ? _addAccommodationToFirebase
                     : _moveNextPage,
             style: TextButton.styleFrom(
               padding: const EdgeInsets.all(18.0),
