@@ -14,9 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:koolb/decoration/color.dart';
-import 'package:koolb/ui/host/pages/create_accommodation/create_accommodation.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/homepage/search.dart';
+import 'package:koolb/ui/renter/pages/profile_page.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
 import 'package:koolb/ui/sign_up_screen.dart';
 // import 'package:koolb/ui/welcoming_page.dart';
@@ -38,6 +38,9 @@ import 'package:koolb/ui/host/h_navigation_bar.dart';
 import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'firebase_options.dart';
 import 'package:koolb/ui/sign_in_screen.dart' as SignInPage;
+import 'package:koolb/ui/renter/pages/notification_page.dart';
+
+import 'ui/renter/pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -95,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       // body: SplashScreen(),
-      body: CreateAccommodation(),
+      body: SettingPage(),
     );
   }
 }

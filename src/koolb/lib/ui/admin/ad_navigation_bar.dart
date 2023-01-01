@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/ui/admin/pages/explore_page.dart';
+import 'package:koolb/ui/admin/pages/posting.dart';
 import 'package:koolb/ui/admin/pages/request_page.dart';
 import 'package:koolb/ui/admin/pages/setting_page.dart';
 import 'package:koolb/ui/admin/pages/statistic_page.dart';
@@ -17,7 +18,7 @@ class AdminPagesNavigator extends StatefulWidget {
 class _AdminPagesNavigatorState extends State<AdminPagesNavigator> {
   List pages = [
     const ExplorePage(),
-    const RequestPage(),
+    const PostingAdmin(),
     const SettingPage(),
     const StatisticPage(),
   ];
@@ -53,7 +54,7 @@ class _AdminPagesNavigatorState extends State<AdminPagesNavigator> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.pending_actions),
-            label: 'Request',
+            label: 'Posting',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

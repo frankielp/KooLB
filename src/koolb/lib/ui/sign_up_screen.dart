@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:koolb/ui/renter/pages/home_page.dart';
+import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'package:koolb/ui/sign_in_screen.dart';
 
 import '../component/already_have_account_check.dart';
@@ -197,8 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             .pushReplacement(MaterialPageRoute(
                                           builder: (context) =>
                                               // ProfilePage(user: user)),
-                                              HomePage(
-                                                  title: user.displayName!),
+                                              RenterPagesNavigation(),
                                         ));
                                       }
                                     }

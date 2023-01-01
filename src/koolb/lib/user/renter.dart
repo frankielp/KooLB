@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/feature/reservation.dart';
 import 'package:koolb/place/place.dart';
@@ -33,4 +34,26 @@ class Renter extends KoolUser {
   String get currency => _currency;
   List<Place> get listing => _listing;
   List<Accommodation> get accommodation => _accommodation;
+}
+
+Future<Map<String, String>> getRenterInfoById(id) async {
+  var snapshot =
+      await FirebaseFirestore.instance.collection('renter').doc(id).get();
+  if (!snapshot.exists) {
+    throw Exception('User does not exist in database');
+  }
+  Map<String, dynamic>? data = snapshot.data();
+
+  String DOB = await data?['DOB'];
+  String email = data?['email'];
+  String fb = data?['fb'];
+  String name = data?['name'];
+  String username = data?['username'];
+  return {
+    'DOB': DOB,
+    'email': email,
+    'fb': fb,
+    'name': name,
+    'username': username
+  };
 }

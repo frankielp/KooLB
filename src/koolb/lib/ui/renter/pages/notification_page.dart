@@ -1,28 +1,21 @@
 // import 'dart:html';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/user/koolUser.dart';
-import 'package:koolb/ui/renter/pages/notification_page.dart';
-import 'package:koolb/ui/renter/pages/chat_box.dart';
-import 'package:koolb/user/renter.dart';
+import 'package:koolb/ui/renter/pages/chat_page.dart';
 
-const thisUserID = 'eNZEIQKDI4chp7eUcWufFqDYbj92';
-const thatUserID = 'eNZEIQKDI4chp7eUcWufFqDYbj92';
+class NotiPage extends StatefulWidget {
+  const NotiPage({super.key});
 
-Map<String, String> chatUser = {
-  'name': 'linh',
-  'messageText': 'Try Dictionary',
-  'Time': 'Today 1:30'
-};
-
-class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  State<NotiPage> createState() => _NotiPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _NotiPageState extends State<NotiPage> {
+  Map<String, String> Notification = {
+    'Title': 'Top 10 hotels in Berlin',
+    'BriefDescription': 'A trip through the scenery of Berlin'
+  };
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,24 +30,24 @@ class _ChatPageState extends State<ChatPage> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      Icon(
-                        Icons.forum,
-                        color: Colors.black,
-                        size: 20,
-                      ),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(context,
                               MaterialPageRoute(builder: (context) {
-                            return NotiPage();
+                            return ChatPage();
                           }));
                         },
                         child: Icon(
-                          Icons.notifications,
+                          Icons.forum,
                           color: Colors.black,
                           size: 20,
                         ),
-                      )
+                      ),
+                      Icon(
+                        Icons.notifications,
+                        color: Colors.black,
+                        size: 20,
+                      ),
                     ]),
               ),
             ),
@@ -65,7 +58,7 @@ class _ChatPageState extends State<ChatPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     const Text(
-                      "CHAT BOX",
+                      "NOTIFICATION",
                       style:
                           TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                     ),
@@ -80,17 +73,12 @@ class _ChatPageState extends State<ChatPage> {
                       child: Row(
                         children: <Widget>[
                           Icon(
-                            Icons.add,
+                            Icons.notifications,
                             color: Colors.black,
                             size: 20,
                           ),
                           SizedBox(
                             width: 2,
-                          ),
-                          Text(
-                            "Add New",
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -99,37 +87,17 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 20, left: 16, right: 16),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Search...",
-                  hintStyle: TextStyle(color: Colors.grey.shade600),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey.shade600,
-                    size: 20,
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey.shade100,
-                  contentPadding: EdgeInsets.all(8),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.grey.shade100)),
-                ),
-              ),
-            ),
             ListView.builder(
+              //View list of notification
               itemCount: 1,
               shrinkWrap: true,
               padding: EdgeInsets.only(top: 16),
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return ConversationList(
-                  name: chatUser['name'].toString(),
-                  messageText: chatUser['messageText'].toString(),
-                  time: chatUser['Time'].toString(),
-                  isMessageRead: (index == 0 || index == 3) ? true : false,
+                return NotiViewBuilder(
+                  title: Notification['Title'].toString(),
+                  briefDescrip: Notification['BriefDescrip'].toString(),
+                  isRead: (index == 0 || index == 3) ? true : false,
                 );
               },
             ),
@@ -140,29 +108,22 @@ class _ChatPageState extends State<ChatPage> {
   }
 }
 
-class ConversationList extends StatefulWidget {
-  String name;
-  String messageText;
-  String time;
-  bool isMessageRead;
-  ConversationList(
-      {required this.name,
-      required this.messageText,
-      required this.time,
-      required this.isMessageRead});
+class NotiViewBuilder extends StatefulWidget {
+  String title;
+  String briefDescrip;
+  bool isRead;
+  NotiViewBuilder(
+      {required this.title, required this.briefDescrip, required this.isRead});
+
   @override
-  _ConversationListState createState() => _ConversationListState();
+  _NotiListState createState() => _NotiListState();
 }
 
-class _ConversationListState extends State<ConversationList> {
+class _NotiListState extends State<NotiViewBuilder> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return ChatBox();
-        }));
-      },
+      onTap: () {},
       child: Container(
         padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
         child: Row(
@@ -180,18 +141,18 @@ class _ConversationListState extends State<ConversationList> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            widget.name,
+                            widget.title,
                             style: TextStyle(fontSize: 16),
                           ),
                           SizedBox(
                             height: 6,
                           ),
                           Text(
-                            widget.messageText,
+                            widget.briefDescrip,
                             style: TextStyle(
                                 fontSize: 13,
                                 color: Colors.grey.shade600,
-                                fontWeight: widget.isMessageRead
+                                fontWeight: widget.isRead
                                     ? FontWeight.bold
                                     : FontWeight.normal),
                           ),
@@ -201,14 +162,6 @@ class _ConversationListState extends State<ConversationList> {
                   ),
                 ],
               ),
-            ),
-            Text(
-              widget.time,
-              style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: widget.isMessageRead
-                      ? FontWeight.bold
-                      : FontWeight.normal),
             ),
           ],
         ),

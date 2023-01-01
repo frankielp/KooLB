@@ -6,6 +6,7 @@ import 'package:koolb/component/or_divider.dart';
 import 'package:koolb/component/row_of_social_icons.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/renter/pages/home_page.dart';
+import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'package:koolb/ui/sign_up_screen.dart';
 
 import '../component/already_have_account_check.dart';
@@ -150,7 +151,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                       .pushReplacement(MaterialPageRoute(
                                     builder: (context) =>
                                         // ProfilePage(user: user)),
-                                        HomePage(title: user.displayName!),
+                                        RenterPagesNavigation(),
                                   ));
                                 }
                               }
