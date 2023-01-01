@@ -1,11 +1,8 @@
 // import 'dart:html';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
-import 'package:koolb/user/koolUser.dart';
 import 'package:koolb/ui/renter/pages/notification_page.dart';
 import 'package:koolb/ui/renter/pages/chat_box.dart';
-import 'package:koolb/user/renter.dart';
 
 const thisUserID = 'eNZEIQKDI4chp7eUcWufFqDYbj92';
 const thatUserID = 'eNZEIQKDI4chp7eUcWufFqDYbj92';
