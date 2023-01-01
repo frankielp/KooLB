@@ -1,7 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:koolb/data/countries_and_cities.dart';
+import 'package:location/location.dart';
 
 List<String> countries = <String>[];
 
@@ -30,4 +34,17 @@ Map<String, List<String>> getCities() {
   return res;
 }
 
-//get geolocation by address
+//get geoPoint by address
+Future<GeoPoint> getGeoPointByAddress(String address) async {
+  try {
+    var locations = await locationFromAddress(address);
+    if (locations.isEmpty) {
+      throw "Not found address.";
+    }
+    var location = locations[0];
+    return GeoPoint(location.latitude, location.longitude);
+  } catch (e) {
+    print(e);
+  }
+  return GeoPoint(0, 0);
+}

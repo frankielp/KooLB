@@ -3,9 +3,11 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/accommodation/category.dart';
 import 'package:koolb/data/countries_and_cities.dart';
 import 'package:koolb/decoration/color.dart';
@@ -47,13 +49,13 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     fontWeight: FontWeight.bold,
   );
 
-  final _controller = PageController(initialPage: 1);
+  final _controller = PageController(initialPage: 0);
   final _kDuration = const Duration(milliseconds: 500);
   final _kCurve = Curves.ease;
   final _minPrice = 10.0;
   late List<Widget> pages;
 
-  int _currentPage = 1;
+  int _currentPage = 0;
   String? _message;
 
   @override
@@ -118,14 +120,14 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
               ),
             ),
             //Row for navigate button
-            rowButton(),
+            _rowButton(),
           ],
         ),
       ),
     );
   }
 
-  Widget rowButton() {
+  Widget _rowButton() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Row(
@@ -151,11 +153,6 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
           //next button
 
           TextButton(
-            // onPressed: if (_verifyPage()) (){
-            //   ScaffoldMessenger.of(context)
-            //           ..removeCurrentSnackBar()
-            //           ..showSnackBar(SnackBar(content: Text(_message!)));
-            // }
             onPressed: _verifyPage()
                 ? () {
                     ScaffoldMessenger.of(context)
@@ -163,14 +160,23 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                       ..showSnackBar(SnackBar(content: Text(_message!)));
                   }
                 : _currentPage == pages.length - 1
-                    ? () {
-                        //TODO: show alert complete
-                        //TODO: implement upload accommodation
+                    ? () async {
+                        try {
+                          _addAccommodationToFirebase();
+                        } on FirebaseException catch (e) {
+                          print(e);
+                          const snackBar = SnackBar(
+                              content: Text(
+                                  'Something went wrong, please try again'));
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(snackBar);
+                        }
                       }
                     : _moveNextPage,
             style: TextButton.styleFrom(
               padding: const EdgeInsets.all(18.0),
-              backgroundColor: _verifyPage() || _currentPage == pages.length - 1
+              backgroundColor: _verifyPage() || _currentPage > pages.length - 1
                   ? Colors.grey.shade300
                   : Colors.black,
               textStyle: const TextStyle(
@@ -178,9 +184,9 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                 fontSize: 20,
               ),
             ),
-            child: const Text(
-              'Next',
-              style: TextStyle(color: Colors.white),
+            child: Text(
+              _currentPage < pages.length - 1 ? 'Next' : 'Publish',
+              style: const TextStyle(color: Colors.white),
             ),
           ),
         ],
@@ -1013,11 +1019,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         break;
 
       default:
-        if (_currentPage == pages.length - 1) {
-          _message = "It is the end of progress.";
-        } else {
-          _message = null;
-        }
+        _message = null;
     }
 
     return _message != null;
@@ -1053,6 +1055,53 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     return null;
   }
 
-  //TODO: add accommodation to firebase
-  // void addAccommmodationToFirebase() {}
+  void _addAccommodationToFirebase() {
+    _categories.add(_bestDescription);
+    if (kIsWeb) {
+      Accommodation.addAccommodationToFirebaseWeb(
+        title: _titleController.text,
+        description: _descriptionController.text,
+        price: _price,
+        address: _addressController.text,
+        city: _cityValue!,
+        country: _countryValue!,
+        categories: _categories,
+        webImage: _webImageFile,
+        rooms: _rooms,
+        adults: _guests,
+        children: _children,
+      );
+    } else {
+      Accommodation.addAccommodationToFirebaseMobile(
+          title: _titleController.text,
+          description: _descriptionController.text,
+          price: _price,
+          address: _addressController.text,
+          city: _cityValue!,
+          country: _countryValue!,
+          categories: _categories,
+          mobileImage: _imageFile!,
+          rooms: _rooms,
+          adults: _guests,
+          children: _children);
+    }
+    _showAlertDone();
+  }
+
+  void _showAlertDone() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Publish successful'),
+        content: const Text('Your accommodation is published successfully'),
+        actions: [
+          TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Continue')),
+        ],
+      ),
+    );
+  }
 }
