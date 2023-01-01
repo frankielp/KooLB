@@ -35,17 +35,27 @@ class _FolderList extends State<FolderList>{
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      body: ListView.builder(
-          shrinkWrap: true,
-          physics: ClampingScrollPhysics(),
-          itemCount: _folders.length,
-          itemBuilder: (context, index){
-            WishlistFolder folder = _folders[index];
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                  children: [
-                    ListTile(
+      body: FutureBuilder(
+        future: getUserFoldersList(),
+        builder: (context, data) {
+          if (data.hasError){
+          return Center(child: Text("${data.error}"),);}
+          else if (data.hasData){
+            setState(() {
+              _folders = data.data as List<WishlistFolder>;
+            });
+          }
+          return ListView.builder(
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              itemCount: _folders.length,
+              itemBuilder: (context, index) {
+                WishlistFolder folder = _folders[index];
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      ListTile(
                         title: Text(
                           folder.folderName.toString(),
                           style: TextStyle(
@@ -60,22 +70,22 @@ class _FolderList extends State<FolderList>{
                             fit: BoxFit.fill,
                           ),
                         ),
-                        onTap: (){
+                        onTap: () {
                           this.widget.onTapFolder(folder, context);
                           // Navigator.push(
                           //     context,
                           //     MaterialPageRoute(builder: (context) => DetailFolder(folder)));
                         },
                       ),
-                    Divider()
-                  ],
+                      Divider()
+                    ],
 
 
-              ),
-            );
-          }
-      ),
-    );
+                  ),
+                );
+              }
+          );
+        }));
   }
 
   // LẤY LIST FOLDER VỚI THÔNG TIN

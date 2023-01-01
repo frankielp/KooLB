@@ -65,12 +65,12 @@ class _HomePageState extends State<HomePage> {
     "icons/homestay.png"
   ];
 
-  // List<String> images = [
-  //   "https://pbs.twimg.com/media/FhrWVV6aAAAQvkf?format=jpg&name=large",
-  //   "https://pbs.twimg.com/media/FiE26JbacAAVWQq?format=jpg&name=large",
-  //   "https://pbs.twimg.com/media/FiE27l3aEAA2wTZ?format=jpg&name=large",
-  //   "https://pbs.twimg.com/media/FiE27mragAIblmC?format=jpg&name=large",
-  // ];
+  List<String> images = [
+    "https://pbs.twimg.com/media/FhrWVV6aAAAQvkf?format=jpg&name=large",
+    "https://pbs.twimg.com/media/FiE26JbacAAVWQq?format=jpg&name=large",
+    "https://pbs.twimg.com/media/FiE27l3aEAA2wTZ?format=jpg&name=large",
+    "https://pbs.twimg.com/media/FiE27mragAIblmC?format=jpg&name=large",
+  ];
 
   List<Accommodation> accommodations = [
     Accommodation(
