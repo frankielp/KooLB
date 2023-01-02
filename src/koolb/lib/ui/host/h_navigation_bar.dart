@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:koolb/ui/host/pages/calendar_page.dart';
 import 'package:koolb/ui/host/pages/chat_page.dart';
+import 'package:koolb/ui/host/pages/create_accommodation/create_accommodation.dart';
 import 'package:koolb/ui/host/pages/insight_page.dart';
 import 'package:koolb/ui/host/pages/menu_page.dart';
 import 'package:koolb/ui/host/pages/reservation_page.dart';
@@ -15,10 +16,8 @@ class HostPagesNavigator extends StatefulWidget {
 class _HostPagesNavigatorState extends State<HostPagesNavigator> {
   List pages = [
     const ReservationPage(),
-    const MenuPage(),
     const ChatPage(),
-    const CalendarPage(),
-    const InsightPage(),
+    CreateAccommodation(hostName: "Name"),
   ];
 
   int currentPage = 0;
@@ -51,20 +50,12 @@ class _HostPagesNavigatorState extends State<HostPagesNavigator> {
             label: 'Reservation',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Menu',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.chat),
             label: 'Message',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: 'Calendar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.insights),
-            label: 'Insight',
+            icon: Icon(Icons.add_home),
+            label: 'Create Accommodation',
           ),
         ],
       ),

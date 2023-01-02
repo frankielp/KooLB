@@ -3,13 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class KoolUser {
-  String? name, email, id;
+  String name, email;
+  String? id;
+  String authID;
 
   //Function
-  KoolUser(String? name, String? email, String? id) {
-    final User? firebaseUser = FirebaseAuth.instance.currentUser;
-    this.name = firebaseUser?.displayName;
-    this.email = firebaseUser?.email;
-    this.id = firebaseUser?.uid;
-  }
+  KoolUser({required this.name, required this.email, this.id, required this.authID});
+
 }

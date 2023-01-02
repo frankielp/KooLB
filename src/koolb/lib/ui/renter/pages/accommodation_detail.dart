@@ -80,7 +80,8 @@ class _DetailsPageState extends State<DetailsPage> {
                             color: BlueJean,
                           ),
                           Text(
-                            widget.accommodation.rating.toString(),
+                            // widget.accommodation.rating.toString(),
+                            "5",
                             style:
                                 Theme.of(context).textTheme.subtitle1!.copyWith(
                                       fontWeight: FontWeight.bold,

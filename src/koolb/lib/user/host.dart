@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/place/place.dart';
 import 'package:koolb/feature/reservation.dart';
@@ -26,12 +27,14 @@ class Host extends KoolUser {
         _currency = currency,
         _listing = listing,
         _accommodation = accommodation,
-        super(name, email, id);
+        super(
+            name: FirebaseAuth.instance.currentUser!.displayName!,
+            email: FirebaseAuth.instance.currentUser!.email!,
+            authID: FirebaseAuth.instance.currentUser!.uid);
 
   String get country => _country;
   String get language => _language;
   String get currency => _currency;
   List<Place> get listing => _listing;
   List<Accommodation> get accommodation => _accommodation;
-
 }

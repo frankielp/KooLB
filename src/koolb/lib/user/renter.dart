@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/feature/reservation.dart';
 import 'package:koolb/place/place.dart';
@@ -27,7 +28,10 @@ class Renter extends KoolUser {
         _currency = currency,
         _listing = listing,
         _accommodation = accommodation,
-        super(name, email, id);
+        super(
+            name: FirebaseAuth.instance.currentUser!.displayName!,
+            email: FirebaseAuth.instance.currentUser!.email!,
+            authID: FirebaseAuth.instance.currentUser!.uid);
   String get profileImg => _profileImg;
   String get country => _country;
   String get language => _language;
