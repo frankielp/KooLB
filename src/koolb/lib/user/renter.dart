@@ -41,3 +41,25 @@ class Renter extends KoolUser {
 
   static addRenterToFirebase() async {}
 }
+
+Future<Map<String, String>> getRenterInfoById(id) async {
+  var snapshot =
+      await FirebaseFirestore.instance.collection('renter').doc(id).get();
+  if (!snapshot.exists) {
+    throw Exception('User does not exist in database');
+  }
+  Map<String, dynamic>? data = snapshot.data();
+
+  String DOB = await data?['DOB'];
+  String email = data?['email'];
+  String fb = data?['fb'];
+  String name = data?['name'];
+  String username = data?['username'];
+  return {
+    'DOB': DOB,
+    'email': email,
+    'fb': fb,
+    'name': name,
+    'username': username
+  };
+}

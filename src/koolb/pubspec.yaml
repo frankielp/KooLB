@@ -35,29 +35,56 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: 
-  google_maps_flutter: 
-  google_maps_flutter_web: 
-  flutter_polyline_points: 
-  location: 
-  flutter_svg: 
-  geolocator: 
-  provider: 
-  firebase_ui_auth: 
-  firebase_auth: 
-  firebase_core: 
-  cloud_firestore: 
-  google_fonts: 
-  intl: 
-  flutter_chat_ui: 
-  image_picker: 
-  open_filex: 
-  file_picker: 
-  uuid: 
-  mime: 
-  firebase_analytics:
-  firebase_messaging: 
-  async: ^2.9.0
+  cupertino_icons: ^1.0.2
+  google_maps_flutter: ^2.2.1
+  google_maps_flutter_web: ^0.4.0+3
+  flutter_polyline_points: ^1.0.0
+  location: ^4.4.0
+  flutter_svg: ^1.1.6
+  geolocator: ^9.0.2
+  provider: ^6.0.4
+  firebase_ui_auth: ^1.0.4
+  firebase_auth: ^4.1.1
+  firebase_core: ^2.1.1
+  cloud_firestore: ^4.0.4
+  google_fonts: ^3.0.1
+  smooth_page_indicator: ^1.0.0+2
+  dropdown_search: ^5.0.5
+  image_picker: ^0.8.6
+  geocoding: ^2.0.5
+  firebase_storage: ^11.0.10
+  intl: ^0.17.0
+  url_launcher: ^6.0.15
+  flutter_chat_ui: ^1.6.6
+  carousel_slider: ^4.2.1
+  open_filex: ^4.3.2
+  file_picker: ^5.2.4
+  uuid: ^3.0.7
+  mime: ^1.0.3
+  # firebase_analytics: any
+  readmore: ^2.2.0
+  flutter_quill: ^6.1.11
+  #firebase_messaging: 6.0.9
+  firebase_database: ^10.0.8
+  firebase_analytics: ^10.0.8
+  shared_preferences: ^2.0.15
+  auto_size_text: ^3.0.0
+  font_awesome_flutter: ^10.3.0
+  json_path: ^0.4.2
+  timeago: ^3.3.0
+  page_transition: ^2.0.9
+  equatable: ^2.0.5
+  fluttertoast: ^8.1.2
+  country_code_picker: ^2.0.2
+  flutter_firebase_chat_core: ^1.6.4
+
+  flutter_facebook_auth: ^5.0.7
+
+  syncfusion_flutter_charts: ^20.4.41
+
+
+  # firebase_analytics: any
+  # firebase_messaging: 6.0.9
 
 dev_dependencies:
   flutter_test:

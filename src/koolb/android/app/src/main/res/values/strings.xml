@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KOOLB</string>
+    <string name="facebook_app_id">590086576254179</string>
+    <string name="fb_login_protocol_scheme">fb590086576254179</string>
+    <string name="facebook_client_token">ca44331381db04c5eefd9992af35db6d</string>
+
+</resources>

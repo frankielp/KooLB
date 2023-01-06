@@ -6,6 +6,7 @@ import 'package:koolb/accommodation/category.dart' as Category;
 import 'package:koolb/component/category_item.dart';
 import 'package:koolb/component/list_accommodation_item.dart';
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/ui/renter/pages/accommodation_detail.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,12 +26,12 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<String> icons = [
-    "icons/all.png",
-    "icons/apartment.png",
-    "icons/sharedhouse.png",
-    "icons/hostel.png",
-    "icons/hotel.png",
-    "icons/homestay.png"
+    "assets/icons/all.png",
+    "assets/icons/apartment.png",
+    "assets/icons/sharedhouse.png",
+    "assets/icons/hostel.png",
+    "assets/icons/hotel.png",
+    "assets/icons/homestay.png"
   ];
 
   List<String> images = [
@@ -40,86 +41,80 @@ class _HomePageState extends State<HomePage> {
     "https://pbs.twimg.com/media/FiE27mragAIblmC?format=jpg&name=large",
   ];
 
-  List<Accommodation> accommodations = [
-    Accommodation(
-        [Category.Category.Hotel],
-        0.5,
-        4.5,
-        1,
-        1,
-        1,
-        [DateTime(2022, 12, 1, 0, 0), DateTime(2023, 1, 1, 0, 0)],
-        [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-        'Việt Nam',
-        'An Giang',
-        'a1',
-        GeoPoint(16.456661, 107.5960929)),
-    Accommodation(
-        [Category.Category.Hotel],
-        0.5,
-        4.5,
-        1,
-        1,
-        1,
-        [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-        [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-        'Việt Nam',
-        'An Giang',
-        'a2',
-        GeoPoint(16.456661, 107.5960929)),
-    Accommodation(
-        [Category.Category.Hotel],
-        0.5,
-        4.5,
-        1,
-        1,
-        1,
-        [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-        [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-        'Việt Nam',
-        'An Giang',
-        'a2',
-        GeoPoint(16.456661, 107.5960929)),
-    Accommodation(
-        [Category.Category.Hotel],
-        0.5,
-        4.5,
-        1,
-        1,
-        1,
-        [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-        [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-        'Việt Nam',
-        'An Giang',
-        'a2',
-        GeoPoint(16.456661, 107.5960929)),
-    Accommodation(
-        [Category.Category.Hotel],
-        0.5,
-        4.5,
-        1,
-        1,
-        1,
-        [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-        [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-        'Việt Nam',
-        'An Giang',
-        'a2',
-        GeoPoint(16.456661, 107.5960929)),
-    Accommodation(
-        [Category.Category.Hotel],
-        0.5,
-        4.5,
-        1,
-        1,
-        1,
-        [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-        [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-        'Việt Nam',
-        'An Giang',
-        'a2',
-        GeoPoint(16.456661, 107.5960929))
-  ];
+  List<Accommodation> accommodations = [];
+  //   Accommodation(
+  //       category: <Category.Category> [Category.Category.Hotel, Category.Category.BreakfastIncluded],
+  //       price: 0.5,
+  //       guests: 1,
+  //       children: 1,
+  //       room: 1,
+  //       country: 'Việt Nam',
+  //       city: 'An Giang',
+  //       title: 'a1',
+  //       location: GeoPoint(16.456661, 107.5960929), address: 'address 1', description: 'description 1',),
+  //   Accommodation(
+  //       category: [Category.Category.Hotel],
+  //       price: 0.5,
+  //       guests: 1,
+  //       children: 1,
+  //       room: 1,
+  //       country: 'Việt Nam',
+  //       city: 'An Giang',
+  //       title: 'a2',
+  //       location: GeoPoint(16.456661, 107.5960929), address: 'address 2', description: 'description 2'),
+  //   Accommodation(
+  //       [Category.Category.Hotel],
+  //       0.5,
+  //       4.5,
+  //       1,
+  //       1,
+  //       1,
+  //       [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
+  //       [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
+  //       'Việt Nam',
+  //       'An Giang',
+  //       'a2',
+  //       GeoPoint(16.456661, 107.5960929)),
+  //   Accommodation(
+  //       [Category.Category.Hotel],
+  //       0.5,
+  //       4.5,
+  //       1,
+  //       1,
+  //       1,
+  //       [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
+  //       [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
+  //       'Việt Nam',
+  //       'An Giang',
+  //       'a2',
+  //       GeoPoint(16.456661, 107.5960929)),
+  //   Accommodation(
+  //       [Category.Category.Hotel],
+  //       0.5,
+  //       4.5,
+  //       1,
+  //       1,
+  //       1,
+  //       [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
+  //       [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
+  //       'Việt Nam',
+  //       'An Giang',
+  //       'a2',
+  //       GeoPoint(16.456661, 107.5960929)),
+  //   Accommodation(
+  //       [Category.Category.Hotel],
+  //       0.5,
+  //       4.5,
+  //       1,
+  //       1,
+  //       1,
+  //       [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
+  //       [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
+  //       'Việt Nam',
+  //       'An Giang',
+  //       'a2',
+  //       GeoPoint(16.456661, 107.5960929))
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -305,14 +300,13 @@ class _HomePageState extends State<HomePage> {
         (index) => AccommodationItem(
               data: filteredaccommodations[index],
               image: images,
-              onTap: () {
-                setState(() {});
-              },
+              onTap: () {},
             ));
     return Container(
       height: size.height * 0.52,
       child: SingleChildScrollView(
-        padding: EdgeInsets.only(left: size.width * 0.05, right: size.width * 0.05),
+        padding:
+            EdgeInsets.only(left: size.width * 0.05, right: size.width * 0.05),
         child: Column(
           children: lists,
         ),
@@ -320,30 +314,44 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Accommodation> displayByCategory(List<Accommodation> filteredaccommodations) {
-    switch(selectedCategory) {
-      case 1: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.Apartment]).toList();
-      }
-      break;
-      case 2: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.SharedHome]).toList();
-      }
-      break;
-      case 3: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.Hostel]).toList();
-      }
-      break;
-      case 4: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.Hotel]).toList();
-      }
-      break;
-      case 5: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.Homestay]).toList();
-      }
-      break;
-      default: 
-      break;
+  List<Accommodation> displayByCategory(
+      List<Accommodation> filteredaccommodations) {
+    switch (selectedCategory) {
+      case 1:
+        {
+          filteredaccommodations = filterResult(
+              accommodations.toSet(), [Category.Category.Apartment]).toList();
+        }
+        break;
+      case 2:
+        {
+          filteredaccommodations = filterResult(
+              accommodations.toSet(), [Category.Category.SharedHome]).toList();
+        }
+        break;
+      case 3:
+        {
+          filteredaccommodations =
+              filterResult(accommodations.toSet(), [Category.Category.Hostel])
+                  .toList();
+        }
+        break;
+      case 4:
+        {
+          filteredaccommodations =
+              filterResult(accommodations.toSet(), [Category.Category.Hotel])
+                  .toList();
+        }
+        break;
+      case 5:
+        {
+          filteredaccommodations =
+              filterResult(accommodations.toSet(), [Category.Category.Homestay])
+                  .toList();
+        }
+        break;
+      default:
+        break;
     }
 
     return filteredaccommodations;
