@@ -2,7 +2,7 @@
 import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/user/koolUser.dart';
-import 'package:koolb/ui/renter/pages/chat_page.dart';
+import 'package:koolb/ui/renter/pages/chat/chat_page.dart';
 
 class NotiPage extends StatefulWidget {
   const NotiPage({super.key});
@@ -30,19 +30,19 @@ class _NotiPageState extends State<NotiPage> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return ChatPage();
-                          }));
-                        },
-                        child: Icon(
-                          Icons.forum,
-                          color: Colors.black,
-                          size: 20,
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Navigator.push(context,
+                      //         MaterialPageRoute(builder: (context) {
+                      //       return ChatPage();
+                      //     }));
+                      //   },
+                      //   child: Icon(
+                      //     Icons.forum,
+                      //     color: Colors.black,
+                      //     size: 20,
+                      //   ),
+                      // ),
                       Icon(
                         Icons.notifications,
                         color: Colors.black,
