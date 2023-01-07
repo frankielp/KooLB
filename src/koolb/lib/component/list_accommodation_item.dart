@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/accommodation/category.dart' as Category;
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/ui/renter/pages/home_page.dart';
 import 'package:koolb/ui/renter/pages/wishlist/wishlist_page.dart';
 
 import '../wishlist/wishlist.dart';
@@ -178,21 +179,30 @@ class _HeartIcon extends State<HeartIcon> {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        onPressed: () {
-          setState(() {
-            //_favorite = !_favorite;
-            this.widget.isFavorite = !this.widget.isFavorite;
-          });
-          if (this.widget.isFavorite == true) {
-            onPressedHeartIcon(context, this.widget.data);
+        onPressed: (){
+          if (!this.widget.isFavorite){
+            onPressedHeartIcon(context, this.widget.data).then((value) {
+              //if (value != null && value != '') {
+                if (value != null && value != '')
+                  setState(() {
+                    this.widget.isFavorite = !this.widget.isFavorite;});
+                else if (value == null)
+                  setState(() {
+                    this.widget.isFavorite = this.widget.isFavorite;});
+            });
+            setState(() {
+              this.widget.isFavorite = !this.widget.isFavorite;});
           }
-          else{
+          else {
             onPressedRemoveFavorite(context, this.widget.data);
+            setState(() {
+              this.widget.isFavorite = !this.widget.isFavorite;
+            });
           }
         },
-        icon: (this.widget.isFavorite == false) ?
-        Icon(Icons.favorite_outline_outlined, size: 30, color: Colors.white,) :
-        Icon(Icons.favorite, size: 30, color: Colors.red)
+        icon: !this.widget.isFavorite ?
+            Icon(Icons.favorite_outline_outlined, color: Colors.white, size: 30,):
+            Icon(Icons.favorite, color: Colors.red, size: 30,)
     );
   }
 }
@@ -201,9 +211,9 @@ class _HeartIcon extends State<HeartIcon> {
 // REMOVE 1 ITEM FAVORITE
 Future onPressedRemoveFavorite(BuildContext context, data) async{
   var snapshot = await FirebaseFirestore.instance
-                                    .collection('wishlist')
-                                    .doc(renter.wishlistID)
-                                    .get();
+      .collection('wishlist')
+      .doc(renter.wishlistID)
+      .get();
 
   List<WishlistFolder> folders = List.from(snapshot.data()?['folders'].map((doc) => WishlistFolder.fromSnapshot(doc)));
 
@@ -247,7 +257,7 @@ Future onPressedRemoveFavorite(BuildContext context, data) async{
 
 
 // KHI ẤN VÀO TRÁI TIM
-onPressedHeartIcon(BuildContext context, data){
+Future<dynamic> onPressedHeartIcon(BuildContext context, data) async{
   showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -298,7 +308,8 @@ onPressedHeartIcon(BuildContext context, data){
                       title: Text('Create new collection'),
                       onTap: (){
                         // CODE FUNCTION
-                        onPressedCreateCollection(context, data);
+                        //onPressedCreateCollection(context, data);
+                        onPressedCreateCollection(context, data).then((value) => Navigator.of(context).pop(value));
                       },
                     ),
                     Divider(
@@ -322,15 +333,16 @@ onPressedHeartIcon(BuildContext context, data){
 // KHI ẤN TẠO COLLECTION MỚI
 Future<dynamic> onPressedCreateCollection(BuildContext context, data) {
   return createAskDialog(context).then((onValue) {
-    if (onValue != null) {
+    if (onValue != null && onValue != '') {
       WishlistFolder folder = WishlistFolder(onValue, data.images[0]);
       WishlistFolder.countFolder += 1;
       folder.addFolderToDatabase(context, data.id, renter);
-  }
+    }
     // else if (onValue == null){
     //   Navigator.pop(context);
     // }
-  }).then((value) => Navigator.pop(context));
+    return onValue;
+  });
 }
 
 
@@ -341,12 +353,12 @@ Future<dynamic> createAskDialog(BuildContext context){
   return showDialog(context: context, builder: (context){
     return AlertDialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(32.0))
+          borderRadius: BorderRadius.all(Radius.circular(32.0))
       ),
       title: ListTile(
         leading: IconButton(
             onPressed: (){
-              Navigator.pop(context);
+              Navigator.of(context).pop("");
             },
             icon: Icon(Icons.close)
         ),
@@ -380,6 +392,8 @@ class FolderListInSheet extends FolderList {
   @override
   onTapFolder(WishlistFolder folder, BuildContext context) {
     folder.addItemToFolderInDatabase(context, folder, accommodationItem.id, wishlistID);
+
+    // CLOSE BOTTOM SHEET
+    Navigator.pop(context);
   }
 }
-

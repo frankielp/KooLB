@@ -95,16 +95,16 @@ class _FolderList extends State<FolderList>{
         .doc(renter.wishlistID)
         .get();
 
-    if (snapshot != null)
-      print("snapshot not null");
-    else
-      print("snapshot is null");
+    // if (snapshot != null)
+    //   print("snapshot not null");
+    // else
+    //   print("snapshot is null");
 
     setState(() {
       _folders = List.from(snapshot.data()?['folders'].map((doc) => WishlistFolder.fromSnapshot(doc)));
     });
-    print(_folders);
-    print("yesssss");
+    // print(_folders);
+    // print("yesssss");
   }
 }
 

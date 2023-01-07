@@ -3,12 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/accommodation/category.dart' as Category;
-//import 'package:koolb/component/category_item.dart';
+import 'package:koolb/component/category_item.dart';
 import 'package:koolb/component/list_accommodation_item.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/wishlist/wishlist.dart';
 
-import '../../../decoration/widget.dart';
 import '../../../main.dart';
 
 const renterID = 'HgvSKaOM6uSLK9qrH2ZL';
@@ -336,7 +335,7 @@ class _HomePageState extends State<HomePage> {
     List<Widget> lists = List.generate(
         categories.length,
             (index) => CategoryItem(
-          //icon: icons[index],
+          icon: icons[index],
           data: categories[index],
           selected: index == selectedCategory,
           onTap: () {

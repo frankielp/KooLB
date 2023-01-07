@@ -44,9 +44,10 @@ class _DetailFolder extends State<DetailFolder> {
       //accommodationItems = List.from(this.widget.folder.accommodationIDs.map((id) => Accommodation.getAccommodationById(id)));
       accommodations = lst;
     });
-    print("Yessssssssss");
-    print(this.widget.folder.accommodationIDs);
+    // print("Yessssssssss");
+    // print(this.widget.folder.accommodationIDs);
     //print(accommodationItems[0].images);
+    return lst;
   }
 
   @override
@@ -56,31 +57,47 @@ class _DetailFolder extends State<DetailFolder> {
       appBar: customAppBar(context, folder.folderName.toString()),
       body: Column(
         children: <Widget>[
-          Expanded(
-              child: ListView.builder(
-                  itemCount: folder.accommodationIDs.length,
-                  itemBuilder: (context, index) {
-                    Accommodation accommodation = accommodations[index];
-                    // List<String> images = folder.accommodationIDs[index].data
-                    //     .images;
-                    return Card(
-                        child: SingleChildScrollView(
-                            padding: EdgeInsets.only(left: MediaQuery
-                                .of(context)
-                                .size
-                                .width * 0.05, right: MediaQuery
-                                .of(context)
-                                .size
-                                .width * 0.05),
-                            child: AccommodationItem(
-                              isFavorite: folder.accommodationIDs.contains(accommodation.id),
-                              data: accommodation,
-                              //image: images,
-                            )
-                        ));
-                  }
-              )
-          )
+          FutureBuilder(
+            future: getUserAccommodationsList(),
+            builder: (context, data) {
+              if (data.hasError) {
+                return Center(child: Text("${data.error}"),);
+              }
+              else if (data.hasData)
+                if (data.data != null) {
+                  List<Accommodation> lst = data.data as List<Accommodation>;
+                  if (lst != null && lst.length > 0)
+                    accommodations = data.data as List<Accommodation>;
+
+                  return Expanded(
+                      child: ListView.builder(
+                          itemCount: folder.accommodationIDs.length,
+                          itemBuilder: (context, index) {
+                            Accommodation accommodation = accommodations[index];
+                            // List<String> images = folder.accommodationIDs[index].data
+                            //     .images;
+                            return Card(
+                                child: SingleChildScrollView(
+                                    padding: EdgeInsets.only(left: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 0.05, right: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width * 0.05),
+                                    child: AccommodationItem(
+                                      isFavorite: folder.accommodationIDs
+                                          .contains(accommodation.id),
+                                      data: accommodation,
+                                      //image: images,
+                                    )
+                                ));
+                          }
+                      )
+                  );
+                }
+              return Center(child: CircularProgressIndicator(color: Colors.grey));
+            })
         ],
       ),
     );
