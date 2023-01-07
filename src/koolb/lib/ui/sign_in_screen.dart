@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:koolb/component/or_divider.dart';
 import 'package:koolb/component/row_of_social_icons.dart';
+import 'package:koolb/data/global_data.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/admin/ad_navigation_bar.dart';
 import 'package:koolb/ui/host/h_navigation_bar.dart';
@@ -180,7 +181,8 @@ class _SignInScreenState extends State<SignInScreen> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SignUpScreen()));
+                                    builder: (context) =>
+                                        const SignUpScreen()));
                           },
                         ),
                         SizedBox(
@@ -204,32 +206,48 @@ class _SignInScreenState extends State<SignInScreen> {
   void route() {
     User? user = FirebaseAuth.instance.currentUser;
     var uid = FirebaseFirestore.instance
-        .collection('users')
-        .doc(user!.uid)
+        .collection('user')
+        .where('email', isEqualTo: user!.email)
         .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        if (documentSnapshot.get('role') == "Renter") {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RenterPagesNavigation(),
-            ),
-          );
-        } else if (documentSnapshot.get('role') == "Host") {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HostPagesNavigator(),
-            ),
-          );
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AdminPagesNavigator(),
-            ),
-          );
+        .then((QuerySnapshot documentSnapshot) {
+      if (documentSnapshot.docs.isNotEmpty) {
+//         String name = "user", email = "email";
+// String? id;
+// String authID = "id";
+        final user = documentSnapshot.docs.first;
+        name = user.get('name');
+        email = user.get('email');
+        id = user.id;
+        authID = user.get('authId');
+        String role = user.get('role');
+
+        switch (role) {
+          case 'Renter':
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const RenterPagesNavigation(),
+              ),
+            );
+            break;
+
+          case 'Host':
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HostPagesNavigator(),
+              ),
+            );
+            break;
+
+          default:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AdminPagesNavigator(),
+              ),
+            );
+            break;
         }
       } else {
         print('Document does not exist on the database');
