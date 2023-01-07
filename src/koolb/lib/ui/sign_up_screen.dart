@@ -301,9 +301,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   postDetailsToFirestore(String role) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     var user = FirebaseAuth.instance.currentUser;
-    CollectionReference ref = FirebaseFirestore.instance.collection('users');
+    CollectionReference ref = FirebaseFirestore.instance.collection('user');
     ref.doc(user!.uid).set({'email': _emailTextController.text, 'role': role});
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => SignInScreen()));
+  }
+
+  createUser {
+    // TODO: create user in Firebase
+    // TODO: create role user
   }
 }
