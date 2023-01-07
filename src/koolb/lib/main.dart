@@ -8,7 +8,9 @@ import 'package:firebase_core/firebase_core.dart'; // new
 // new
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:koolb/data/global_data.dart';
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/ui/host/h_navigation_bar.dart';
 import 'package:koolb/ui/list_accommodations/view_list_accommodations.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/homepage/search.dart';
@@ -33,6 +35,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  id = '0NPijEWSfGrg671kRjYL';
   runApp(const KoolB());
 }
 
@@ -83,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // appBar: AppBar(
       //   title: Text(widget.title),
       // ),
-      body: SignUpScreen(),
+      body: HostPagesNavigator(),
     );
   }
 }
