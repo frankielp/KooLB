@@ -26,21 +26,21 @@ class _AccommodationItemState extends State<AccommodationItem> {
       onTap: () {
         setState(
           () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return DetailsPage(
-                    description: widget.data.city,
-                    address: '${widget.data.city} ${widget.data.country}',
-                    images: widget.image,
-                    accommodationID: "widget.data.accommodationID",
-                    isFavorite: false,
-                    accommodation: widget.data,
-                  );
-                },
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) {
+            //       return DetailsPage(
+            //         description: widget.data.city,
+            //         address: '${widget.data.city} ${widget.data.country}',
+            //         imagePath: widget.image,
+            //         accommodationID: "widget.data.accommodationID",
+            //         isFavorite: false,
+            //         accommodation: widget.data,
+            //       );
+            //     },
+            //   ),
+            // );
           },
         );
       },

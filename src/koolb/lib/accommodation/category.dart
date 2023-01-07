@@ -14,14 +14,6 @@ enum Category {
   HighSafety,
 }
 
-List<Category> intArrayToListCategory(List<int> a) {
-  List<Category> ret = [];
-  a.forEach((element) {
-    ret.add(Category.values[element]);
-  });
-  return ret;
-}
-
 extension ParseToString on Category {
   String toShortString() {
     if (this == Category.SharedHome) {

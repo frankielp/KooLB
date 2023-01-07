@@ -9,6 +9,9 @@ import 'package:koolb/place/place.dart';
 import 'package:koolb/util/load_data.dart';
 
 class Accommodation extends Place {
+  static final CollectionReference _accommodationCollection =
+      FirebaseFirestore.instance.collection('accommodation');
+
   late String id;
   String address;
   String country;
@@ -178,5 +181,9 @@ class Accommodation extends Place {
       'id': id,
       'imagePath': imagePath,
     });
+  }
+
+  static Future getAccommodationByIdFuture(String accommodationId) {
+    return _accommodationCollection.doc(accommodationId).get();
   }
 }

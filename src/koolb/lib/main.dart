@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart'; // new
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/ui/list_accommodations/view_list_accommodations.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/homepage/search.dart';
 import 'package:koolb/ui/renter/pages/profile_page.dart';
@@ -79,10 +80,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: SettingPage(),
+      // appBar: AppBar(
+      //   title: Text(widget.title),
+      // ),
+      body: const SignUpScreen(),
     );
   }
 }
