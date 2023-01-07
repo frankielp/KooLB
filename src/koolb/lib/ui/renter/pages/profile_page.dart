@@ -472,8 +472,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     20, 0, 20, 0),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    final new_dob =
-                                        await openDialog("Date of Birth",);
+                                    final new_dob = await openDialog(
+                                      "Date of Birth",
+                                    );
                                     _userCollection.doc(id).update({
                                       "DOB": new_dob
                                     }).then(
@@ -593,6 +594,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           FFButtonWidget(
                             onPressed: () async {
                               await FirebaseAuth.instance.signOut();
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => SignInScreen()));
                             },
                             text: 'Log Out',
                             options: FFButtonOptions(
@@ -662,7 +667,6 @@ class _ProfilePageState extends State<ProfilePage> {
             TextButton(
               onPressed: submit,
               child: Text("SUBMIT"),
-              
             ),
           ],
         ),
