@@ -58,7 +58,8 @@ class Accommodation extends Place {
       required int rooms,
       required int adults,
       required int children,
-      GeoPoint? location}) async {
+      GeoPoint? location,
+      required String hostId}) async {
     location ??= await getGeoPointByAddress(address);
 
     final accommodationCollection =
@@ -84,6 +85,7 @@ class Accommodation extends Place {
       'ends': [],
       'location': location,
       'imagePath': '',
+      'hostId': hostId,
       'category': FieldValue.arrayUnion(type),
     });
 
@@ -107,6 +109,7 @@ class Accommodation extends Place {
       required int rooms,
       required int adults,
       required int children,
+      required String hostId,
       GeoPoint? location}) async {
     location ??= await getGeoPointByAddress(address);
 
@@ -133,6 +136,7 @@ class Accommodation extends Place {
       'ends': [],
       'location': location,
       'imagePath': '',
+      'hostId': hostId,
       'category': FieldValue.arrayUnion(type),
     });
 
@@ -153,7 +157,7 @@ class Accommodation extends Place {
     Reference referenceRoot = FirebaseStorage.instance.ref();
     Reference referenceDirImage = referenceRoot.child('accommodationImages');
     Reference referenceDirImageAccommodation =
-        referenceDirImage.child('$id.jpg');
+        referenceDirImage.child('$id.png');
 
     referenceDirImageAccommodation.putData(webImages);
 
@@ -164,7 +168,7 @@ class Accommodation extends Place {
     Reference referenceRoot = FirebaseStorage.instance.ref();
     Reference referenceDirImage = referenceRoot.child('accommodationImages');
     Reference referenceDirImageAccommodation =
-        referenceDirImage.child('$id.jpg');
+        referenceDirImage.child('$id.png');
 
     referenceDirImageAccommodation.putFile(mobileImage);
 

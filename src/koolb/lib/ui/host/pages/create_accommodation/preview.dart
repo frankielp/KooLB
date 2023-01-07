@@ -109,25 +109,27 @@ abstract class ParentPreview extends StatelessWidget {
       onDismissed: ((direction) {
         onDismissible(direction);
       }),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            accommodationImage(imageHeight),
-            titleText(),
-            _defaultDivider(),
-            hostNameText(),
-            _defaultDivider(),
-            basicsText(),
-            _defaultDivider(),
-            descriptionText(),
-            _defaultDivider(),
-            _priceText(),
-            _defaultDivider(),
-            locationText(),
-          ],
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              accommodationImage(imageHeight),
+              titleText(),
+              _defaultDivider(),
+              hostNameText(),
+              _defaultDivider(),
+              basicsText(),
+              _defaultDivider(),
+              descriptionText(),
+              _defaultDivider(),
+              _priceText(),
+              _defaultDivider(),
+              locationText(),
+            ],
+          ),
         ),
       ),
     );
