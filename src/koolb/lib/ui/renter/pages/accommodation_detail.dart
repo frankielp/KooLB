@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/accommodation/category.dart' as _category;
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:koolb/chat/chat.dart';
+import 'package:koolb/data/global_data.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/decoration/widget.dart';
+import 'package:koolb/ui/chat/conservation_list.dart';
 import 'package:koolb/ui/renter/pages/booking/basic_book.dart';
 
 class DetailsPage extends StatefulWidget {
@@ -19,6 +22,8 @@ class DetailsPage extends StatefulWidget {
   final int guests;
   final int children;
   final List<_category.Category> category;
+  final String userId;
+  final String hostName;
   bool isFavorite;
   DetailsPage({
     Key? key,
@@ -34,6 +39,8 @@ class DetailsPage extends StatefulWidget {
     required this.guests,
     required this.children,
     required this.category,
+    required this.hostName,
+    required this.userId,
   }) : super(key: key);
 
   @override
@@ -184,7 +191,18 @@ class _DetailsPageState extends State<DetailsPage> {
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () async {
+                      String chatId = await Chat.newChat(id, widget.userId);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ConversationList(
+                                chatId: chatId,
+                                currentUserId: id,
+                                otherUserId: widget.userId,
+                                otherUserName: widget.hostName),
+                          ));
+                    },
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       margin: const EdgeInsets.only(right: 8),

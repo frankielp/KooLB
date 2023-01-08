@@ -624,93 +624,88 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
 
   //get image
   Widget _addPhotos() {
-    // print('Outside\n');
-    // print(_imageFile?.path);
-    // print(_imageFile == null ? 'No image selected yet' : _webImageFile);
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Add some photos for your tiny home',
-            style: _defaultHeadingStyle,
-          ),
-          _defaultDivider(),
-          Expanded(
-            child: Center(
-              child: Container(
-                child: _imageFile == null
-                    ? const Text('Select your image')
-                    : Container(
-                        child: kIsWeb
-                            ? Image.memory(
-                                _webImageFile,
-                                fit: BoxFit.fill,
-                              )
-                            : Image.file(_imageFile!, fit: BoxFit.fill),
-                      ),
-              ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Add some photos for your tiny home',
+          style: _defaultHeadingStyle,
+        ),
+        _defaultDivider(),
+        Expanded(
+          child: Center(
+            child: Container(
+              child: _imageFile == null
+                  ? const Text('Select your image')
+                  : Container(
+                      child: kIsWeb
+                          ? Image.memory(
+                              _webImageFile,
+                              fit: BoxFit.fill,
+                            )
+                          : Image.file(_imageFile!, fit: BoxFit.fill),
+                    ),
             ),
           ),
+        ),
+        Center(
+          child: TextButton(
+            onPressed: kIsWeb
+                ? () async {
+                    final image = ImagePicker();
+                    XFile? tmp =
+                        await image.pickImage(source: ImageSource.gallery);
+                    var f = await tmp?.readAsBytes();
+                    setState(() {
+                      _webImageFile = f!;
+                      _imageFile = File('a');
+                      // print('Inside\n');
+                      // print(_imageFile?.path);
+                      // print(_imageFile == null
+                      //     ? 'No image selected yet'
+                      //     : _webImageFile);
+                    });
+                  }
+                : () async {
+                    XFile? pickedFile = await ImagePicker()
+                        .pickImage(source: ImageSource.gallery);
+                    setState(() {
+                      if (pickedFile != null) {
+                        _imageFile = File(pickedFile.path);
+                      }
+                    });
+                  },
+            // onPressed: () async {
+            //   if (kIsWeb) {
+            //
+            //   } else {
+            //
+            //   }
+            // },
+            child: Text(_imageFile == null
+                ? 'Select from library'
+                : 'Replace from library'),
+          ),
+        ),
+        if (!kIsWeb)
           Center(
             child: TextButton(
-              onPressed: kIsWeb
-                  ? () async {
-                      final image = ImagePicker();
-                      XFile? tmp =
-                          await image.pickImage(source: ImageSource.gallery);
-                      var f = await tmp?.readAsBytes();
-                      setState(() {
-                        _webImageFile = f!;
-                        _imageFile = File('a');
-                        // print('Inside\n');
-                        // print(_imageFile?.path);
-                        // print(_imageFile == null
-                        //     ? 'No image selected yet'
-                        //     : _webImageFile);
-                      });
-                    }
-                  : () async {
-                      XFile? pickedFile = await ImagePicker()
-                          .pickImage(source: ImageSource.gallery);
-                      setState(() {
-                        if (pickedFile != null) {
-                          _imageFile = File(pickedFile.path);
-                        }
-                      });
-                    },
-              // onPressed: () async {
-              //   if (kIsWeb) {
-              //
-              //   } else {
-              //
-              //   }
-              // },
+              onPressed: () async {
+                XFile? pickedFile =
+                    await ImagePicker().pickImage(source: ImageSource.camera);
+                setState(() {
+                  if (pickedFile != null) {
+                    _imageFile = File(pickedFile.path);
+                  }
+                });
+              },
               child: Text(_imageFile == null
-                  ? 'Select from library'
-                  : 'Replace from library'),
+                  ? 'Select from camera'
+                  : 'Replace from camera'),
             ),
           ),
-          if (!kIsWeb)
-            Center(
-              child: TextButton(
-                onPressed: () async {
-                  XFile? pickedFile =
-                      await ImagePicker().pickImage(source: ImageSource.camera);
-                  setState(() {
-                    if (pickedFile != null) {
-                      _imageFile = File(pickedFile.path);
-                    }
-                  });
-                },
-                child: Text(_imageFile == null
-                    ? 'Select from camera'
-                    : 'Replace from camera'),
-              ),
-            ),
-        ],
-      ),
+      ],
     );
   }
 
@@ -766,116 +761,114 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   }
 
   Widget _addPrice() {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            'Now, set your price',
-            style: _defaultHeadingStyle,
-          ),
-          _defaultDivider(),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Material(
-                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        //button set price
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            IconButton(
-                              splashRadius: 20.0,
-                              disabledColor: Colors.grey.shade400,
-                              color: Colors.black,
-                              onPressed: _price <= _minPrice
-                                  ? null
-                                  : () {
-                                      setState(() {
-                                        _price =
-                                            double.parse(_priceController.text);
-                                        _price = max(_minPrice, _price - 1);
-                                        _priceController.text = '$_price';
-                                      });
-                                    },
-                              icon: const Icon(
-                                Icons.remove_circle,
-                              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Text(
+          'Now, set your price',
+          style: _defaultHeadingStyle,
+        ),
+        _defaultDivider(),
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Material(
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      //button set price
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            splashRadius: 20.0,
+                            disabledColor: Colors.grey.shade400,
+                            color: Colors.black,
+                            onPressed: _price <= _minPrice
+                                ? null
+                                : () {
+                                    setState(() {
+                                      _price =
+                                          double.parse(_priceController.text);
+                                      _price = max(_minPrice, _price - 1);
+                                      _priceController.text = '$_price';
+                                    });
+                                  },
+                            icon: const Icon(
+                              Icons.remove_circle,
                             ),
-                            Row(
-                              children: [
-                                IntrinsicWidth(
-                                  child: TextField(
-                                    onChanged: (value) {
-                                      if (value.isNotEmpty) {
-                                        setState(() {
-                                          _price = double.parse(value);
-                                        });
-                                      }
-                                    },
-                                    controller: _priceController,
-                                    keyboardType:
-                                        const TextInputType.numberWithOptions(
-                                      signed: false,
-                                      decimal: true,
-                                    ),
-                                    decoration:
-                                        const InputDecoration(isDense: true),
-                                    style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                const Text('\$'),
-                              ],
-                            ),
-                            IconButton(
-                              splashRadius: 20.0,
-                              onPressed: () {
-                                setState(() {
-                                  _price = double.parse(_priceController.text);
-                                  _price += 1;
-                                  _priceController.text = '$_price';
-                                });
-                              },
-                              icon: const Icon(
-                                Icons.add_circle,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        const Center(
-                          child: Text(
-                            'per night',
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.w400),
                           ),
-                        )
-                      ],
-                    ),
+                          Row(
+                            children: [
+                              IntrinsicWidth(
+                                child: TextField(
+                                  onChanged: (value) {
+                                    if (value.isNotEmpty) {
+                                      setState(() {
+                                        _price = double.parse(value);
+                                      });
+                                    }
+                                  },
+                                  controller: _priceController,
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                    signed: false,
+                                    decimal: true,
+                                  ),
+                                  decoration:
+                                      const InputDecoration(isDense: true),
+                                  style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              const Text('\$'),
+                            ],
+                          ),
+                          IconButton(
+                            splashRadius: 20.0,
+                            onPressed: () {
+                              setState(() {
+                                _price = double.parse(_priceController.text);
+                                _price += 1;
+                                _priceController.text = '$_price';
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.add_circle,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      const Center(
+                        child: Text(
+                          'per night',
+                          style: TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.w400),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -1072,6 +1065,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     String accommodationID;
     if (kIsWeb) {
       accommodationID = await Accommodation.addAccommodationToFirebaseWeb(
+        userId: id,
         title: _titleController.text,
         description: _descriptionController.text,
         price: _price,
@@ -1087,6 +1081,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
       );
     } else {
       accommodationID = await Accommodation.addAccommodationToFirebaseMobile(
+        userId: id,
         title: _titleController.text,
         description: _descriptionController.text,
         price: _price,

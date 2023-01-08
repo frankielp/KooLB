@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:koolb/accommodation/category.dart';
 import 'package:koolb/place/place.dart';
+import 'package:koolb/data/global_data.dart';
 
 class Accommodation extends Place {
   static final CollectionReference _accommodationCollection =
@@ -37,6 +38,9 @@ class Accommodation extends Place {
     required this.room,
     required this.children,
     required this.guests,
+    required this.rating,
+    required this.starts,
+    required this.ends,
   }) : super(title, location);
 
   get location => super.position;
@@ -54,6 +58,7 @@ class Accommodation extends Place {
       required int adults,
       required int children,
       GeoPoint? location,
+      required String userId,
       required String hostId}) async {
     // location ??= await getGeoPointByAddress(address);
 
@@ -81,6 +86,8 @@ class Accommodation extends Place {
       'location': const GeoPoint(0, 0),
       'imagePath': '',
       'hostId': hostId,
+      'userId': userId,
+      'hostName': name,
       'category': FieldValue.arrayUnion(type),
     });
 
@@ -105,6 +112,7 @@ class Accommodation extends Place {
       required int adults,
       required int children,
       required String hostId,
+      required String userId,
       GeoPoint? location}) async {
     // location ??= await getGeoPointByAddress(address);
 
@@ -132,6 +140,8 @@ class Accommodation extends Place {
       'location': const GeoPoint(0, 0),
       'imagePath': '',
       'hostId': hostId,
+      'userId': userId,
+      'hostName': name,
       'category': FieldValue.arrayUnion(type),
     });
 
@@ -181,5 +191,66 @@ class Accommodation extends Place {
 
   static Future getAccommodationByIdFuture(String accommodationId) {
     return _accommodationCollection.doc(accommodationId).get();
+  }
+
+  static Future<List<Accommodation>> getAccommodationBasedOnDatabase(
+      String country,
+      String city,
+      int numRooms,
+      int numAdult,
+      int numChildren,
+      DateTime start,
+      DateTime end) async {
+    List<Accommodation> ret = [];
+    QuerySnapshot qn = await FirebaseFirestore.instance
+        .collection('accommodation')
+        .where('country', isEqualTo: country)
+        .where('city', isEqualTo: city)
+        .get();
+
+    qn.docs.forEach((element) {
+      final map = element.data();
+      if (element['room'] < numRooms ||
+          element['adult'] < numAdult ||
+          element['children'] < numChildren) {
+        return;
+      }
+      List<DateTime> starts = [];
+      element['starts'].forEach((value) {
+        starts.add(value.toDate());
+      });
+      List<DateTime> ends = [];
+      element['ends'].forEach((value) {
+        ends.add(value.toDate());
+      });
+      for (int i = 0; i < starts.length; ++i) {
+        if ((start.isAfter(starts[i]) && start.isAfter(ends[i]) ||
+            (end.isAfter(starts[i]) && end.isBefore(ends[i])))) {
+          return;
+        }
+      }
+      List<Category> category = [];
+      element['category'].forEach((value) {
+        category.add(Category.values[value]);
+      });
+      ret.add(Accommodation(
+          category: category,
+          price: element['price'],
+          rating: element['rating'],
+          room: element['room'],
+          children: element['children'],
+          guests: element['adult'],
+          title: element['name'],
+          starts: starts,
+          ends: ends,
+          country: element['country'],
+          city: element['city'],
+          location: element['location'],
+          address: element['address'],
+          description: element['description']));
+    });
+
+    print(ret);
+    return ret;
   }
 }

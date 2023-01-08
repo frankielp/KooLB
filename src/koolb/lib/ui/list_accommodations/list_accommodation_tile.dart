@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/accommodation/category.dart';
+import 'package:koolb/component/list_accommodation_item.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/renter/pages/accommodation_detail.dart';
 
@@ -24,6 +25,8 @@ class ListAccommodationTile extends StatefulWidget {
   final String country;
   final String city;
   final List<Category> category;
+  final String userId;
+  final String hostName;
   bool isFavorite;
   ListAccommodationTile({
     super.key,
@@ -41,6 +44,8 @@ class ListAccommodationTile extends StatefulWidget {
     required this.guests,
     required this.children,
     required this.category,
+    required this.userId,
+    required this.hostName,
   });
 
   @override
@@ -71,6 +76,8 @@ class _ListAccommodationTileState extends State<ListAccommodationTile> {
                         rating: widget.rating,
                         room: widget.room,
                         children: widget.children,
+                        userId: widget.userId,
+                        hostName: widget.hostName,
                       )));
         },
         child: Padding(
@@ -102,17 +109,10 @@ class _ListAccommodationTileState extends State<ListAccommodationTile> {
           children: [
             _imageContainer(),
             Positioned(
-              right: 5,
-              top: 5,
-              child: IconButton(
-                icon: Icon(
-                  Icons.favorite,
-                  size: 20,
-                  color: widget.isFavorite ? Colors.red : Colors.grey.shade800,
-                ),
-                onPressed: () {},
-              ),
-            ),
+                right: 5,
+                top: 5,
+                child: HeartIcon(this.widget.accommodationID,
+                    this.widget.isFavorite, this.widget.imagePath)),
           ],
         ),
         Row(

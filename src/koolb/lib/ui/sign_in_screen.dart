@@ -221,6 +221,17 @@ class _SignInScreenState extends State<SignInScreen> {
 
         switch (role) {
           case 'Renter':
+            FirebaseFirestore.instance
+                .collection('renter')
+                .doc(roleId)
+                .get()
+                .then((value) {
+              if (value.exists) {
+                debugPrint(value.data().toString());
+                wishlistID = value.data()!['wishlistID'];
+                debugPrint(wishlistID);
+              }
+            });
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
