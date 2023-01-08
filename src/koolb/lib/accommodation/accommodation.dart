@@ -3,10 +3,8 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:koolb/accommodation/category.dart';
 import 'package:koolb/place/place.dart';
-import 'package:koolb/util/load_data.dart';
 
 class Accommodation extends Place {
   static final CollectionReference _accommodationCollection =
@@ -43,9 +41,6 @@ class Accommodation extends Place {
 
   get location => super.position;
 
-  //TODO: upload to firestore
-
-  //TODO: up to firebase
   static Future<String> addAccommodationToFirebaseWeb(
       {required String title,
       required String description,
@@ -83,7 +78,7 @@ class Accommodation extends Place {
       'rating': 5,
       'starts': [],
       'ends': [],
-      'location': GeoPoint(0, 0),
+      'location': const GeoPoint(0, 0),
       'imagePath': '',
       'hostId': hostId,
       'category': FieldValue.arrayUnion(type),
@@ -134,7 +129,7 @@ class Accommodation extends Place {
       'rating': 5,
       'starts': [],
       'ends': [],
-      'location': GeoPoint(0, 0),
+      'location': const GeoPoint(0, 0),
       'imagePath': '',
       'hostId': hostId,
       'category': FieldValue.arrayUnion(type),
@@ -175,9 +170,6 @@ class Accommodation extends Place {
     return referenceDirImageAccommodation.fullPath;
   }
 
-  //TODO: get accommodation from database
-
-  //TODO: update accommodation
   static void _updateAccommodation(String id, String imagePath) {
     final accommodationRef =
         FirebaseFirestore.instance.collection('accommodation').doc(id);

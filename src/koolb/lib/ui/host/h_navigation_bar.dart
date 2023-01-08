@@ -3,6 +3,7 @@ import 'package:koolb/data/global_data.dart';
 import 'package:koolb/ui/host/pages/menu_page.dart';
 import 'package:koolb/ui/host/pages/reservation_page.dart';
 import 'package:koolb/ui/chat/chat_page.dart';
+import 'package:koolb/ui/renter/pages/profile_page.dart';
 
 class HostPagesNavigator extends StatefulWidget {
   const HostPagesNavigator({super.key});
@@ -16,6 +17,7 @@ class _HostPagesNavigatorState extends State<HostPagesNavigator> {
     const ReservationPage(),
     const MenuPage(),
     ChatPage(userName: name, userID: id),
+    const ProfilePage(),
     // const CalendarPage(),
     // const InsightPage(),
   ];
@@ -50,20 +52,17 @@ class _HostPagesNavigatorState extends State<HostPagesNavigator> {
             label: 'Reservation',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: 'Menu',
+            icon: Icon(Icons.add),
+            label: 'Create accommodation',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.chat),
             label: 'Message',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.calendar_month),
-          //   label: 'Calendar',
-          // ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.insights),
-          //   label: 'Insight',
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle_rounded),
+            label: 'Message',
+          ),
         ],
       ),
     );

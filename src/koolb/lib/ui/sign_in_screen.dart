@@ -2,17 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:koolb/component/or_divider.dart';
 import 'package:koolb/component/row_of_social_icons.dart';
 import 'package:koolb/data/global_data.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/admin/ad_navigation_bar.dart';
 import 'package:koolb/ui/host/h_navigation_bar.dart';
-import 'package:koolb/ui/renter/pages/home_page.dart';
 import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'package:koolb/ui/sign_up_screen.dart';
-import 'package:koolb/user/koolUser.dart';
 
 import '../component/already_have_account_check.dart';
 import '../component/text_field_container.dart';

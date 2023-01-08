@@ -9,7 +9,7 @@ class MenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: TextButton(
-        child: Text('Create new Accommodation'),
+        child: const Text('Create new Accommodation'),
         onPressed: () {
           Navigator.push(
             context,

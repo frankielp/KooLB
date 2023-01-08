@@ -1,25 +1,9 @@
-// import 'dart:js';
-// import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
-// new
-// new
-import 'package:firebase_core/firebase_core.dart'; // new
-// new
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:koolb/data/global_data.dart';
 import 'package:koolb/decoration/color.dart';
-import 'package:koolb/ui/host/h_navigation_bar.dart';
 import 'package:koolb/ui/sign_up_screen.dart';
 import 'package:koolb/util/load_data.dart';
-// import 'package:koolb/ui/welcoming_page.dart';
-// new
-import 'firebase_options.dart'; // new
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:koolb/firebase_options.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -27,8 +11,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  roleId = '0NPijEWSfGrg671kRjYL';
-  id = '70Hx9Xq1eicOUdVTCAxC';
   loadData();
   runApp(const KoolB());
 }
@@ -80,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // appBar: AppBar(
       //   title: Text(widget.title),
       // ),
-      body: ProfilePage(),
+      body: SignUpScreen(),
     );
   }
 }
