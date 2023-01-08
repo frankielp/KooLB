@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:koolb/data/global_data.dart';
 import 'package:koolb/ui/host/pages/create_accommodation/create_accommodation.dart';
