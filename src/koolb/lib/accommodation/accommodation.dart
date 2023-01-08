@@ -3,10 +3,8 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:koolb/accommodation/category.dart';
 import 'package:koolb/place/place.dart';
-import 'package:koolb/util/load_data.dart';
 
 class Accommodation extends Place {
   static final CollectionReference _accommodationCollection =
@@ -43,9 +41,6 @@ class Accommodation extends Place {
 
   get location => super.position;
 
-  //TODO: upload to firestore
-
-  //TODO: up to firebase
   static Future<String> addAccommodationToFirebaseWeb(
       {required String title,
       required String description,
@@ -58,8 +53,9 @@ class Accommodation extends Place {
       required int rooms,
       required int adults,
       required int children,
-      GeoPoint? location}) async {
-    location ??= await getGeoPointByAddress(address);
+      GeoPoint? location,
+      required String hostId}) async {
+    // location ??= await getGeoPointByAddress(address);
 
     final accommodationCollection =
         FirebaseFirestore.instance.collection('accommodation');
@@ -82,8 +78,9 @@ class Accommodation extends Place {
       'rating': 5,
       'starts': [],
       'ends': [],
-      'location': location,
+      'location': const GeoPoint(0, 0),
       'imagePath': '',
+      'hostId': hostId,
       'category': FieldValue.arrayUnion(type),
     });
 
@@ -107,11 +104,12 @@ class Accommodation extends Place {
       required int rooms,
       required int adults,
       required int children,
+      required String hostId,
       GeoPoint? location}) async {
-    location ??= await getGeoPointByAddress(address);
+    // location ??= await getGeoPointByAddress(address);
 
     final accommodationCollection =
-        FirebaseFirestore.instance.collection('accommodations');
+        FirebaseFirestore.instance.collection('accommodation');
 
     List<int> type = [];
     for (var element in categories) {
@@ -131,8 +129,9 @@ class Accommodation extends Place {
       'rating': 5,
       'starts': [],
       'ends': [],
-      'location': location,
+      'location': const GeoPoint(0, 0),
       'imagePath': '',
+      'hostId': hostId,
       'category': FieldValue.arrayUnion(type),
     });
 
@@ -153,7 +152,7 @@ class Accommodation extends Place {
     Reference referenceRoot = FirebaseStorage.instance.ref();
     Reference referenceDirImage = referenceRoot.child('accommodationImages');
     Reference referenceDirImageAccommodation =
-        referenceDirImage.child('$id.jpg');
+        referenceDirImage.child('$id.png');
 
     referenceDirImageAccommodation.putData(webImages);
 
@@ -164,16 +163,13 @@ class Accommodation extends Place {
     Reference referenceRoot = FirebaseStorage.instance.ref();
     Reference referenceDirImage = referenceRoot.child('accommodationImages');
     Reference referenceDirImageAccommodation =
-        referenceDirImage.child('$id.jpg');
+        referenceDirImage.child('$id.png');
 
     referenceDirImageAccommodation.putFile(mobileImage);
 
     return referenceDirImageAccommodation.fullPath;
   }
 
-  //TODO: get accommodation from database
-
-  //TODO: update accommodation
   static void _updateAccommodation(String id, String imagePath) {
     final accommodationRef =
         FirebaseFirestore.instance.collection('accommodation').doc(id);

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/chat/chat.dart';
 import 'package:koolb/decoration/color.dart';
-import 'package:koolb/ui/renter/pages/chat/message_tile.dart';
+import 'package:koolb/ui/chat/message_tile.dart';
 
 class ConversationList extends StatefulWidget {
   final String chatId;

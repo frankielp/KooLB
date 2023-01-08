@@ -1,13 +1,6 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:koolb/chat/chat.dart';
-import 'package:koolb/main.dart';
-import 'package:koolb/ui/renter/pages/chat/conservation_list.dart';
-import 'package:koolb/user/koolUser.dart';
+import 'package:koolb/ui/chat/conservation_list.dart';
 import 'package:koolb/util/helper.dart';
 
 class ChatTile extends StatefulWidget {
@@ -28,10 +21,6 @@ class _ChatTileState extends State<ChatTile> {
       FirebaseFirestore.instance.collection('user');
   static final CollectionReference _chatCollection =
       FirebaseFirestore.instance.collection('chat');
-
-  Future<DocumentSnapshot>? _otherUser;
-
-  Stream<QuerySnapshot>? _chatInfo;
 
   String? _otherUserId;
   String? _recentSender;

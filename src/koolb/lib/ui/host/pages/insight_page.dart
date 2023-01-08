@@ -47,76 +47,79 @@ class HostInsightPage extends State<InsightPage> {
 
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                Color.fromARGB(255, 66, 61, 206),
-                Color.fromARGB(255, 186, 208, 255),
-                Color.fromARGB(255, 84, 92, 166),
-              ])),
-          child: Container(
-              padding: EdgeInsets.symmetric(vertical: 30),
-              child: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('HOST INSIGHT',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 30,
-                                fontWeight: FontWeight.bold)),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.analytics_rounded,
-                          color: Colors.black,
-                          size: 30,
-                        )
-                      ],
-                    ),
-                    ListTile(
-                      title: Text(
-                        '========= Rating insight =========',
-                        textScaleFactor: 1.5,
-                        textAlign: TextAlign.center,
+      child: Container(
+        decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+              Color.fromARGB(255, 66, 61, 206),
+              Color.fromARGB(255, 186, 208, 255),
+              Color.fromARGB(255, 84, 92, 166),
+            ])),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Padding(
+            padding:
+                const EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 10),
+            child: SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text('HOST INSIGHT',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold)),
+                      SizedBox(
+                        width: 5,
                       ),
-                      subtitle: Text(
-                        'We have analized your data for the past frametime. If you have any trouble with the statistic due to new rating coming, please refresh this page.',
-                        textScaleFactor: 1.2,
-                      ),
+                      Icon(
+                        Icons.analytics_rounded,
+                        color: Colors.black,
+                        size: 30,
+                      )
+                    ],
+                  ),
+                  const ListTile(
+                    title: Text(
+                      'Rating insight',
+                      textScaleFactor: 1.5,
+                      textAlign: TextAlign.center,
                     ),
-                    Container(
-                      height: 400,
-                      child: SfCartesianChart(
-                          tooltipBehavior: TooltipBehavior(enable: true),
-                          primaryXAxis: DateTimeAxis(),
-                          series: <LineSeries<_ChartData, DateTime>>[
-                            LineSeries<_ChartData, DateTime>(
-                                dataSource: chartData,
-                                xValueMapper: (_ChartData data, _) => data.x,
-                                yValueMapper: (_ChartData data, _) => data.y)
-                          ]),
+                    subtitle: Text(
+                      'We have analized your data for the past frametime. If you have any trouble with the statistic due to new rating coming, please refresh this page.',
+                      textScaleFactor: 1.2,
                     ),
-                    ListTile(
-                      title: Text(
-                        '========= Idea for host =========',
-                        textScaleFactor: 1.5,
-                        textAlign: TextAlign.center,
-                      ),
-                      subtitle: Text(
-                        'In order to boost your own products, we recommend using this rating analysis to track customers ideal. The more interesting your post accomodation is, the higher the rating star is.',
-                        textScaleFactor: 1.2,
-                      ),
+                  ),
+                  Container(
+                    height: 400,
+                    child: SfCartesianChart(
+                        tooltipBehavior: TooltipBehavior(enable: true),
+                        primaryXAxis: DateTimeAxis(),
+                        series: <LineSeries<_ChartData, DateTime>>[
+                          LineSeries<_ChartData, DateTime>(
+                              dataSource: chartData,
+                              xValueMapper: (_ChartData data, _) => data.x,
+                              yValueMapper: (_ChartData data, _) => data.y)
+                        ]),
+                  ),
+                  const ListTile(
+                    title: Text(
+                      'Idea for host',
+                      textScaleFactor: 1.5,
+                      textAlign: TextAlign.center,
                     ),
-                  ]))),
+                    subtitle: Text(
+                      'In order to boost your own products, we recommend using this rating analysis to track customers ideal. The more interesting your post accomodation is, the higher the rating star is.',
+                      textScaleFactor: 1.2,
+                    ),
+                  ),
+                ])),
+          ),
         ),
       ),
     );

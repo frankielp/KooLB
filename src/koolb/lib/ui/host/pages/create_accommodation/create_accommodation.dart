@@ -2,14 +2,15 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/accommodation/category.dart';
 import 'package:koolb/data/countries_and_cities.dart';
+import 'package:koolb/data/global_data.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/host/pages/create_accommodation/preview.dart';
 import 'package:koolb/util/load_data.dart';
@@ -35,7 +36,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   int _children = 0;
   int _rooms = 1;
   double _price = 10;
-  File? _imageFile;
+  late File? _imageFile = null;
   Uint8List _webImageFile = Uint8List(8);
 
   //controller
@@ -49,13 +50,15 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     fontWeight: FontWeight.bold,
   );
 
-  final _controller = PageController(initialPage: 0);
+  final _controller = PageController(initialPage: _beginPage);
   final _kDuration = const Duration(milliseconds: 500);
   final _kCurve = Curves.ease;
   final _minPrice = 10.0;
   late List<Widget> pages;
 
-  int _currentPage = 0;
+  static const int _beginPage = 0;
+
+  int _currentPage = _beginPage;
   String? _message;
 
   @override
@@ -409,7 +412,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                       width: 10,
                     ),
                     Text(
-                      _guests > 5 ? '5+' : '$_rooms',
+                      _rooms > 5 ? '5+' : '$_rooms',
                       style: const TextStyle(fontSize: 18),
                     ),
                     const SizedBox(
@@ -606,6 +609,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     );
   }
 
+  //get image
   Widget _addPhotos() {
     // print('Outside\n');
     // print(_imageFile?.path);
@@ -930,15 +934,17 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                             width: MediaQuery.of(context).size.width - 5,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20.0),
-                              child: kIsWeb
-                                  ? Image.memory(
-                                      _webImageFile,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.file(
-                                      _imageFile!,
-                                      fit: BoxFit.cover,
-                                    ),
+                              child: _imageFile != null
+                                  ? (kIsWeb
+                                      ? Image.memory(
+                                          _webImageFile,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.file(
+                                          _imageFile!,
+                                          fit: BoxFit.cover,
+                                        ))
+                                  : Container(),
                             ),
                           ),
                         ),
@@ -1059,21 +1065,26 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         rooms: _rooms,
         adults: _guests,
         children: _children,
+        hostId: roleId,
       );
     } else {
       accommodationID = await Accommodation.addAccommodationToFirebaseMobile(
-          title: _titleController.text,
-          description: _descriptionController.text,
-          price: _price,
-          address: _addressController.text,
-          city: _cityValue!,
-          country: _countryValue!,
-          categories: _categories,
-          mobileImage: _imageFile!,
-          rooms: _rooms,
-          adults: _guests,
-          children: _children);
+        title: _titleController.text,
+        description: _descriptionController.text,
+        price: _price,
+        address: _addressController.text,
+        city: _cityValue!,
+        country: _countryValue!,
+        categories: _categories,
+        mobileImage: _imageFile!,
+        rooms: _rooms,
+        adults: _guests,
+        children: _children,
+        hostId: roleId,
+      );
     }
+
+    _addAccommodationIdToHost(accommodationID);
     _showAlertDone(accommodationID);
   }
 
@@ -1086,6 +1097,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         actions: [
           TextButton(
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.pop(context, {
                   'accommodationID': accommodationID,
                 });
@@ -1094,5 +1106,11 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         ],
       ),
     );
+  }
+
+  void _addAccommodationIdToHost(String accommodationID) async {
+    FirebaseFirestore.instance.collection('host').doc(roleId).update({
+      'accommodationIds': FieldValue.arrayUnion([accommodationID]),
+    });
   }
 }

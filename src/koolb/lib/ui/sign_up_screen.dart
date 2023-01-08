@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:koolb/ui/renter/pages/home_page.dart';
-import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'package:koolb/ui/sign_in_screen.dart';
 
 import '../component/already_have_account_check.dart';
@@ -48,6 +45,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // void initState() {
   //   _passwordVisible = false;
   // }
+
+  static final _userCollection = FirebaseFirestore.instance.collection('user');
+  static final _hostCollection = FirebaseFirestore.instance.collection('host');
+  static final _renterCollection =
+      FirebaseFirestore.instance.collection('renter');
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +187,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             isDense: true,
                             isExpanded: false,
                             iconEnabledColor: BlueJean,
-                            focusColor: BlueJean,
+                            focusColor: Colors.white,
                             items: options.map((String dropDownStringItem) {
                               return DropdownMenuItem<String>(
                                 value: dropDownStringItem,
@@ -243,13 +245,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     });
 
                                     if (user != null) {
-                                      postDetailsToFirestore(role);
-                                      Navigator.of(context)
-                                          .pushReplacement(MaterialPageRoute(
-                                        builder: (context) =>
-                                            // ProfilePage(user: user)),
-                                            SignInScreen(),
-                                      ));
+                                      postDetailsToFirestore(
+                                          role, _nameTextController.text);
+                                      // Navigator.of(context)
+                                      //     .pushReplacement(MaterialPageRoute(
+                                      //   builder: (context) =>
+                                      //       // ProfilePage(user: user)),
+                                      //       SignInScreen(),
+                                      // ));
                                     }
                                   }
                                 },
@@ -282,7 +285,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SignInScreen()));
+                            builder: (context) => const SignInScreen()));
                   },
                 ),
                 SizedBox(
@@ -298,12 +301,70 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  postDetailsToFirestore(String role) async {
+  postDetailsToFirestore(String role, String userName) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     var user = FirebaseAuth.instance.currentUser;
-    CollectionReference ref = FirebaseFirestore.instance.collection('users');
-    ref.doc(user!.uid).set({'email': _emailTextController.text, 'role': role});
+    await _createUser(user!.uid, role, user.email!, userName);
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => SignInScreen()));
+        context, MaterialPageRoute(builder: (context) => const SignInScreen()));
+  }
+
+  _createUser(String authId, String role, String email, String userName) async {
+    final userRef = await _userCollection.add({
+      'chat': [],
+      'email': email,
+      'id': '',
+      'authId': authId,
+      'name': userName,
+      'role': role,
+      'roleId': '',
+      'DOB': '',
+    });
+
+    final id = userRef.id;
+    final roleId = role == 'Renter'
+        ? await _createRenterUser(email, userName)
+        : await _createHostUser(email, userName);
+
+    userRef.update({
+      'id': id,
+      'roleId': roleId,
+    });
+  }
+
+  Future<String> _createRenterUser(String email, String userName) async {
+    final renterRef = await _renterCollection.add({
+      'DOB': '',
+      'email': email,
+      'fb': '',
+      'id': '',
+      'name': '',
+      'username': userName,
+    });
+
+    final id = renterRef.id;
+    renterRef.update({
+      'id': id,
+    });
+
+    return id;
+  }
+
+  Future<String> _createHostUser(String email, String userName) async {
+    final renterRef = await _hostCollection.add({
+      'DOB': '',
+      'email': email,
+      'fb': '',
+      'id': '',
+      'name': userName,
+      'accommodationIds': [],
+    });
+
+    final id = renterRef.id;
+    renterRef.update({
+      'id': id,
+    });
+
+    return id;
   }
 }
