@@ -974,6 +974,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                         child: RichText(
                           text: TextSpan(
                             style: const TextStyle(
+                              color: Colors.black,
                               fontSize: 14,
                             ),
                             children: <TextSpan>[

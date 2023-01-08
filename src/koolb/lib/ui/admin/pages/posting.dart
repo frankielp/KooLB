@@ -1,12 +1,10 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:koolb/ui/admin/ad_navigation_bar.dart';
-import 'package:koolb/ui/renter/r_navigationbar.dart';
 
 class PostingAdmin extends StatefulWidget {
   const PostingAdmin({super.key});
@@ -45,7 +43,7 @@ class _PostingAdminState extends State<PostingAdmin> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -95,7 +93,7 @@ class _PostingAdminState extends State<PostingAdmin> {
                 quill.QuillToolbar.basic(
                   controller: _controller,
                   toolbarIconSize: 16,
-                  iconTheme: quill.QuillIconTheme(
+                  iconTheme: const quill.QuillIconTheme(
                     iconSelectedFillColor: BlueJean,
                     borderRadius: 12,
                   ),
@@ -165,7 +163,7 @@ Future<void> _showMyDialog(BuildContext context) async {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                 builder: (context) =>
                     // ProfilePage(user: user)),
-                    AdminPagesNavigator(),
+                    const AdminPagesNavigator(),
               ));
             },
           ),
@@ -187,19 +185,19 @@ class ButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ElevatedButton(
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 24),
-        ),
         style: ElevatedButton.styleFrom(
           // shape: StadiumBorder(),
           backgroundColor: BlueJean,
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          textStyle: TextStyle(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          textStyle: const TextStyle(
             color: Colors.white,
           ),
         ),
         onPressed: onClicked,
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 24),
+        ),
       );
 }
 
@@ -219,7 +217,7 @@ Widget CustomTopBar(BuildContext context) {
       Padding(
         padding: EdgeInsets.symmetric(
             horizontal: size.width * 0.1, vertical: size.width * 0.05),
-        child: Text(
+        child: const Text(
           'Posting',
           style: TextStyle(
               fontSize: 45, color: Colors.white, fontWeight: FontWeight.bold),
