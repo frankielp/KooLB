@@ -1,11 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:koolb/ui/renter/pages/home_page.dart';
-import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'package:koolb/ui/sign_in_screen.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../component/already_have_account_check.dart';
 import '../component/or_divider.dart';
@@ -289,7 +285,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => SignInScreen()));
+                            builder: (context) => const SignInScreen()));
                   },
                 ),
                 SizedBox(
@@ -310,7 +306,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     var user = FirebaseAuth.instance.currentUser;
     await _createUser(user!.uid, role, user.email!, userName);
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => SignInScreen()));
+        context, MaterialPageRoute(builder: (context) => const SignInScreen()));
   }
 
   _createUser(String authId, String role, String email, String userName) async {
@@ -361,6 +357,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       'fb': '',
       'id': '',
       'name': userName,
+      'accommodationIds': [],
     });
 
     final id = renterRef.id;

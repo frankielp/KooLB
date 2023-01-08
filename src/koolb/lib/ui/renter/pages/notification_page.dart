@@ -1,8 +1,4 @@
-// import 'dart:html';
-import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
-import 'package:koolb/user/koolUser.dart';
-import 'package:koolb/ui/renter/pages/chat/chat_page.dart';
 
 class NotiPage extends StatefulWidget {
   const NotiPage({super.key});
@@ -20,16 +16,16 @@ class _NotiPageState extends State<NotiPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SafeArea(
               child: Padding(
-                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
+                    children: const <Widget>[
                       // GestureDetector(
                       //   onTap: () {
                       //     Navigator.push(context,
@@ -53,7 +49,7 @@ class _NotiPageState extends State<NotiPage> {
             ),
             SafeArea(
               child: Padding(
-                padding: EdgeInsets.only(left: 16, right: 16, top: 14),
+                padding: const EdgeInsets.only(left: 16, right: 16, top: 14),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -63,15 +59,15 @@ class _NotiPageState extends State<NotiPage> {
                           TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                     ),
                     Container(
-                      padding:
-                          EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+                      padding: const EdgeInsets.only(
+                          left: 8, right: 8, top: 2, bottom: 2),
                       height: 30,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30),
                         color: Colors.cyan,
                       ),
                       child: Row(
-                        children: <Widget>[
+                        children: const <Widget>[
                           Icon(
                             Icons.notifications,
                             color: Colors.black,
@@ -91,8 +87,8 @@ class _NotiPageState extends State<NotiPage> {
               //View list of notification
               itemCount: 1,
               shrinkWrap: true,
-              padding: EdgeInsets.only(top: 16),
-              physics: NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.only(top: 16),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return NotiViewBuilder(
                   title: Notification['Title'].toString(),
@@ -125,13 +121,14 @@ class _NotiListState extends State<NotiViewBuilder> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        padding: EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
         child: Row(
           children: <Widget>[
             Expanded(
               child: Row(
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     width: 16,
                   ),
                   Expanded(
@@ -142,9 +139,9 @@ class _NotiListState extends State<NotiViewBuilder> {
                         children: <Widget>[
                           Text(
                             widget.title,
-                            style: TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 16),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 6,
                           ),
                           Text(
