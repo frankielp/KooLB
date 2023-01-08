@@ -51,6 +51,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   static final _hostCollection = FirebaseFirestore.instance.collection('host');
   static final _renterCollection =
       FirebaseFirestore.instance.collection('renter');
+  static final _adminCollection =
+      FirebaseFirestore.instance.collection('admin');
 
   @override
   Widget build(BuildContext context) {
@@ -323,16 +325,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
 
     final id = userRef.id;
-    final roleId = role;
-    if (role == 'Renter'){
-      await _createRenterUser(email, userName);
-      await _addWishListForRenter(id);
+    var roleId = '';
 
-      print("userID: $id");
-    }
-    else {
-      await _createHostUser(email, userName);
-    }
+    if (role == 'Renter') {
+      roleId = await _createRenterUser(email, userName);
+    } else if (role == 'Host') {
+      roleId = await _createHostUser(email, userName);
+    } else
+      roleId = await _createAdminUser(email, userName);
 
     userRef.update({
       'id': id,
@@ -340,10 +340,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
   }
 
-  Future<void> _addWishListForRenter(userID) async{
-    final wishlistRef = await FirebaseFirestore.instance
-        .collection('wishlist')
-        .add({});
+  Future<void> _addWishListForRenter(userID) async {
+    final wishlistRef =
+        await FirebaseFirestore.instance.collection('wishlist').add({});
 
     final wishlistID = wishlistRef.id;
 
@@ -382,6 +381,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
       'id': '',
       'name': userName,
       'accommodationIds': [],
+    });
+
+    final id = renterRef.id;
+    renterRef.update({
+      'id': id,
+    });
+
+    return id;
+  }
+
+  Future<String> _createAdminUser(String email, String userName) async {
+    final renterRef = await _adminCollection.add({
+      'DOB': '',
+      'email': email,
+      'fb': '',
+      'id': '',
+      'name': userName,
     });
 
     final id = renterRef.id;

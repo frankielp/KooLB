@@ -95,7 +95,7 @@ abstract class ParentPreview extends StatelessWidget {
               color: Colors.black, fontSize: 17, fontWeight: FontWeight.w700),
         ),
         Text(
-          '$price\$ night',
+          '${price}\$ night',
           style: const TextStyle(color: Colors.black, fontSize: 17),
         ),
       ],
@@ -174,14 +174,8 @@ class PreviewForMobile extends ParentPreview {
     _context = context;
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.close),
-          ),
-        ],
+        title: const Text('Preview Accommodation'),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -241,14 +235,8 @@ class PreviewForWeb extends ParentPreview {
     _context = context;
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.close),
-          ),
-        ],
+        title: const Text('Preview Accommodation'),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
