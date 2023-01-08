@@ -5,9 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:koolb/decoration/color.dart';
 import 'package:readmore/readmore.dart';
-
-import '../../../decoration/color.dart';
 
 class TipsModel {
   late String tipName;
@@ -130,7 +129,7 @@ Widget TipsList(BuildContext context) {
                 var myJSON = jsonDecode(tips[index].tipContent);
                 _controller = quill.QuillController(
                   document: quill.Document.fromJson(myJSON),
-                  selection: TextSelection.collapsed(offset: 0),
+                  selection: const TextSelection.collapsed(offset: 0),
                 );
                 return ExpansionTile(
                   title: Column(
@@ -138,7 +137,7 @@ Widget TipsList(BuildContext context) {
                     children: [
                       Text(
                         tips[index].tipName.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: BlueJean,
                             fontSize: 22,
                             fontWeight: FontWeight.bold),
@@ -188,6 +187,10 @@ class _TipsPage extends State<TipsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Tips'),
+        centerTitle: true,
+      ),
       body: Column(
         children: <Widget>[
           CustomTopBar(context),
