@@ -361,6 +361,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       'fb': '',
       'id': '',
       'name': userName,
+      'accommodationIds': [],
     });
 
     final id = renterRef.id;

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:koolb/ui/host/pages/calendar_page.dart';
-import 'package:koolb/ui/host/pages/chat_page.dart';
-import 'package:koolb/ui/host/pages/insight_page.dart';
+import 'package:koolb/data/global_data.dart';
 import 'package:koolb/ui/host/pages/menu_page.dart';
 import 'package:koolb/ui/host/pages/reservation_page.dart';
+import 'package:koolb/ui/chat/chat_page.dart';
 
 class HostPagesNavigator extends StatefulWidget {
   const HostPagesNavigator({super.key});
@@ -16,14 +15,14 @@ class _HostPagesNavigatorState extends State<HostPagesNavigator> {
   List pages = [
     const ReservationPage(),
     const MenuPage(),
-    const ChatPage(),
-    const CalendarPage(),
-    const InsightPage(),
+    ChatPage(userName: name, userID: id),
+    // const CalendarPage(),
+    // const InsightPage(),
   ];
 
   int currentPage = 0;
 
-  void onTap(int index){
+  void onTap(int index) {
     setState(() {
       currentPage = index;
     });
@@ -37,9 +36,9 @@ class _HostPagesNavigatorState extends State<HostPagesNavigator> {
         unselectedFontSize: 0,
         selectedFontSize: 0,
         type: BottomNavigationBarType.fixed,
-        backgroundColor:Colors.white,
-        onTap: onTap,    
-        currentIndex: currentPage,    
+        backgroundColor: Colors.white,
+        onTap: onTap,
+        currentIndex: currentPage,
         selectedItemColor: Colors.black54,
         unselectedItemColor: Colors.grey.withOpacity(0.5),
         showSelectedLabels: false,
@@ -58,14 +57,13 @@ class _HostPagesNavigatorState extends State<HostPagesNavigator> {
             icon: Icon(Icons.chat),
             label: 'Message',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month),
-            label: 'Calendar',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.insights),
-            label: 'Insight',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.calendar_month),
+          //   label: 'Calendar',
+          // ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.insights),
+          //   label: 'Insight',
         ],
       ),
     );

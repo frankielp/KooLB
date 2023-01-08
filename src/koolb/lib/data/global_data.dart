@@ -1,3 +1,4 @@
 String name = "user", email = "email";
-String? id;
+String id = 'id';
+String roleId = 'roleId';
 String authID = "id";

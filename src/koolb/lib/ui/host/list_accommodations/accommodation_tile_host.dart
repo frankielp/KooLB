@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/widgets.dart';
-import 'package:koolb/accommodation/category.dart';
 import 'package:koolb/decoration/color.dart';
 
 class AccommodationTileHost extends StatefulWidget {
@@ -36,14 +34,14 @@ class _AccommodationTileHostState extends State<AccommodationTileHost> {
             FutureBuilder(
               future: _getAccommodation(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.hasData && snapshot.data!.data() != null) {
                   final data = snapshot.data!.data() as Map<String, dynamic>;
                   imagePath = data['imagePath'];
                   country = data['country'];
                   city = data['city'];
                   rating = data['rating'] * 1.0;
                   name = data['name'];
-                  price = data['price'];
+                  price = data['price'] * 1.0;
                   return _listTile();
                 } else {
                   return _loadingWidget();
@@ -95,31 +93,34 @@ class _AccommodationTileHostState extends State<AccommodationTileHost> {
 
   _imageContainer() {
     var size = MediaQuery.of(context).size;
-    return FutureBuilder(
-      future: _downloadUrl(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image.network(
-                snapshot.data!,
-                width: size.width * 0.7,
-                height: size.width * 0.7,
-                fit: BoxFit.cover,
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: FutureBuilder(
+        future: _downloadUrl(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image.network(
+                  snapshot.data!,
+                  width: size.width * 0.75,
+                  height: size.width * 0.75,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-          );
-        } else {
-          return SizedBox(
-            width: size.width * 0.8,
-            height: size.width * 0.8,
-            child: const CircularProgressIndicator(
-              color: BlueJean,
-            ),
-          );
-        }
-      },
+            );
+          } else {
+            return SizedBox(
+              width: size.width * 0.8,
+              height: size.width * 0.8,
+              child: const CircularProgressIndicator(
+                color: BlueJean,
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -166,12 +167,15 @@ class _AccommodationTileHostState extends State<AccommodationTileHost> {
   }
 
   _nameContainer() {
-    return Text(
-      name!,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        color: DarkBlue,
-        fontSize: 15,
+    return Padding(
+      padding: const EdgeInsets.only(top: 5),
+      child: Text(
+        name!,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: DarkBlue,
+          fontSize: 15,
+        ),
       ),
     );
   }

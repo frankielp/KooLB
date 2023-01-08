@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
-import 'package:koolb/ui/renter/pages/chat/chat_tile.dart';
+import 'package:koolb/ui/chat/chat_tile.dart';
 import 'package:koolb/user/koolUser.dart';
 
 class ChatPage extends StatefulWidget {
@@ -78,15 +78,18 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   _noChatWidget() {
-    return Center(
-      child: Column(
-        children: [
-          const Text(
-            'Wow, such empty!',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
-          ),
-          Image.asset('assets/images/empty.png'),
-        ],
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Center(
+        child: Column(
+          children: [
+            const Text(
+              'Wow, such empty!',
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
+            ),
+            Image.asset('assets/images/empty.png'),
+          ],
+        ),
       ),
     );
   }

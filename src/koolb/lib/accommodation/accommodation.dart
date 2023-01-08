@@ -60,7 +60,7 @@ class Accommodation extends Place {
       required int children,
       GeoPoint? location,
       required String hostId}) async {
-    location ??= await getGeoPointByAddress(address);
+    // location ??= await getGeoPointByAddress(address);
 
     final accommodationCollection =
         FirebaseFirestore.instance.collection('accommodation');
@@ -83,7 +83,7 @@ class Accommodation extends Place {
       'rating': 5,
       'starts': [],
       'ends': [],
-      'location': location,
+      'location': GeoPoint(0, 0),
       'imagePath': '',
       'hostId': hostId,
       'category': FieldValue.arrayUnion(type),
@@ -111,10 +111,10 @@ class Accommodation extends Place {
       required int children,
       required String hostId,
       GeoPoint? location}) async {
-    location ??= await getGeoPointByAddress(address);
+    // location ??= await getGeoPointByAddress(address);
 
     final accommodationCollection =
-        FirebaseFirestore.instance.collection('accommodations');
+        FirebaseFirestore.instance.collection('accommodation');
 
     List<int> type = [];
     for (var element in categories) {
@@ -134,7 +134,7 @@ class Accommodation extends Place {
       'rating': 5,
       'starts': [],
       'ends': [],
-      'location': location,
+      'location': GeoPoint(0, 0),
       'imagePath': '',
       'hostId': hostId,
       'category': FieldValue.arrayUnion(type),

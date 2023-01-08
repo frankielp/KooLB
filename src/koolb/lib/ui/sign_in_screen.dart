@@ -219,6 +219,7 @@ class _SignInScreenState extends State<SignInScreen> {
         email = user.get('email');
         id = user.id;
         authID = user.get('authId');
+        roleId = user.get('roleId');
         String role = user.get('role');
 
         switch (role) {

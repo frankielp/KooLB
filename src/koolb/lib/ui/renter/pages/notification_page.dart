@@ -2,7 +2,7 @@
 import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/user/koolUser.dart';
-import 'package:koolb/ui/renter/pages/chat/chat_page.dart';
+import 'package:koolb/ui/chat/chat_page.dart';
 
 class NotiPage extends StatefulWidget {
   const NotiPage({super.key});

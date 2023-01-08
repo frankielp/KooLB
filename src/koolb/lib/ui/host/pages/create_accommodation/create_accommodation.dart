@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,7 +36,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   int _children = 0;
   int _rooms = 1;
   double _price = 10;
-  File? _imageFile;
+  late File? _imageFile = null;
   Uint8List _webImageFile = Uint8List(8);
 
   //controller
@@ -51,13 +50,15 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     fontWeight: FontWeight.bold,
   );
 
-  final _controller = PageController(initialPage: 0);
+  final _controller = PageController(initialPage: _beginPage);
   final _kDuration = const Duration(milliseconds: 500);
   final _kCurve = Curves.ease;
   final _minPrice = 10.0;
   late List<Widget> pages;
 
-  int _currentPage = 0;
+  static const int _beginPage = 0;
+
+  int _currentPage = _beginPage;
   String? _message;
 
   @override
@@ -932,15 +933,17 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                             width: MediaQuery.of(context).size.width - 5,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20.0),
-                              child: kIsWeb
-                                  ? Image.memory(
-                                      _webImageFile,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.file(
-                                      _imageFile!,
-                                      fit: BoxFit.cover,
-                                    ),
+                              child: _imageFile != null
+                                  ? (kIsWeb
+                                      ? Image.memory(
+                                          _webImageFile,
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.file(
+                                          _imageFile!,
+                                          fit: BoxFit.cover,
+                                        ))
+                                  : Container(),
                             ),
                           ),
                         ),
@@ -1061,7 +1064,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         rooms: _rooms,
         adults: _guests,
         children: _children,
-        hostId: id!,
+        hostId: roleId,
       );
     } else {
       accommodationID = await Accommodation.addAccommodationToFirebaseMobile(
@@ -1076,7 +1079,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
         rooms: _rooms,
         adults: _guests,
         children: _children,
-        hostId: id!,
+        hostId: roleId,
       );
     }
 
@@ -1105,7 +1108,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   }
 
   void _addAccommodationIdToHost(String accommodationID) async {
-    FirebaseFirestore.instance.collection('host').doc(id!).update({
+    FirebaseFirestore.instance.collection('host').doc(roleId).update({
       'accommodationIds': FieldValue.arrayUnion([accommodationID]),
     });
   }

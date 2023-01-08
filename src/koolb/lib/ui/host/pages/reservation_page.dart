@@ -13,14 +13,13 @@ class ReservationPage extends StatefulWidget {
 
 class _ReservationPageState extends State<ReservationPage> {
   static final _hostCollection = FirebaseFirestore.instance.collection('host');
-  static final _accommodationCollection =
-      FirebaseFirestore.instance.collection('accommodation');
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(18.0),
+        padding:
+            const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 10),
         child: StreamBuilder(
             stream: _getAccommodationsList(),
             builder: (context, AsyncSnapshot snapshot) {
@@ -70,6 +69,6 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 
   _getAccommodationsList() {
-    return _hostCollection.doc(id!).snapshots();
+    return _hostCollection.doc(roleId).snapshots();
   }
 }
