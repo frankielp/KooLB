@@ -1,6 +1,10 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:koolb/data/global_data.dart';
+import 'package:koolb/decoration/color.dart';
 import 'package:koolb/user/renter.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -17,7 +21,7 @@ class _SettingPageState extends State<SettingPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ProfileHeader(size),
+          ProfileHeader(size, context),
           Profile(size),
           AccountSetting(size, context)
         ],
@@ -26,18 +30,14 @@ class _SettingPageState extends State<SettingPage> {
   }
 }
 
-Widget ProfileHeader(Size size) {
+Widget ProfileHeader(Size size, BuildContext context) {
   return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
     Container(
       color: Colors.white,
       height: size.height / 10,
       width: size.width * 0.15,
     ),
-    CircleAvatar(
-        radius: 35.0,
-        backgroundColor: Colors.black,
-        // backgroundImage: NetworkImage(''),
-        child: Text('Frankie')),
+    _imageContainer(context),
     Container(
       color: Colors.white,
       height: size.height / 10,
@@ -64,6 +64,36 @@ Widget ProfileHeader(Size size) {
       ],
     )
   ]);
+}
+
+_imageContainer(BuildContext context) {
+  var size = MediaQuery.of(context).size;
+  return FutureBuilder(
+    future: _downloadUrl(),
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        return Center(
+          child: CircleAvatar(
+            backgroundImage: Image.network(snapshot.data!) as ImageProvider,
+            radius: 35,
+          ),
+        );
+      } else {
+        return CircleAvatar(
+            radius: 35.0,
+            backgroundColor: Colors.black,
+            child: Text('Loading'));
+      }
+    },
+  );
+}
+
+Future<String> _downloadUrl() async {
+  String downloadUrl = await FirebaseStorage.instance
+      .ref('accommodationImages/${authID}.png')
+      .getDownloadURL();
+
+  return downloadUrl;
 }
 
 Widget Profile(Size size) {

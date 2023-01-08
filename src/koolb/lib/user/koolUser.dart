@@ -65,3 +65,4 @@ class KoolUser {
     return _userCollection.doc(id).get();
   }
 }
+

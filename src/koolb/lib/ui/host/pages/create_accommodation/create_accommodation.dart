@@ -609,6 +609,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     );
   }
 
+  //get image
   Widget _addPhotos() {
     // print('Outside\n');
     // print(_imageFile?.path);
