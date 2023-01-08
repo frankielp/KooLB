@@ -1,19 +1,13 @@
 // import 'dart:js';
 // import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'dart:async'; // new
-import 'package:firebase_auth/firebase_auth.dart' // new
-    hide
-    EmailAuthProvider,
-    PhoneAuthProvider; // new
 import 'package:firebase_core/firebase_core.dart'; // new
-import 'package:firebase_ui_auth/firebase_ui_auth.dart'; // new
+// new
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/ui/list_accommodations/view_list_accommodations.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/home_page.dart';
 import 'package:koolb/ui/renter/pages/homepage/search.dart';
@@ -21,29 +15,20 @@ import 'package:koolb/ui/renter/pages/setting_page.dart';
 import 'package:koolb/ui/renter/pages/wishlist/wishlist_page.dart';
 import 'package:koolb/ui/sign_up_screen.dart';
 // import 'package:koolb/ui/welcoming_page.dart';
-import 'package:koolb/ui/splash_screen.dart';
-import 'package:koolb/user/renter.dart';
-import 'package:koolb/wishlist/wishlist.dart';
-import 'package:provider/provider.dart'; // new
 import 'firebase_options.dart'; // new
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:koolb/ui/admin/ad_navigation_bar.dart';
-import 'package:koolb/ui/host/h_navigation_bar.dart';
-import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'package:koolb/firebase_options.dart';
-import 'package:koolb/ui/renter/r_navigationbar.dart';
-import 'package:provider/provider.dart';
-import 'package:koolb/ui/admin/ad_navigation_bar.dart';
-import 'package:koolb/ui/host/h_navigation_bar.dart';
-import 'package:koolb/ui/renter/r_navigationbar.dart';
 import 'firebase_options.dart';
 import 'package:koolb/ui/sign_in_screen.dart' as SignInPage;
 import 'package:koolb/ui/host/pages/tips_page.dart';
+import 'package:koolb/ui/renter/pages/notification_page.dart';
+import 'package:koolb/ui/host/pages/insight_page.dart';
+import 'ui/renter/pages/home_page.dart';
+import 'user/renter.dart';
 
-Renter renter = Renter("", "", "", "", [], [], "", "", "HgvSKaOM6uSLK9qrH2ZL");
+Renter renter = Renter("", "", "", "", [], []);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -97,13 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      // body: SplashScreen(),
-      //body: SettingPage(),
-      //body: HomePage(title: '',),
-      bottomNavigationBar: RenterPagesNavigation(),
+      body: const SignUpScreen(),
     );
   }
 }

@@ -4,7 +4,9 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   desktop_webview_auth
+  flutter_secure_storage_windows
   geolocator_windows
+  pasteboard
   url_launcher_windows
 )
 

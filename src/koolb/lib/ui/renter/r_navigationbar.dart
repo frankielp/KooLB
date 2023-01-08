@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:koolb/ui/renter/pages/chat_page.dart';
+import 'package:koolb/ui/renter/pages/chat/chat_page.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/home_page.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
@@ -17,17 +17,10 @@ class RenterPagesNavigation extends StatefulWidget {
 }
 
 class _RenterPagesNavigationState extends State<RenterPagesNavigation> {
-  // List pages = [
-  //   const RenterMaps(),
-  //   const WishlistPage(),
-  //   const ChatPage(),
-  //   const SettingPage(),
-  // ];
-
   List pages = [
-    const HomePage(title: ''),
-    WishlistPage(),
-    const ChatPage(),
+    const HomePage(),
+    const WishlistPage(),
+    ChatPage(userName: name, userID: id!),
     const SettingPage(),
   ];
 

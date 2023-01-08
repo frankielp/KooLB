@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/accommodation/category.dart' as _category;
@@ -8,20 +8,32 @@ import 'package:koolb/decoration/widget.dart';
 import 'package:koolb/ui/renter/pages/booking/basic_book.dart';
 
 class DetailsPage extends StatefulWidget {
-  // thêm id
+  final String name;
   final String description;
   final String address;
-  final List<String> images;
+  final String imagePath;
+  final double rating;
+  final double price;
+  final int room;
   final String accommodationID;
-  final Accommodation accommodation;
+  final int guests;
+  final int children;
+  final List<_category.Category> category;
   bool isFavorite;
   DetailsPage({
     Key? key,
     required this.description,
     required this.address,
-    required this.images,
+    required this.imagePath,
     required this.accommodationID,
-    required this.isFavorite, required this.accommodation,
+    required this.isFavorite,
+    required this.name,
+    required this.rating,
+    required this.price,
+    required this.room,
+    required this.guests,
+    required this.children,
+    required this.category,
   }) : super(key: key);
 
   @override
@@ -53,9 +65,7 @@ class _DetailsPageState extends State<DetailsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CarouselwithIndicatorDemo(
-                  images: widget.images,
-                ),
+                _imageContainer(),
                 const SizedBox(
                   height: 12,
                 ),
@@ -67,7 +77,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       Row(
                         children: [
                           Text(
-                            widget.accommodation.name,
+                            widget.name,
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       fontWeight: FontWeight.bold,
@@ -79,7 +89,7 @@ class _DetailsPageState extends State<DetailsPage> {
                             color: BlueJean,
                           ),
                           Text(
-                            widget.accommodation.rating.toString(),
+                            ((widget.rating * 10).toInt() / 10.0).toString(),
                             style:
                                 Theme.of(context).textTheme.subtitle1!.copyWith(
                                       fontWeight: FontWeight.bold,
@@ -101,7 +111,7 @@ class _DetailsPageState extends State<DetailsPage> {
                           ),
                           const Spacer(),
                           Text(
-                            "\$ ${widget.accommodation.price}",
+                            "\$ ${(widget.price * 10).toInt() / 10.0}",
                             style:
                                 Theme.of(context).textTheme.subtitle2!.copyWith(
                                       color: Colors.black.withOpacity(0.5),
@@ -119,17 +129,17 @@ class _DetailsPageState extends State<DetailsPage> {
                             specWidget(
                               context,
                               Icons.home,
-                              "${widget.accommodation.room} Rooms",
+                              "${widget.room} Rooms",
                             ),
                             specWidget(
                               context,
                               Icons.child_care,
-                              "${widget.accommodation.children} Children",
+                              "${widget.children} Children",
                             ),
                             specWidget(
                               context,
                               Icons.people,
-                              "${widget.accommodation.adult} Adult",
+                              "${widget.guests} Adult",
                             ),
                           ],
                         ),
@@ -137,7 +147,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       SizedBox(
                         height: size.height * 0.03,
                       ),
-                      listCategories(widget.accommodation.category, size),
+                      listCategories(widget.category, size),
                       SizedBox(
                         height: size.height * 0.035,
                       ),
@@ -248,13 +258,13 @@ class _DetailsPageState extends State<DetailsPage> {
                             builder: (context) => BasicBook(
                               startDate: DateTime.now(),
                               endDate: DateTime.now().add(
-                                Duration(days: 2),
+                                const Duration(days: 2),
                               ),
                               adults: 1,
                               children: 1,
-                              maxAdults: widget.accommodation.adult,
-                              maxChildren: widget.accommodation.children,
-                              price: widget.accommodation.price,
+                              maxAdults: widget.guests,
+                              maxChildren: widget.children,
+                              price: widget.price,
                             ),
                           ),
                         );
@@ -335,7 +345,7 @@ class _DetailsPageState extends State<DetailsPage> {
             ));
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.only(bottom: 5, left: 0),
+      padding: const EdgeInsets.only(bottom: 5, left: 0),
       child: Row(children: lists),
     );
   }
@@ -344,8 +354,8 @@ class _DetailsPageState extends State<DetailsPage> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 500),
       curve: Curves.fastOutSlowIn,
-      padding: EdgeInsets.fromLTRB(3, 10, 5, 5),
-      margin: EdgeInsets.only(right: 10),
+      padding: const EdgeInsets.fromLTRB(3, 10, 5, 5),
+      margin: const EdgeInsets.only(right: 10),
       width: size.width * 0.20,
       height: size.width * 0.12,
       decoration: BoxDecoration(
@@ -356,7 +366,7 @@ class _DetailsPageState extends State<DetailsPage> {
             color: Colors.grey.withOpacity(0.1),
             spreadRadius: .5,
             blurRadius: .5,
-            offset: Offset(0, 1), // changes position of shadow
+            offset: const Offset(0, 1), // changes position of shadow
           ),
         ],
       ),
@@ -367,7 +377,7 @@ class _DetailsPageState extends State<DetailsPage> {
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
               color: Colors.black,
               fontWeight: FontWeight.w500,
@@ -377,96 +387,42 @@ class _DetailsPageState extends State<DetailsPage> {
       ),
     );
   }
-}
 
-class CarouselwithIndicatorDemo extends StatefulWidget {
-  final List<String> images;
-  const CarouselwithIndicatorDemo({
-    Key? key,
-    required this.images,
-  }) : super(key: key);
-
-  @override
-  _CarouselwithIndicatorDemoState createState() =>
-      _CarouselwithIndicatorDemoState();
-}
-
-class _CarouselwithIndicatorDemoState extends State<CarouselwithIndicatorDemo> {
-  int _current = 0;
-  final CarouselController _controller = CarouselController();
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        CarouselSlider(
-          carouselController: _controller,
-          items: widget.images.map((item) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Container(
-                height: size.height * 0.45,
-                // width: size.width,
-                // margin: EdgeInsets.symmetric(vertical: 0),
-                // decoration: BoxDecoration(
-                //   color: Colors.white,
-                //   borderRadius: BorderRadius.circular(16),
-                //   boxShadow: const [
-                //     BoxShadow(
-                //       color: Colors.black12,
-                //       blurRadius: 3,
-                //       spreadRadius: 3,
-                //     ),
-                //   ],
-                // ),
-                child: Image.network(
-                  item,
-                  fit: BoxFit.cover,
-                  width: size.width,
-                ),
+  _imageContainer() {
+    var size = MediaQuery.of(context).size;
+    return FutureBuilder(
+      future: _downloadUrl(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                snapshot.data!,
+                width: size.width * 0.7,
+                height: size.width * 0.7,
+                fit: BoxFit.cover,
               ),
-            );
-          }).toList(),
-          options: CarouselOptions(
-            height: size.height * 0.45,
-            enlargeCenterPage: true,
-            autoPlay: false,
-            aspectRatio: 2.0,
-            autoPlayCurve: Curves.easeInBack,
-            enableInfiniteScroll: true,
-            autoPlayAnimationDuration: Duration(milliseconds: 900),
-            viewportFraction: 0.8,
-            enlargeStrategy: CenterPageEnlargeStrategy.height,
-            onPageChanged: (index, reason) {
-              setState(() {
-                _current = index;
-              });
-            },
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: widget.images.asMap().entries.map((entry) {
-            return GestureDetector(
-              onTap: () {},
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
-                width: 10,
-                height: _current == entry.key ? 6 : 4,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: (Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Colors.black12)
-                      .withOpacity(
-                    _current == entry.key ? 0.5 : 0.2,
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        )
-      ],
+            ),
+          );
+        } else {
+          return SizedBox(
+            width: size.width * 0.8,
+            height: size.width * 0.8,
+            child: const CircularProgressIndicator(
+              color: BlueJean,
+            ),
+          );
+        }
+      },
     );
+  }
+
+  Future<String> _downloadUrl() async {
+    String downloadUrl = await FirebaseStorage.instance
+        .ref('accommodationImages/${widget.accommodationID}.png')
+        .getDownloadURL();
+
+    return downloadUrl;
   }
 }

@@ -30,42 +30,53 @@ class _AccommodationItemState extends State<AccommodationItem> {
   Widget build(BuildContext context) {
     //print("AccommodationItem build: ${this.widget.favoriteInfo} ${DateTime.now()}");
     Size size = MediaQuery.of(context).size;
-    return Stack(
-      children: [
-        Container(
-          padding:
-          EdgeInsets.only(right: size.width * 0.1, top: size.height * 0.03),
-          height: size.height * 0.5,
-          child: PageView.builder(
-            onPageChanged: ((value) {
-              setState(() {
-                currentPage = value;
-              });
-            }),
-            // itemCount: widget.data["image"].length,
-            itemCount: widget.data.images.length,
-            itemBuilder: (context, index) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  // widget.data["image"][index],
-                  widget.data.images[index],
-                  height: size.height * 0.4,
-                  fit: BoxFit.fill,
-                ),
-              );
-            },
-          ),
-        ),
-        Container(
-          padding:
-          EdgeInsets.only(right: size.width * 0.1, top: size.height * 0.04),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(
-              // widget.data["image"].length,
-              widget.data.images.length,
-                  (index) => buildDot(index: index),
+    return GestureDetector(
+      onTap: () {
+        setState(
+          () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) {
+            //       return DetailsPage(
+            //         description: widget.data.city,
+            //         address: '${widget.data.city} ${widget.data.country}',
+            //         imagePath: widget.image,
+            //         accommodationID: "widget.data.accommodationID",
+            //         isFavorite: false,
+            //         accommodation: widget.data,
+            //       );
+            //     },
+            //   ),
+            // );
+          },
+        );
+      },
+      child: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.only(
+                right: size.width * 0.1, top: size.height * 0.03),
+            height: size.height * 0.5,
+            child: PageView.builder(
+              onPageChanged: ((value) {
+                setState(() {
+                  currentPage = value;
+                });
+              }),
+              // itemCount: widget.data["image"].length,
+              itemCount: widget.image.length,
+              itemBuilder: (context, index) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(
+                    // widget.data["image"][index],
+                    widget.image[index],
+                    height: size.height * 0.4,
+                    fit: BoxFit.fill,
+                  ),
+                );
+              },
             ),
           ),
           // decoration: BoxDecoration(
@@ -77,7 +88,6 @@ class _AccommodationItemState extends State<AccommodationItem> {
           //     )
           //   ]
           // ),
-        ),
         Container(
           margin: EdgeInsets.only(
               top: size.height * 0.035,

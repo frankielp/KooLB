@@ -6,45 +6,22 @@ import 'package:koolb/accommodation/category.dart' as Category;
 import 'package:koolb/component/category_item.dart';
 import 'package:koolb/component/list_accommodation_item.dart';
 import 'package:koolb/decoration/color.dart';
-import 'package:koolb/wishlist/wishlist.dart';
-
-import '../../../main.dart';
-
-const renterID = 'HgvSKaOM6uSLK9qrH2ZL';
+import 'package:koolb/ui/list_accommodations/view_list_accommodations.dart';
+import 'package:koolb/ui/renter/pages/accommodation_detail.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required String title});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> favoriteAccommodationIDs = [];
+  static final _accommodationCollection =
+  FirebaseFirestore.instance.collection('accommodation');
 
-  @override
-  void didChangeDependencies(){
-    super.didChangeDependencies();
-    getUserFavoriteListIDs();
-  }
-
-  Future getUserFavoriteListIDs() async {
-    List<String> tmp = [];
-    var data = await FirebaseFirestore.instance
-          .collection('wishlist')
-          .doc(renter.wishlistID)
-          .get();
-
-    List<WishlistFolder> folders = List.from(data.data()?['folders'].map((doc) => WishlistFolder.fromSnapshot(doc)));
-
-    for (int i = 0; i < folders.length; ++i){
-      tmp = List.from(tmp)..addAll(folders[i].accommodationIDs);
-    }
-    setState(() {
-      favoriteAccommodationIDs = tmp;
-      //print(favoriteAccommodationIDs);
-    });
-  }
+  Stream<QuerySnapshot> _queryListAccommodation =
+  _accommodationCollection.snapshots();
 
   List<String> categories = [
     "All",
@@ -56,12 +33,12 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<String> icons = [
-    "icons/all.png",
-    "icons/apartment.png",
-    "icons/sharedhouse.png",
-    "icons/hostel.png",
-    "icons/hotel.png",
-    "icons/homestay.png"
+    "assets/icons/all.png",
+    "assets/icons/apartment.png",
+    "assets/icons/sharedhouse.png",
+    "assets/icons/hostel.png",
+    "assets/icons/hotel.png",
+    "assets/icons/homestay.png"
   ];
 
   List<String> images = [
@@ -71,110 +48,80 @@ class _HomePageState extends State<HomePage> {
     "https://pbs.twimg.com/media/FiE27mragAIblmC?format=jpg&name=large",
   ];
 
-  List<Accommodation> accommodations = [
-    Accommodation(
-        [Category.Category.Hotel],
-        ["https://pbs.twimg.com/media/FhrWVV6aAAAQvkf?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE26JbacAAVWQq?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE27l3aEAA2wTZ?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE27mragAIblmC?format=jpg&name=large",],
-        0.5,
-        4.5,
-        1,
-        1,
-        1,
-        [DateTime(2022, 12, 1, 0, 0), DateTime(2023, 1, 1, 0, 0)],
-        [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-        'Việt Nam',
-        'An Giang',
-        'a1',
-        GeoPoint(16.456661, 107.5960929)),
-    Accommodation(
-        [Category.Category.Hotel],
-        ["https://pbs.twimg.com/media/FhrWVV6aAAAQvkf?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE26JbacAAVWQq?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE27l3aEAA2wTZ?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE27mragAIblmC?format=jpg&name=large",],
-        0.5,
-        4.5,
-        1,
-        1,
-        1,
-        [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-        [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-        'Việt Nam',
-        'An Giang',
-        'a2',
-        GeoPoint(16.456661, 107.5960929)),
-    Accommodation(
-        [Category.Category.Hotel],
-        ["https://pbs.twimg.com/media/FhrWVV6aAAAQvkf?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE26JbacAAVWQq?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE27l3aEAA2wTZ?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE27mragAIblmC?format=jpg&name=large",],
-        0.5,
-        4.5,
-        1,
-        1,
-        1,
-        [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-        [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-        'Việt Nam',
-        'An Giang',
-        'a2',
-        GeoPoint(16.456661, 107.5960929)),
-    Accommodation(
-        [Category.Category.Hotel],
-        ["https://pbs.twimg.com/media/FhrWVV6aAAAQvkf?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE26JbacAAVWQq?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE27l3aEAA2wTZ?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE27mragAIblmC?format=jpg&name=large",],
-        0.5,
-        4.5,
-        1,
-        1,
-        1,
-        [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-        [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-        'Việt Nam',
-        'An Giang',
-        'a2',
-        GeoPoint(16.456661, 107.5960929)),
-    Accommodation(
-        [Category.Category.Hotel],
-        ["https://pbs.twimg.com/media/FhrWVV6aAAAQvkf?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE26JbacAAVWQq?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE27l3aEAA2wTZ?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE27mragAIblmC?format=jpg&name=large",],
-        0.5,
-        4.5,
-        1,
-        1,
-        1,
-        [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-        [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-        'Việt Nam',
-        'An Giang',
-        'a2',
-        GeoPoint(16.456661, 107.5960929)),
-    Accommodation(
-        [Category.Category.Hotel],
-        ["https://pbs.twimg.com/media/FhrWVV6aAAAQvkf?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE26JbacAAVWQq?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE27l3aEAA2wTZ?format=jpg&name=large",
-          "https://pbs.twimg.com/media/FiE27mragAIblmC?format=jpg&name=large",],
-        0.5,
-        4.5,
-        1,
-        1,
-        1,
-        [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-        [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-        'Việt Nam',
-        'An Giang',
-        'a2',
-        GeoPoint(16.456661, 107.5960929))
-  ];
+  List<Accommodation> accommodations = [];
+  //   Accommodation(
+  //       category: <Category.Category> [Category.Category.Hotel, Category.Category.BreakfastIncluded],
+  //       price: 0.5,
+  //       guests: 1,
+  //       children: 1,
+  //       room: 1,
+  //       country: 'Việt Nam',
+  //       city: 'An Giang',
+  //       title: 'a1',
+  //       location: GeoPoint(16.456661, 107.5960929), address: 'address 1', description: 'description 1',),
+  //   Accommodation(
+  //       category: [Category.Category.Hotel],
+  //       price: 0.5,
+  //       guests: 1,
+  //       children: 1,
+  //       room: 1,
+  //       country: 'Việt Nam',
+  //       city: 'An Giang',
+  //       title: 'a2',
+  //       location: GeoPoint(16.456661, 107.5960929), address: 'address 2', description: 'description 2'),
+  //   Accommodation(
+  //       [Category.Category.Hotel],
+  //       0.5,
+  //       4.5,
+  //       1,
+  //       1,
+  //       1,
+  //       [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
+  //       [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
+  //       'Việt Nam',
+  //       'An Giang',
+  //       'a2',
+  //       GeoPoint(16.456661, 107.5960929)),
+  //   Accommodation(
+  //       [Category.Category.Hotel],
+  //       0.5,
+  //       4.5,
+  //       1,
+  //       1,
+  //       1,
+  //       [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
+  //       [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
+  //       'Việt Nam',
+  //       'An Giang',
+  //       'a2',
+  //       GeoPoint(16.456661, 107.5960929)),
+  //   Accommodation(
+  //       [Category.Category.Hotel],
+  //       0.5,
+  //       4.5,
+  //       1,
+  //       1,
+  //       1,
+  //       [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
+  //       [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
+  //       'Việt Nam',
+  //       'An Giang',
+  //       'a2',
+  //       GeoPoint(16.456661, 107.5960929)),
+  //   Accommodation(
+  //       [Category.Category.Hotel],
+  //       0.5,
+  //       4.5,
+  //       1,
+  //       1,
+  //       1,
+  //       [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
+  //       [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
+  //       'Việt Nam',
+  //       'An Giang',
+  //       'a2',
+  //       GeoPoint(16.456661, 107.5960929))
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -245,8 +192,9 @@ class _HomePageState extends State<HomePage> {
                               height: 35,
                               width: size.width * 0.6,
                               alignment: Alignment.centerLeft,
-                              margin: EdgeInsets.symmetric(vertical: 15),
-                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              margin: const EdgeInsets.symmetric(vertical: 15),
+                              padding:
+                              const EdgeInsets.symmetric(horizontal: 20),
                               decoration: BoxDecoration(
                                   color: cardColor,
                                   borderRadius: BorderRadius.circular(29.5)),
@@ -277,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                               width: size.width * 0.08,
                             ),
                             Container(
-                              margin: EdgeInsets.symmetric(vertical: 15),
+                              margin: const EdgeInsets.symmetric(vertical: 15),
                               alignment: Alignment.center,
                               height: 35,
                               width: size.width * 0.1,
@@ -304,9 +252,17 @@ class _HomePageState extends State<HomePage> {
               child: listCategories(),
             ),
             // listAccommodation(),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: listAccommodation(favoriteAccommodationIDs),
+            Expanded(
+              child: Container(
+                margin:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: SizedBox(
+                  height: size.height * 0.52,
+                  child: ViewListAccommodations(
+                    listAccommodations: _queryListAccommodation,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -342,67 +298,27 @@ class _HomePageState extends State<HomePage> {
             setState(() {
               selectedCategory = index;
             });
+            _displayByCategory(selectedCategory);
           },
         ));
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      padding: EdgeInsets.only(bottom: 5, left: 15),
+      padding: const EdgeInsets.only(bottom: 5, left: 15),
       child: Row(children: lists),
     );
   }
 
-  listAccommodation(List<String> favoriteAccommodationIDs) {
-    Size size = MediaQuery.of(context).size;
-    List<Accommodation> filteredaccommodations = accommodations;
-    //print(List.from(accommodations.map((e) => e.id)));
-    filteredaccommodations = displayByCategory(filteredaccommodations);
-    List<Widget> lists = List.generate(
-        filteredaccommodations.length,
-            (index) => AccommodationItem(
-          isFavorite: favoriteAccommodationIDs.contains(filteredaccommodations[index].id),
-          data: filteredaccommodations[index],
-          //image: images,
-          onTap: () {
-            setState(() {});
-          },
-        ));
-    return Container(
-      height: size.height * 0.52,
-      child: SingleChildScrollView(
-        padding: EdgeInsets.only(left: size.width * 0.05, right: size.width * 0.05),
-        child: Column(
-          children: lists,
-        ),
-      ),
-    );
-  }
-
-  List<Accommodation> displayByCategory(List<Accommodation> filteredaccommodations) {
-    switch(selectedCategory) {
-      case 1: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.Apartment]).toList();
-      }
-      break;
-      case 2: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.SharedHome]).toList();
-      }
-      break;
-      case 3: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.Hostel]).toList();
-      }
-      break;
-      case 4: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.Hotel]).toList();
-      }
-      break;
-      case 5: {
-        filteredaccommodations = filterResult(accommodations.toSet(), [Category.Category.Homestay]).toList();
-      }
-      break;
-      default:
-        break;
+  _displayByCategory(int selectedCategory) {
+    if (selectedCategory == 0) {
+      setState(() {
+        _queryListAccommodation = _accommodationCollection.snapshots();
+      });
+    } else {
+      setState(() {
+        _queryListAccommodation = _accommodationCollection
+            .where('category', arrayContains: selectedCategory)
+            .snapshots();
+      });
     }
-
-    return filteredaccommodations;
   }
 }

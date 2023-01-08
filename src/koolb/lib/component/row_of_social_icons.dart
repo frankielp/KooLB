@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:koolb/component/fire_auth.dart';
 import 'package:koolb/component/social_icon.dart';
 
 class RowOfSocialIcons extends StatelessWidget {
@@ -15,6 +17,8 @@ class RowOfSocialIcons extends StatelessWidget {
           icon_src: "assets/icons/facebookicon.svg",
           press: () {
             //CODE HERE
+            FireAuth(FirebaseAuth.instance)
+                .signInWithFacebook(context);
           },
         ),
         SocialIcon(
