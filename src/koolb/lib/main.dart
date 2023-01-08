@@ -7,8 +7,10 @@ import 'package:koolb/ui/sign_up_screen.dart';
 import 'package:koolb/user/renter.dart';
 import 'package:koolb/util/load_data.dart';
 import 'firebase_options.dart';
+
 Renter renter = Renter("", "", "", "", [], []);
 void main() async {
+  loadData();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
