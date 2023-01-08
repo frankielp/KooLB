@@ -95,7 +95,7 @@ abstract class ParentPreview extends StatelessWidget {
               color: Colors.black, fontSize: 17, fontWeight: FontWeight.w700),
         ),
         Text(
-          '$price\$ night',
+          '${price}\$ night',
           style: const TextStyle(color: Colors.black, fontSize: 17),
         ),
       ],
