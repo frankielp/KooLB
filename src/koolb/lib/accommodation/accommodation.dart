@@ -2,14 +2,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:koolb/accommodation/category.dart' as Category;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:koolb/accommodation/category.dart';
 import 'package:koolb/place/place.dart';
-import 'package:koolb/util/helper.dart';
-import '../host/host.dart';
+import 'package:koolb/data/global_data.dart';
 
 class Accommodation extends Place {
   static final CollectionReference _accommodationCollection =
@@ -42,6 +38,9 @@ class Accommodation extends Place {
     required this.room,
     required this.children,
     required this.guests,
+    required this.rating,
+    required this.starts,
+    required this.ends,
   }) : super(title, location);
 
   get location => super.position;
@@ -59,6 +58,7 @@ class Accommodation extends Place {
       required int adults,
       required int children,
       GeoPoint? location,
+      required String userId,
       required String hostId}) async {
     // location ??= await getGeoPointByAddress(address);
 
@@ -86,6 +86,8 @@ class Accommodation extends Place {
       'location': const GeoPoint(0, 0),
       'imagePath': '',
       'hostId': hostId,
+      'userId': userId,
+      'hostName': name,
       'category': FieldValue.arrayUnion(type),
     });
 
@@ -110,6 +112,7 @@ class Accommodation extends Place {
       required int adults,
       required int children,
       required String hostId,
+      required String userId,
       GeoPoint? location}) async {
     // location ??= await getGeoPointByAddress(address);
 
@@ -137,146 +140,8 @@ class Accommodation extends Place {
       'location': const GeoPoint(0, 0),
       'imagePath': '',
       'hostId': hostId,
-      'category': FieldValue.arrayUnion(type),
-    });
-
-    String accommodationID = accommodationRef.id;
-
-    _updateAccommodation(accommodationID,
-        _addImageToFirebaseForMobile(accommodationID, mobileImage));
-
-class Accommodation extends Place {
-  List<Category.Category> _category;
-  double _price;
-  double _rating;
-  int _room;
-  int _children;
-  int _adult;
-  List<DateTime> _starts;
-  List<DateTime> _ends;
-  String _country;
-  String _city;
-
-  Accommodation(
-      List<Category.Category> category,
-      double price,
-      double rating,
-      int room,
-      int children,
-      int adult,
-      List<DateTime> starts,
-      List<DateTime> ends,
-      String country,
-      String city,
-      String name,
-      GeoPoint location)
-      : _category = category,
-        _price = price,
-        _rating = rating,
-        _room = room,
-        _children = children,
-        _adult = adult,
-        _starts = starts,
-        _ends = ends,
-        _country = country,
-        _city = city,
-        super(name, location);
-
-  List<Category.Category> get category => _category;
-
-  get location => super.position;
-
-  static Future<String> addAccommodationToFirebaseWeb(
-      {required String title,
-      required String description,
-      required double price,
-      required String address,
-      required String city,
-      required String country,
-      required List<Category> categories,
-      required Uint8List webImage,
-      required int rooms,
-      required int adults,
-      required int children,
-      GeoPoint? location,
-      required String hostId}) async {
-    // location ??= await getGeoPointByAddress(address);
-
-    final accommodationCollection =
-        FirebaseFirestore.instance.collection('accommodation');
-
-    List<int> type = [];
-    for (var element in categories) {
-      type.add(element.index);
-    }
-
-    final accommodationRef = await accommodationCollection.add({
-      'name': title,
-      'description': description,
-      'price': price,
-      'room': rooms,
-      'children': children,
-      'adult': adults,
-      'address': address,
-      'city': city,
-      'country': country,
-      'rating': 5,
-      'starts': [],
-      'ends': [],
-      'location': const GeoPoint(0, 0),
-      'imagePath': '',
-      'hostId': hostId,
-      'category': FieldValue.arrayUnion(type),
-    });
-
-    String accommodationID = accommodationRef.id;
-
-    _updateAccommodation(
-        accommodationID, _addImageToFirebaseForWeb(accommodationID, webImage));
-
-    return accommodationID;
-  }
-
-  static Future<String> addAccommodationToFirebaseMobile(
-      {required String title,
-      required String description,
-      required double price,
-      required String address,
-      required String city,
-      required String country,
-      required List<Category> categories,
-      required File mobileImage,
-      required int rooms,
-      required int adults,
-      required int children,
-      required String hostId,
-      GeoPoint? location}) async {
-    // location ??= await getGeoPointByAddress(address);
-
-    final accommodationCollection =
-        FirebaseFirestore.instance.collection('accommodation');
-
-    List<int> type = [];
-    for (var element in categories) {
-      type.add(element.index);
-    }
-
-    final accommodationRef = await accommodationCollection.add({
-      'name': title,
-      'description': description,
-      'price': price,
-      'room': rooms,
-      'children': children,
-      'adult': adults,
-      'address': address,
-      'city': city,
-      'country': country,
-      'rating': 5,
-      'starts': [],
-      'ends': [],
-      'location': const GeoPoint(0, 0),
-      'imagePath': '',
-      'hostId': hostId,
+      'userId': userId,
+      'hostName': name,
       'category': FieldValue.arrayUnion(type),
     });
 
@@ -326,5 +191,66 @@ class Accommodation extends Place {
 
   static Future getAccommodationByIdFuture(String accommodationId) {
     return _accommodationCollection.doc(accommodationId).get();
+  }
+
+  static Future<List<Accommodation>> getAccommodationBasedOnDatabase(
+      String country,
+      String city,
+      int numRooms,
+      int numAdult,
+      int numChildren,
+      DateTime start,
+      DateTime end) async {
+    List<Accommodation> ret = [];
+    QuerySnapshot qn = await FirebaseFirestore.instance
+        .collection('accommodation')
+        .where('country', isEqualTo: country)
+        .where('city', isEqualTo: city)
+        .get();
+
+    qn.docs.forEach((element) {
+      final map = element.data();
+      if (element['room'] < numRooms ||
+          element['adult'] < numAdult ||
+          element['children'] < numChildren) {
+        return;
+      }
+      List<DateTime> starts = [];
+      element['starts'].forEach((value) {
+        starts.add(value.toDate());
+      });
+      List<DateTime> ends = [];
+      element['ends'].forEach((value) {
+        ends.add(value.toDate());
+      });
+      for (int i = 0; i < starts.length; ++i) {
+        if ((start.isAfter(starts[i]) && start.isAfter(ends[i]) ||
+            (end.isAfter(starts[i]) && end.isBefore(ends[i])))) {
+          return;
+        }
+      }
+      List<Category> category = [];
+      element['category'].forEach((value) {
+        category.add(Category.values[value]);
+      });
+      ret.add(Accommodation(
+          category: category,
+          price: element['price'],
+          rating: element['rating'],
+          room: element['room'],
+          children: element['children'],
+          guests: element['adult'],
+          title: element['name'],
+          starts: starts,
+          ends: ends,
+          country: element['country'],
+          city: element['city'],
+          location: element['location'],
+          address: element['address'],
+          description: element['description']));
+    });
+
+    print(ret);
+    return ret;
   }
 }
