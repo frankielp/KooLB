@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../../../data/global_data.dart';
 import '../../../../decoration/color.dart';
 import '../../../../main.dart';
 import '../../../../wishlist/wishlist.dart';
@@ -62,14 +64,17 @@ class _FolderList extends State<FolderList>{
                               fontWeight: FontWeight.bold,
                               fontSize: 20
                           ),),
-                        leading: ClipRRect(
-                          borderRadius: BorderRadius.circular(5.0),
-                          child: Image.network(folder.leadingUrl.toString(),
-                            height: 100.0,
-                            width: 60.0,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                        leading: (folder.accommodationIDs != null && folder.accommodationIDs.length > 0)
+                        ? _imageContainer(folder.accommodationIDs[0])
+                        : Icon(Icons.houseboat_outlined),
+                        // leading: ClipRRect(
+                        //   borderRadius: BorderRadius.circular(5.0),
+                        //   child: Image.network(folder.leadingUrl.toString(),
+                        //     height: 100.0,
+                        //     width: 60.0,
+                        //     fit: BoxFit.fill,
+                        //   ),
+                        // ),
                         onTap: () {
                           this.widget.onTapFolder(folder, context);
                           // Navigator.push(
@@ -79,26 +84,20 @@ class _FolderList extends State<FolderList>{
                       ),
                       Divider()
                     ],
-
-
                   ),
                 );
               }
           );
         }));
+
   }
 
   // LẤY LIST FOLDER VỚI THÔNG TIN
   Future getUserFoldersList() async{
     var snapshot = await FirebaseFirestore.instance
         .collection('wishlist')
-        .doc(renter.wishlistID)
+        .doc(wishlistID)
         .get();
-
-    // if (snapshot != null)
-    //   print("snapshot not null");
-    // else
-    //   print("snapshot is null");
 
     setState(() {
       _folders = List.from(snapshot.data()?['folders'].map((doc) => WishlistFolder.fromSnapshot(doc)));
@@ -106,10 +105,49 @@ class _FolderList extends State<FolderList>{
     // print(_folders);
     // print("yesssss");
   }
+
+  _imageContainer(accommodationID) {
+    var size = MediaQuery.of(context).size;
+    return FutureBuilder(
+      future: _downloadUrl(accommodationID),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Container(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Image.network(
+                snapshot.data!,
+                width: 70,
+                height: 70,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        } else {
+          return SizedBox(
+            width: size.width * 0.8,
+            height: size.width * 0.8,
+            child: const CircularProgressIndicator(
+              color: BlueJean,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Future<String> _downloadUrl(accommodationID) async {
+    String downloadUrl = await FirebaseStorage.instance
+        .ref('accommodationImages/${accommodationID}.png')
+        .getDownloadURL();
+
+    return downloadUrl;
+  }
 }
 
 
 class WishlistPage extends StatefulWidget{
+  const WishlistPage({super.key});
   @override
   State<StatefulWidget> createState() {
     return _WishlistPage();

@@ -7,6 +7,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/accommodation/category.dart';
+import 'package:koolb/component/list_accommodation_item.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/renter/pages/accommodation_detail.dart';
 
@@ -104,14 +105,7 @@ class _ListAccommodationTileState extends State<ListAccommodationTile> {
             Positioned(
               right: 5,
               top: 5,
-              child: IconButton(
-                icon: Icon(
-                  Icons.favorite,
-                  size: 20,
-                  color: widget.isFavorite ? Colors.red : Colors.grey.shade800,
-                ),
-                onPressed: () {},
-              ),
+              child: HeartIcon(this.widget.accommodationID, this.widget.isFavorite, this.widget.imagePath)
             ),
           ],
         ),

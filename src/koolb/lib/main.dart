@@ -2,10 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:koolb/decoration/color.dart';
+import 'package:koolb/ui/sign_in_screen.dart';
 import 'package:koolb/ui/sign_up_screen.dart';
+import 'package:koolb/user/renter.dart';
 import 'package:koolb/util/load_data.dart';
 import 'firebase_options.dart';
-
+Renter renter = Renter("", "", "", "", [], []);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -62,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // appBar: AppBar(
       //   title: Text(widget.title),
       // ),
-      body: SignUpScreen(),
+      body: SignInScreen(),
     );
   }
 }

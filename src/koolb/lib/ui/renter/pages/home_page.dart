@@ -9,6 +9,9 @@ import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/list_accommodations/view_list_accommodations.dart';
 import 'package:koolb/ui/renter/pages/accommodation_detail.dart';
 
+import '../../../data/global_data.dart';
+import '../../../wishlist/wishlist.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 

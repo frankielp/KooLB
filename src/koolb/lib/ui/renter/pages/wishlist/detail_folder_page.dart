@@ -5,6 +5,8 @@ import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/component/list_accommodation_item.dart';
 import 'package:koolb/ui/renter/pages/wishlist/wishlist_page.dart';
 import '../../../../wishlist/wishlist.dart';
+import '../../../list_accommodations/list_accommodation_tile.dart';
+import '../../../list_accommodations/view_list_accommodations.dart';
 
 
 class DetailFolder extends StatefulWidget{
@@ -32,26 +34,26 @@ class _DetailFolder extends State<DetailFolder> {
   Future getUserAccommodationsList() async{
     List<Accommodation> lst = [];
     for (int i = 0; i < this.widget.folder.accommodationIDs.length; ++i){
-      // Future accommodation = FirebaseFirestore.instance
-      //     .collection('accommodation')
-      //     .doc(this.widget.folder.accommodationIDs[i])
-      //     .get();
-      //
-      Future accommodation = Accommodation.getAccommodationById(this.widget.folder.accommodationIDs[i]);
+      Future accommodation = Accommodation.getAccommodationByIdFuture(this.widget.folder.accommodationIDs[i]);
       lst.add(await accommodation);
     }
     setState(() {
       //accommodationItems = List.from(this.widget.folder.accommodationIDs.map((id) => Accommodation.getAccommodationById(id)));
       accommodations = lst;
     });
-    // print("Yessssssssss");
-    // print(this.widget.folder.accommodationIDs);
-    //print(accommodationItems[0].images);
     return lst;
   }
 
   @override
   Widget build(BuildContext context) {
+    final _accommodationCollection =
+    FirebaseFirestore.instance
+        .collection('accommodation')
+        .where('id', whereIn: this.widget.folder.accommodationIDs);
+
+    Stream<QuerySnapshot> _queryListAccommodation =
+    _accommodationCollection.snapshots();
+
     WishlistFolder folder = this.widget.folder;
     return Scaffold(
       appBar: customAppBar(context, folder.folderName.toString()),
@@ -85,13 +87,12 @@ class _DetailFolder extends State<DetailFolder> {
                                         .of(context)
                                         .size
                                         .width * 0.05),
-                                    child: AccommodationItem(
-                                      isFavorite: folder.accommodationIDs
-                                          .contains(accommodation.id),
-                                      data: accommodation,
+                                    child: ViewListAccommodations(
+                                      listAccommodations: _queryListAccommodation,
+                                    )
                                       //image: images,
                                     )
-                                ));
+                                );
                           }
                       )
                   );

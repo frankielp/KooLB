@@ -6,6 +6,7 @@ import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/renter/pages/home_page.dart';
 import 'package:koolb/ui/renter/pages/wishlist/wishlist_page.dart';
 
+import '../data/global_data.dart';
 import '../wishlist/wishlist.dart';
 import 'package:koolb/main.dart';
 
@@ -15,6 +16,7 @@ class AccommodationItem extends StatefulWidget {
   AccommodationItem({super.key, this.data, this.onTap, required this.isFavorite});
 
   final data;
+  final image = [];
   final GestureTapCallback? onTap;
   bool isFavorite;
   //List<String> favoriteInfo;
@@ -34,21 +36,6 @@ class _AccommodationItemState extends State<AccommodationItem> {
       onTap: () {
         setState(
           () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) {
-            //       return DetailsPage(
-            //         description: widget.data.city,
-            //         address: '${widget.data.city} ${widget.data.country}',
-            //         imagePath: widget.image,
-            //         accommodationID: "widget.data.accommodationID",
-            //         isFavorite: false,
-            //         accommodation: widget.data,
-            //       );
-            //     },
-            //   ),
-            // );
           },
         );
       },
@@ -79,21 +66,13 @@ class _AccommodationItemState extends State<AccommodationItem> {
               },
             ),
           ),
-          // decoration: BoxDecoration(
-          //   boxShadow: [
-          //     BoxShadow(
-          //       color:
-          //       Colors.black.withOpacity(0.3),
-          //       blurRadius: 5
-          //     )
-          //   ]
-          // ),
+
         Container(
           margin: EdgeInsets.only(
               top: size.height * 0.035,
               left: size.width * 0.62
           ),
-          child: HeartIcon(this.widget.data, this.widget.isFavorite),
+          //child: HeartIcon(this.widget.data, this.widget.isFavorite),
         ),
         Container(
             width: size.width * 0.5,
@@ -156,7 +135,7 @@ class _AccommodationItemState extends State<AccommodationItem> {
               ),
             )),
       ],
-    );
+    ));
   }
 
   AnimatedContainer buildDot({required int index}) {
@@ -174,10 +153,11 @@ class _AccommodationItemState extends State<AccommodationItem> {
 }
 
 class HeartIcon extends StatefulWidget{
-  var data;
+  var dataID;
   bool isFavorite;
+  String imagePath;
   //List<String> favoriteInfo;
-  HeartIcon(this.data, this.isFavorite);
+  HeartIcon(this.dataID, this.isFavorite, this.imagePath);
 
   @override
   State<StatefulWidget> createState() {
@@ -191,7 +171,7 @@ class _HeartIcon extends State<HeartIcon> {
     return IconButton(
         onPressed: (){
           if (!this.widget.isFavorite){
-            onPressedHeartIcon(context, this.widget.data).then((value) {
+            onPressedHeartIcon(context, this.widget.dataID, this.widget.imagePath).then((value) {
               //if (value != null && value != '') {
                 if (value != null && value != '')
                   setState(() {
@@ -204,7 +184,7 @@ class _HeartIcon extends State<HeartIcon> {
               this.widget.isFavorite = !this.widget.isFavorite;});
           }
           else {
-            onPressedRemoveFavorite(context, this.widget.data);
+            onPressedRemoveFavorite(context, this.widget.dataID);
             setState(() {
               this.widget.isFavorite = !this.widget.isFavorite;
             });
@@ -219,10 +199,10 @@ class _HeartIcon extends State<HeartIcon> {
 
 
 // REMOVE 1 ITEM FAVORITE
-Future onPressedRemoveFavorite(BuildContext context, data) async{
+Future onPressedRemoveFavorite(BuildContext context, dataID) async{
   var snapshot = await FirebaseFirestore.instance
       .collection('wishlist')
-      .doc(renter.wishlistID)
+      .doc(wishlistID)
       .get();
 
   List<WishlistFolder> folders = List.from(snapshot.data()?['folders'].map((doc) => WishlistFolder.fromSnapshot(doc)));
@@ -231,12 +211,12 @@ Future onPressedRemoveFavorite(BuildContext context, data) async{
   WishlistFolder oldFolder = WishlistFolder("", "");
 
   for (int i = 0; i < folders.length; ++i){
-    if (folders[i].accommodationIDs.contains(data.id)) {
+    if (folders[i].accommodationIDs.contains(dataID)) {
       oldFolder = WishlistFolder(folders[i].folderName, folders[i].leadingUrl);
       oldFolder.accommodationIDs = List<String>.from(folders[i].accommodationIDs);
       oldFolder.folderNumber = folders[i].folderNumber;
 
-      folders[i].accommodationIDs.remove(data.id);
+      folders[i].accommodationIDs.remove(dataID);
       newFolder = folders[i];
 
       print(oldFolder.accommodationIDs);
@@ -267,7 +247,7 @@ Future onPressedRemoveFavorite(BuildContext context, data) async{
 
 
 // KHI ẤN VÀO TRÁI TIM
-Future<dynamic> onPressedHeartIcon(BuildContext context, data) async{
+Future<dynamic> onPressedHeartIcon(BuildContext context, dataID, imagePath) async{
   showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -319,7 +299,7 @@ Future<dynamic> onPressedHeartIcon(BuildContext context, data) async{
                       onTap: (){
                         // CODE FUNCTION
                         //onPressedCreateCollection(context, data);
-                        onPressedCreateCollection(context, data).then((value) => Navigator.of(context).pop(value));
+                        onPressedCreateCollection(context, dataID, imagePath).then((value) => Navigator.of(context).pop(value));
                       },
                     ),
                     Divider(
@@ -328,7 +308,7 @@ Future<dynamic> onPressedHeartIcon(BuildContext context, data) async{
                     ),
                     SizedBox(
                       height: 700,
-                      child: FolderListInSheet(data, renter.wishlistID),
+                      child: FolderListInSheet(dataID, wishlistID),
                     )
                   ],
                 ),
@@ -341,12 +321,12 @@ Future<dynamic> onPressedHeartIcon(BuildContext context, data) async{
 
 
 // KHI ẤN TẠO COLLECTION MỚI
-Future<dynamic> onPressedCreateCollection(BuildContext context, data) {
+Future<dynamic> onPressedCreateCollection(BuildContext context, dataID, imagePath) {
   return createAskDialog(context).then((onValue) {
     if (onValue != null && onValue != '') {
-      WishlistFolder folder = WishlistFolder(onValue, data.images[0]);
+      WishlistFolder folder = WishlistFolder(onValue, imagePath);
       WishlistFolder.countFolder += 1;
-      folder.addFolderToDatabase(context, data.id, renter);
+      folder.addFolderToDatabase(context, dataID);
     }
     // else if (onValue == null){
     //   Navigator.pop(context);
@@ -394,14 +374,14 @@ Future<dynamic> createAskDialog(BuildContext context){
 
 // HIỆN FOLDER LITS TRONG BOTTOM SHEET
 class FolderListInSheet extends FolderList {
-  var accommodationItem;
+  var dataID;
   var wishlistID;
 
-  FolderListInSheet(this.accommodationItem, this.wishlistID);
+  FolderListInSheet(this.dataID, this.wishlistID);
 
   @override
   onTapFolder(WishlistFolder folder, BuildContext context) {
-    folder.addItemToFolderInDatabase(context, folder, accommodationItem.id, wishlistID);
+    folder.addItemToFolderInDatabase(context, folder, dataID, wishlistID);
 
     // CLOSE BOTTOM SHEET
     Navigator.pop(context);

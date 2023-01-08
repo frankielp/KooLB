@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/main.dart';
 
+import '../data/global_data.dart';
 import '../user/renter.dart';
 
 class WishlistFolder{
@@ -26,29 +27,28 @@ class WishlistFolder{
 
 
   // THÊM FOLDER VỚI ITEM VÀO DATABASE
-  Future<void> addFolderToDatabase(BuildContext context, String accommodationID, Renter renter) {
+  Future<void> addFolderToDatabase(BuildContext context, String accommodationID) {
     accommodationIDs.add(accommodationID);
-    if (renter.wishlistID != '') {
-      return FirebaseFirestore.instance
-          .collection('wishlist')
-          .doc(renter.wishlistID)
-          .update({'folders': FieldValue.arrayUnion([this.toJson()])})
-          .then((value) {
-            showSnackBar(context, "A new collection added!");
-            print("Wishlist updated");
-      });
-    }
     return FirebaseFirestore.instance
         .collection('wishlist')
-        .add(<String, dynamic>{
-          'folders': FieldValue.arrayUnion(convertListFolderToJson([this]))
-    })
-        .then((value){
-          renter.wishlistID = value.id;
+        .doc(wishlistID)
+        .update({'folders': FieldValue.arrayUnion([this.toJson()])})
+        .then((value) {
           showSnackBar(context, "A new collection added!");
-          print("New wishlist added");
-    })
-        .catchError((onError) => print("Failed: $onError"));
+          print("Wishlist updated");
+    });
+
+    // return FirebaseFirestore.instance
+    //     .collection('wishlist')
+    //     .add(<String, dynamic>{
+    //       'folders': FieldValue.arrayUnion(convertListFolderToJson([this]))
+    // })
+    //     .then((value){
+    //       //wishlistID = value.id;
+    //       showSnackBar(context, "A new collection added!");
+    //       print("New wishlist added");
+    // })
+    //     .catchError((onError) => print("Failed: $onError"));
   }
 
   // Lấy 1 folder từ map
@@ -123,7 +123,7 @@ void showSnackBar(BuildContext context, String text){
           color: Colors.white,
           fontSize: 30
         ),),
-        duration: Duration(seconds: 10),
+        duration: Duration(seconds: 5),
       )
   );
 }

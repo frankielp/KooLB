@@ -6,7 +6,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:koolb/accommodation/category.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/list_accommodations/list_accommodation_tile.dart';
+import 'package:koolb/ui/renter/pages/booking/basic_book.dart';
 import 'package:koolb/util/helper.dart';
+
+import '../../data/global_data.dart';
+import '../../wishlist/wishlist.dart';
 
 class ViewListAccommodations extends StatefulWidget {
   Stream<QuerySnapshot> listAccommodations;
@@ -17,6 +21,33 @@ class ViewListAccommodations extends StatefulWidget {
 }
 
 class _ViewListAccommodationsState extends State<ViewListAccommodations> {
+  // WISHLIST
+  List<String> favoriteAccommodationIDs = [];
+
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+    getUserFavoriteListIDs();
+  }
+
+  Future getUserFavoriteListIDs() async {
+    List<String> tmp = [];
+    var data = await FirebaseFirestore.instance
+        .collection('wishlist')
+        .doc(wishlistID)
+        .get();
+
+    List<WishlistFolder> folders = List.from(data.data()?['folders'].map((doc) => WishlistFolder.fromSnapshot(doc)));
+
+    for (int i = 0; i < folders.length; ++i){
+      tmp = List.from(tmp)..addAll(folders[i].accommodationIDs);
+    }
+    setState(() {
+      favoriteAccommodationIDs = tmp;
+      //print(favoriteAccommodationIDs);
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -35,7 +66,7 @@ class _ViewListAccommodationsState extends State<ViewListAccommodations> {
                   city: data['city'],
                   address: data['address'],
                   name: data['name'],
-                  isFavorite: true,
+                  isFavorite: favoriteAccommodationIDs.contains(accommodationID),
                   price: data['price'] * 1.0,
                   rating: data['rating'] * 1.0,
                   category: intArrayToListCategory(data['category']),

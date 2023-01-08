@@ -7,6 +7,7 @@ import '../component/already_have_account_check.dart';
 import '../component/or_divider.dart';
 import '../component/row_of_social_icons.dart';
 import '../component/text_field_container.dart';
+import '../data/global_data.dart';
 import '../decoration/color.dart';
 import '../component/fire_auth.dart';
 import '../component/validator.dart';
@@ -322,14 +323,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
 
     final id = userRef.id;
-    final roleId = role == 'Renter'
-        ? await _createRenterUser(email, userName)
-        : await _createHostUser(email, userName);
+    final roleId = role;
+    if (role == 'Renter'){
+      await _createRenterUser(email, userName);
+      await _addWishListForRenter(id);
+
+      print("userID: $id");
+    }
+    else {
+      await _createHostUser(email, userName);
+    }
 
     userRef.update({
       'id': id,
       'roleId': roleId,
     });
+  }
+
+  Future<void> _addWishListForRenter(userID) async{
+    final wishlistRef = await FirebaseFirestore.instance
+        .collection('wishlist')
+        .add({});
+
+    final wishlistID = wishlistRef.id;
+
+    await FirebaseFirestore.instance
+        .collection('user')
+        .doc(userID)
+        .update({'wishlistID': wishlistID});
+
+    print(wishlistID);
   }
 
   Future<String> _createRenterUser(String email, String userName) async {
@@ -340,6 +363,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       'id': '',
       'name': '',
       'username': userName,
+      'wishlistID': '',
     });
 
     final id = renterRef.id;

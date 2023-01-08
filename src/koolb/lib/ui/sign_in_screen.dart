@@ -221,6 +221,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
         switch (role) {
           case 'Renter':
+            wishlistID = user.get('wishlistID');
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
