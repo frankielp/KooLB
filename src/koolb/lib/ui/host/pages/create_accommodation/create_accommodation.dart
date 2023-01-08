@@ -98,8 +98,12 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
       _reviewPages(),
     ];
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Create Accommodation'),
+        centerTitle: true,
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -131,8 +135,9 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   }
 
   Widget _rowButton() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -142,7 +147,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
             style: TextButton.styleFrom(
               backgroundColor:
                   _currentPage == 0 ? Colors.grey.shade500 : Colors.white,
-              padding: const EdgeInsets.all(18.0),
+              padding: const EdgeInsets.all(12.0),
               side: const BorderSide(color: Colors.black, width: 1),
               textStyle: const TextStyle(
                 fontSize: 20,
@@ -166,7 +171,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                     ? _addAccommodationToFirebase
                     : _moveNextPage,
             style: TextButton.styleFrom(
-              padding: const EdgeInsets.all(18.0),
+              padding: const EdgeInsets.all(12.0),
               backgroundColor: _verifyPage() || _currentPage > pages.length - 1
                   ? Colors.grey.shade300
                   : Colors.black,
@@ -200,26 +205,30 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   }
 
   Widget _selectingCategory() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Which of these best describes your place?',
-          style: _defaultHeadingStyle,
-        ),
-        _defaultDivider(),
-        _cardViewDescription(Icons.apartment, 'Apartment', Category.Apartment),
-        _cardViewDescription(Icons.hotel, 'Hotel', Category.Hotel),
-        _cardViewDescription(
-            Icons.house_siding_outlined, 'Hostel', Category.Hostel),
-        _cardViewDescription(Icons.house, 'Homestay', Category.Homestay),
-        _cardViewDescription(Icons.people, 'Shared Home', Category.SharedHome),
-        _cardViewDescription(
-            Icons.location_city, 'Near City', Category.NearCity),
-        _cardViewDescription(
-            Icons.bedroom_parent, 'Double Room', Category.DoubleRoom),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Which of these best describes your place?',
+            style: _defaultHeadingStyle,
+          ),
+          _defaultDivider(),
+          _cardViewDescription(
+              Icons.apartment, 'Apartment', Category.Apartment),
+          _cardViewDescription(Icons.hotel, 'Hotel', Category.Hotel),
+          _cardViewDescription(
+              Icons.house_siding_outlined, 'Hostel', Category.Hostel),
+          _cardViewDescription(Icons.house, 'Homestay', Category.Homestay),
+          _cardViewDescription(
+              Icons.people, 'Shared Home', Category.SharedHome),
+          _cardViewDescription(
+              Icons.location_city, 'Near City', Category.NearCity),
+          _cardViewDescription(
+              Icons.bedroom_parent, 'Double Room', Category.DoubleRoom),
+        ],
+      ),
     );
   }
 
@@ -277,18 +286,20 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   }
 
   Widget _selectingLocation() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Where's your place located?",
-          style: _defaultHeadingStyle,
-        ),
-        _defaultDivider(),
-        _selectingCountryAndCity(),
-        _addAddress(),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Where's your place located?",
+            style: _defaultHeadingStyle,
+          ),
+          _defaultDivider(),
+          _selectingCountryAndCity(),
+          _addAddress(),
+        ],
+      ),
     );
   }
 
@@ -375,159 +386,161 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   }
 
   Widget _addBasics() {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Share some basics about your place',
-            style: _defaultHeadingStyle,
-          ),
-          _defaultDivider(),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Rooms',
-                  style: TextStyle(fontSize: 18),
-                ),
-                // guests
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _rooms = max(1, _rooms - 1);
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.remove_circle,
-                          color: Colors.black,
-                        )),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      _rooms > 5 ? '5+' : '$_rooms',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _rooms = min(6, _rooms + 1);
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.add_circle,
-                          color: Colors.black,
-                        ))
-                  ],
-                )
-              ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Share some basics about your place',
+              style: _defaultHeadingStyle,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Guests',
-                  style: TextStyle(fontSize: 18),
-                ),
-                // guests
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _guests = max(1, _guests - 1);
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.remove_circle,
-                          color: Colors.black,
-                        )),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      _guests >= 17 ? '16+' : '$_guests',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _guests = min(17, _guests + 1);
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.add_circle,
-                          color: Colors.black,
-                        ))
-                  ],
-                )
-              ],
+            _defaultDivider(),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Rooms',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  // guests
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _rooms = max(1, _rooms - 1);
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.remove_circle,
+                            color: Colors.black,
+                          )),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        _rooms > 5 ? '5+' : '$_rooms',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _rooms = min(6, _rooms + 1);
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.add_circle,
+                            color: Colors.black,
+                          ))
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Children',
-                  style: TextStyle(fontSize: 18),
-                ),
-                // children
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _children = max(0, _children - 1);
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.remove_circle,
-                          color: Colors.black,
-                        )),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      _children >= 17 ? '16+' : '$_children',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _children = min(17, _children + 1);
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.add_circle,
-                          color: Colors.black,
-                        ))
-                  ],
-                )
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Guests',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  // guests
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _guests = max(1, _guests - 1);
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.remove_circle,
+                            color: Colors.black,
+                          )),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        _guests >= 17 ? '16+' : '$_guests',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _guests = min(17, _guests + 1);
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.add_circle,
+                            color: Colors.black,
+                          ))
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Children',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  // children
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _children = max(0, _children - 1);
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.remove_circle,
+                            color: Colors.black,
+                          )),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        _children >= 17 ? '16+' : '$_children',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _children = min(17, _children + 1);
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.add_circle,
+                            color: Colors.black,
+                          ))
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -614,88 +627,90 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
     // print('Outside\n');
     // print(_imageFile?.path);
     // print(_imageFile == null ? 'No image selected yet' : _webImageFile);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Add some photos for your tiny home',
-          style: _defaultHeadingStyle,
-        ),
-        _defaultDivider(),
-        Expanded(
-          child: Center(
-            child: Container(
-              child: _imageFile == null
-                  ? const Text('Select your image')
-                  : Container(
-                      child: kIsWeb
-                          ? Image.memory(
-                              _webImageFile,
-                              fit: BoxFit.fill,
-                            )
-                          : Image.file(_imageFile!, fit: BoxFit.fill),
-                    ),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Add some photos for your tiny home',
+            style: _defaultHeadingStyle,
+          ),
+          _defaultDivider(),
+          Expanded(
+            child: Center(
+              child: Container(
+                child: _imageFile == null
+                    ? const Text('Select your image')
+                    : Container(
+                        child: kIsWeb
+                            ? Image.memory(
+                                _webImageFile,
+                                fit: BoxFit.fill,
+                              )
+                            : Image.file(_imageFile!, fit: BoxFit.fill),
+                      ),
+              ),
             ),
           ),
-        ),
-        Center(
-          child: TextButton(
-            onPressed: kIsWeb
-                ? () async {
-                    final image = ImagePicker();
-                    XFile? tmp =
-                        await image.pickImage(source: ImageSource.gallery);
-                    var f = await tmp?.readAsBytes();
-                    setState(() {
-                      _webImageFile = f!;
-                      _imageFile = File('a');
-                      // print('Inside\n');
-                      // print(_imageFile?.path);
-                      // print(_imageFile == null
-                      //     ? 'No image selected yet'
-                      //     : _webImageFile);
-                    });
-                  }
-                : () async {
-                    XFile? pickedFile = await ImagePicker()
-                        .pickImage(source: ImageSource.gallery);
-                    setState(() {
-                      if (pickedFile != null) {
-                        _imageFile = File(pickedFile.path);
-                      }
-                    });
-                  },
-            // onPressed: () async {
-            //   if (kIsWeb) {
-            //
-            //   } else {
-            //
-            //   }
-            // },
-            child: Text(_imageFile == null
-                ? 'Select from library'
-                : 'Replace from library'),
-          ),
-        ),
-        if (!kIsWeb)
           Center(
             child: TextButton(
-              onPressed: () async {
-                XFile? pickedFile =
-                    await ImagePicker().pickImage(source: ImageSource.camera);
-                setState(() {
-                  if (pickedFile != null) {
-                    _imageFile = File(pickedFile.path);
-                  }
-                });
-              },
+              onPressed: kIsWeb
+                  ? () async {
+                      final image = ImagePicker();
+                      XFile? tmp =
+                          await image.pickImage(source: ImageSource.gallery);
+                      var f = await tmp?.readAsBytes();
+                      setState(() {
+                        _webImageFile = f!;
+                        _imageFile = File('a');
+                        // print('Inside\n');
+                        // print(_imageFile?.path);
+                        // print(_imageFile == null
+                        //     ? 'No image selected yet'
+                        //     : _webImageFile);
+                      });
+                    }
+                  : () async {
+                      XFile? pickedFile = await ImagePicker()
+                          .pickImage(source: ImageSource.gallery);
+                      setState(() {
+                        if (pickedFile != null) {
+                          _imageFile = File(pickedFile.path);
+                        }
+                      });
+                    },
+              // onPressed: () async {
+              //   if (kIsWeb) {
+              //
+              //   } else {
+              //
+              //   }
+              // },
               child: Text(_imageFile == null
-                  ? 'Select from camera'
-                  : 'Replace from camera'),
+                  ? 'Select from library'
+                  : 'Replace from library'),
             ),
           ),
-      ],
+          if (!kIsWeb)
+            Center(
+              child: TextButton(
+                onPressed: () async {
+                  XFile? pickedFile =
+                      await ImagePicker().pickImage(source: ImageSource.camera);
+                  setState(() {
+                    if (pickedFile != null) {
+                      _imageFile = File(pickedFile.path);
+                    }
+                  });
+                },
+                child: Text(_imageFile == null
+                    ? 'Select from camera'
+                    : 'Replace from camera'),
+              ),
+            ),
+        ],
+      ),
     );
   }
 
@@ -751,114 +766,116 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
   }
 
   Widget _addPrice() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Text(
-          'Now, set your price',
-          style: _defaultHeadingStyle,
-        ),
-        _defaultDivider(),
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Material(
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      //button set price
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          IconButton(
-                            splashRadius: 20.0,
-                            disabledColor: Colors.grey.shade400,
-                            color: Colors.black,
-                            onPressed: _price <= _minPrice
-                                ? null
-                                : () {
-                                    setState(() {
-                                      _price =
-                                          double.parse(_priceController.text);
-                                      _price = max(_minPrice, _price - 1);
-                                      _priceController.text = '$_price';
-                                    });
-                                  },
-                            icon: const Icon(
-                              Icons.remove_circle,
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              IntrinsicWidth(
-                                child: TextField(
-                                  onChanged: (value) {
-                                    if (value.isNotEmpty) {
-                                      setState(() {
-                                        _price = double.parse(value);
-                                      });
-                                    }
-                                  },
-                                  controller: _priceController,
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                    signed: false,
-                                    decimal: true,
-                                  ),
-                                  decoration:
-                                      const InputDecoration(isDense: true),
-                                  style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ),
-                              const Text('\$'),
-                            ],
-                          ),
-                          IconButton(
-                            splashRadius: 20.0,
-                            onPressed: () {
-                              setState(() {
-                                _price = double.parse(_priceController.text);
-                                _price += 1;
-                                _priceController.text = '$_price';
-                              });
-                            },
-                            icon: const Icon(
-                              Icons.add_circle,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(
+            'Now, set your price',
+            style: _defaultHeadingStyle,
+          ),
+          _defaultDivider(),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Material(
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        //button set price
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            IconButton(
+                              splashRadius: 20.0,
+                              disabledColor: Colors.grey.shade400,
                               color: Colors.black,
+                              onPressed: _price <= _minPrice
+                                  ? null
+                                  : () {
+                                      setState(() {
+                                        _price =
+                                            double.parse(_priceController.text);
+                                        _price = max(_minPrice, _price - 1);
+                                        _priceController.text = '$_price';
+                                      });
+                                    },
+                              icon: const Icon(
+                                Icons.remove_circle,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5.0,
-                      ),
-                      const Center(
-                        child: Text(
-                          'per night',
-                          style: TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.w400),
+                            Row(
+                              children: [
+                                IntrinsicWidth(
+                                  child: TextField(
+                                    onChanged: (value) {
+                                      if (value.isNotEmpty) {
+                                        setState(() {
+                                          _price = double.parse(value);
+                                        });
+                                      }
+                                    },
+                                    controller: _priceController,
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                      signed: false,
+                                      decimal: true,
+                                    ),
+                                    decoration:
+                                        const InputDecoration(isDense: true),
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                const Text('\$'),
+                              ],
+                            ),
+                            IconButton(
+                              splashRadius: 20.0,
+                              onPressed: () {
+                                setState(() {
+                                  _price = double.parse(_priceController.text);
+                                  _price += 1;
+                                  _priceController.text = '$_price';
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.add_circle,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
-                      )
-                    ],
+                        const SizedBox(
+                          height: 5.0,
+                        ),
+                        const Center(
+                          child: Text(
+                            'per night',
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.w400),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -974,6 +991,7 @@ class _CreateAccommodationState extends State<CreateAccommodation> {
                         child: RichText(
                           text: TextSpan(
                             style: const TextStyle(
+                              color: Colors.black,
                               fontSize: 14,
                             ),
                             children: <TextSpan>[

@@ -15,7 +15,7 @@ class HostPagesNavigator extends StatefulWidget {
 class _HostPagesNavigatorState extends State<HostPagesNavigator> {
   List pages = [
     const ReservationPage(),
-    const MenuPage(),
+    MenuPage(),
     ChatPage(userName: name, userID: id),
     const ProfilePage(),
     // const CalendarPage(),
