@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:koolb/data/global_data.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/ui/chat/chat_tile.dart';
@@ -56,7 +57,7 @@ class _ChatPageState extends State<ChatPage> {
               itemCount: snapshot.data['chat'].length,
               itemBuilder: (context, index) {
                 return ChatTile(
-                  userId: widget.userID,
+                  userId: id,
                   chatId: snapshot.data['chat'][index],
                 );
               },

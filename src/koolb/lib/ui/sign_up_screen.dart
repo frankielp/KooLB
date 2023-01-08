@@ -347,7 +347,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final wishlistID = wishlistRef.id;
 
     await FirebaseFirestore.instance
-        .collection('user')
+        .collection('renter')
         .doc(userID)
         .update({'wishlistID': wishlistID});
 
@@ -369,6 +369,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     renterRef.update({
       'id': id,
     });
+    _addWishListForRenter(id);
 
     return id;
   }

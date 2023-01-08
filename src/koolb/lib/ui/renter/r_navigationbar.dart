@@ -6,6 +6,7 @@ import 'package:koolb/data/global_data.dart';
 import 'package:koolb/ui/chat/chat_page.dart';
 import 'package:koolb/ui/renter/pages/google_maps.dart';
 import 'package:koolb/ui/renter/pages/home_page.dart';
+import 'package:koolb/ui/renter/pages/profile_page.dart';
 import 'package:koolb/ui/renter/pages/setting_page.dart';
 import 'package:koolb/ui/renter/pages/wishlist/wishlist_page.dart';
 import 'package:koolb/user/renter.dart';
@@ -22,7 +23,7 @@ class _RenterPagesNavigationState extends State<RenterPagesNavigation> {
     const HomePage(),
     const WishlistPage(),
     ChatPage(userName: name, userID: id),
-    const SettingPage(),
+    const ProfilePage(),
   ];
 
   int currentPage = 0;

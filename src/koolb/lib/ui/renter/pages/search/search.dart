@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:koolb/accommodation/accommodation.dart';
+import 'package:koolb/data/countries_and_cities.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/renter/pages/search/result_search.dart';
 import 'package:koolb/util/helper.dart';
@@ -46,23 +47,100 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     //safe screen
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
-        horizontal: 12.0,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Search Accommodation'),
+        centerTitle: true,
       ),
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              // location
-              _customDefaultDecoratedContainer(
-                Column(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 8.0,
+          horizontal: 12.0,
+        ),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                // location
+                _customDefaultDecoratedContainer(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Where to go?',
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      defaultDivider,
+                      Row(
+                        children: [
+                          //Country dropdown
+                          Expanded(
+                            child: DropdownSearch<String>(
+                              popupProps: const PopupProps.menu(
+                                showSearchBox: true,
+                                showSelectedItems: true,
+                              ),
+                              dropdownDecoratorProps:
+                                  const DropDownDecoratorProps(
+                                dropdownSearchDecoration: InputDecoration(
+                                  hintText: "Select a Country",
+                                  labelText: "Country",
+                                ),
+                              ),
+                              selectedItem: countryValue,
+                              items: countries,
+                              onChanged: ((String? value) {
+                                setState(() {
+                                  cities = countriesAndCities[value]!;
+                                  cityValue = null;
+                                  countrySelected = true;
+                                  countryValue = value!;
+                                  print(
+                                      "Selected country: $countryValue\nCountry selected: $countrySelected\nCities: $cities");
+                                });
+                              }),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 50.0,
+                          ),
+                          Expanded(
+                            child: DropdownSearch<String>(
+                              popupProps: const PopupProps.menu(
+                                showSearchBox: true,
+                                showSelectedItems: true,
+                              ),
+                              selectedItem: cityValue,
+                              dropdownDecoratorProps:
+                                  const DropDownDecoratorProps(
+                                dropdownSearchDecoration: InputDecoration(
+                                  hintText: "Select a Cty",
+                                  labelText: "City",
+                                ),
+                              ),
+                              items: cities,
+                              onChanged: ((String? value) {
+                                setState(() {
+                                  cityValue = value!;
+                                });
+                              }),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                //when
+                _customDefaultDecoratedContainer(Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Where to go?',
+                      'You are here',
                       style: Theme.of(context).textTheme.headline5,
                     ),
                     const SizedBox(
@@ -71,203 +149,91 @@ class _SearchState extends State<Search> {
                     defaultDivider,
                     Row(
                       children: [
-                        //Country dropdown
-                        Expanded(
-                          child: DropdownSearch<String>(
-                            popupProps: const PopupProps.menu(
-                              showSearchBox: true,
-                              showSelectedItems: true,
-                            ),
-                            dropdownDecoratorProps:
-                                const DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
-                                hintText: "Select a Country",
-                                labelText: "Country",
-                              ),
-                            ),
-                            selectedItem: countryValue,
-                            items: countries,
-                            onChanged: ((String? value) {
+                        const Text('From'),
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: dateButtonColor),
+                          onPressed: () async {
+                            DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(DateTime.now().year),
+                                lastDate: DateTime(DateTime.now().year + 5));
+                            if (picked != null && picked != start) {
                               setState(() {
-                                cities = countriesAndCities[value]!;
-                                cityValue = null;
-                                countrySelected = true;
-                                countryValue = value!;
-                                print(
-                                    "Selected country: $countryValue\nCountry selected: $countrySelected\nCities: $cities");
+                                start = picked;
+                                if (start.isAfter(end)) {
+                                  end = start;
+                                }
                               });
-                            }),
-                          ),
+                            }
+                          },
+                          child: Text(dateTimeToString(start)),
                         ),
                         const SizedBox(
-                          width: 50.0,
+                          width: 15.0,
                         ),
-                        Expanded(
-                          child: DropdownSearch<String>(
-                            popupProps: const PopupProps.menu(
-                              showSearchBox: true,
-                              showSelectedItems: true,
-                            ),
-                            selectedItem: cityValue,
-                            dropdownDecoratorProps:
-                                const DropDownDecoratorProps(
-                              dropdownSearchDecoration: InputDecoration(
-                                hintText: "Select a Cty",
-                                labelText: "City",
-                              ),
-                            ),
-                            items: cities,
-                            onChanged: ((String? value) {
-                              setState(() {
-                                cityValue = value!;
-                              });
-                            }),
-                          ),
+                        const Text('to'),
+                        const SizedBox(
+                          width: 15.0,
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              //when
-              _customDefaultDecoratedContainer(Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'You are here',
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  defaultDivider,
-                  Row(
-                    children: [
-                      const Text('From'),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: dateButtonColor),
-                        onPressed: () async {
-                          DateTime? picked = await showDatePicker(
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: dateButtonColor),
+                          onPressed: () async {
+                            DateTime? picked = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime(DateTime.now().year),
-                              lastDate: DateTime(DateTime.now().year + 5));
-                          if (picked != null && picked != start) {
-                            setState(() {
-                              start = picked;
-                              if (start.isAfter(end)) {
-                                end = start;
-                              }
-                            });
-                          }
-                        },
-                        child: Text(dateTimeToString(start)),
-                      ),
-                      const SizedBox(
-                        width: 15.0,
-                      ),
-                      const Text('to'),
-                      const SizedBox(
-                        width: 15.0,
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: dateButtonColor),
-                        onPressed: () async {
-                          DateTime? picked = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(DateTime.now().year),
-                            lastDate: DateTime(DateTime.now().year + 5),
-                          );
-                          if (picked != null && picked != end) {
-                            end = picked;
-                            setState(() {
-                              if (end.isAfter(start)) {
-                                dateButtonColor = BlueJean;
-                              } else {
-                                dateButtonColor = actionColor;
-                                const snackBar = SnackBar(
-                                  content: Text(
-                                      'The end day must be after the start day!'),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              }
-                            });
-                          }
-                        },
-                        child: Text(dateTimeToString(end)),
-                      )
-                    ],
-                  )
-                ],
-              )),
-              //room
-              _customDefaultDecoratedContainer(Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'You need',
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  const SizedBox(
-                    height: 0.5,
-                  ),
-                  defaultDivider,
-                  const SizedBox(
-                    height: 0.5,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: TextFormField(
-                          controller: _numRoomsController,
-                          maxLength: 6,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: const TextInputType.numberWithOptions(
-                            signed: false,
-                            decimal: false,
-                          ),
-                          validator: (value) {
-                            return _validator(value, 1);
+                              lastDate: DateTime(DateTime.now().year + 5),
+                            );
+                            if (picked != null && picked != end) {
+                              end = picked;
+                              setState(() {
+                                if (end.isAfter(start)) {
+                                  dateButtonColor = BlueJean;
+                                } else {
+                                  dateButtonColor = actionColor;
+                                  const snackBar = SnackBar(
+                                    content: Text(
+                                        'The end day must be after the start day!'),
+                                  );
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                }
+                              });
+                            }
                           },
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5.0,
-                      ),
-                      const Text('rooms'),
-                    ],
-                  )
-                ],
-              )),
-              //Adult
-              _customDefaultDecoratedContainer(Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'You have',
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  const SizedBox(
-                    height: 0.5,
-                  ),
-                  defaultDivider,
-                  const SizedBox(
-                    height: 0.5,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: TextFormField(
-                            controller: _numAdultsController,
+                          child: Text(dateTimeToString(end)),
+                        )
+                      ],
+                    )
+                  ],
+                )),
+                //room
+                _customDefaultDecoratedContainer(Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'You need',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                    const SizedBox(
+                      height: 0.5,
+                    ),
+                    defaultDivider,
+                    const SizedBox(
+                      height: 0.5,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: TextFormField(
+                            controller: _numRoomsController,
                             maxLength: 6,
                             textInputAction: TextInputAction.next,
                             keyboardType: const TextInputType.numberWithOptions(
@@ -276,78 +242,120 @@ class _SearchState extends State<Search> {
                             ),
                             validator: (value) {
                               return _validator(value, 1);
-                            }),
-                      ),
-                      const SizedBox(
-                        width: 5.0,
-                      ),
-                      const Text('adults'),
-                    ],
-                  )
-                ],
-              )),
-              //children
-              _customDefaultDecoratedContainer(Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'And you go with',
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  const SizedBox(
-                    height: 0.5,
-                  ),
-                  defaultDivider,
-                  const SizedBox(
-                    height: 0.5,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: TextFormField(
-                          maxLength: 6,
-                          controller: _numChildrenController,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: const TextInputType.numberWithOptions(
-                            signed: false,
-                            decimal: false,
+                            },
                           ),
-                          validator: (value) {
-                            return _validator(value, 0);
-                          },
                         ),
-                      ),
-                      const SizedBox(
-                        width: 5.0,
-                      ),
-                      const Text('children'),
-                    ],
-                  )
-                ],
-              )),
-              //search
-              ElevatedButton(
-                child: const Text('Search'),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    final snackBar = SnackBar(
-                        content: Text(
-                            'Num rooms: ${_numRoomsController.text}, num adults: ${_numAdultsController.text}, num children: ${_numChildrenController.text}'));
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  }
-                  _numRoom = int.parse(_numRoomsController.text);
-                  _numAdults = int.parse(_numAdultsController.text);
-                  _numChildren = int.parse(_numChildrenController.text);
-                  List<Accommodation> result = await _getAccommodation();
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ResultSearch(resultSearch: result)));
-                },
-              )
-            ],
+                        const SizedBox(
+                          width: 5.0,
+                        ),
+                        const Text('rooms'),
+                      ],
+                    )
+                  ],
+                )),
+                //Adult
+                _customDefaultDecoratedContainer(Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'You have',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                    const SizedBox(
+                      height: 0.5,
+                    ),
+                    defaultDivider,
+                    const SizedBox(
+                      height: 0.5,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: TextFormField(
+                              controller: _numAdultsController,
+                              maxLength: 6,
+                              textInputAction: TextInputAction.next,
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                signed: false,
+                                decimal: false,
+                              ),
+                              validator: (value) {
+                                return _validator(value, 1);
+                              }),
+                        ),
+                        const SizedBox(
+                          width: 5.0,
+                        ),
+                        const Text('adults'),
+                      ],
+                    )
+                  ],
+                )),
+                //children
+                _customDefaultDecoratedContainer(Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'And you go with',
+                      style: Theme.of(context).textTheme.headline5,
+                    ),
+                    const SizedBox(
+                      height: 0.5,
+                    ),
+                    defaultDivider,
+                    const SizedBox(
+                      height: 0.5,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: TextFormField(
+                            maxLength: 6,
+                            controller: _numChildrenController,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: const TextInputType.numberWithOptions(
+                              signed: false,
+                              decimal: false,
+                            ),
+                            validator: (value) {
+                              return _validator(value, 0);
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5.0,
+                        ),
+                        const Text('children'),
+                      ],
+                    )
+                  ],
+                )),
+                //search
+                ElevatedButton(
+                  child: const Text('Search'),
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      final snackBar = SnackBar(
+                          content: Text(
+                              'Num rooms: ${_numRoomsController.text}, num adults: ${_numAdultsController.text}, num children: ${_numChildrenController.text}'));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                    _numRoom = int.parse(_numRoomsController.text);
+                    _numAdults = int.parse(_numAdultsController.text);
+                    _numChildren = int.parse(_numChildrenController.text);
+                    List<Accommodation> result = await _getAccommodation();
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ResultSearch(resultSearch: result)));
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),

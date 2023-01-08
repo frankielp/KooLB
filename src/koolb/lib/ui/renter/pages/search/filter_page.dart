@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:koolb/accommodation/accommodation.dart';
 import 'package:koolb/accommodation/category.dart';
@@ -187,7 +185,7 @@ class _FilterPageState extends State<FilterPage> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _categoryChoice(Icons.cottage, 'Homestead', Category.Homestead),
+              _categoryChoice(Icons.cottage, 'Homestead', Category.Homestay),
               _categoryChoice(Icons.breakfast_dining, 'Breakfast Included',
                   Category.BreakfastIncluded),
             ],

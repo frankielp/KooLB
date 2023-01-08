@@ -25,7 +25,7 @@ class _ViewListAccommodationsState extends State<ViewListAccommodations> {
   List<String> favoriteAccommodationIDs = [];
 
   @override
-  void didChangeDependencies(){
+  void didChangeDependencies() {
     super.didChangeDependencies();
     getUserFavoriteListIDs();
   }
@@ -37,9 +37,10 @@ class _ViewListAccommodationsState extends State<ViewListAccommodations> {
         .doc(wishlistID)
         .get();
 
-    List<WishlistFolder> folders = List.from(data.data()?['folders'].map((doc) => WishlistFolder.fromSnapshot(doc)));
+    List<WishlistFolder> folders = List.from(
+        data.data()?['folders'].map((doc) => WishlistFolder.fromSnapshot(doc)));
 
-    for (int i = 0; i < folders.length; ++i){
+    for (int i = 0; i < folders.length; ++i) {
       tmp = List.from(tmp)..addAll(folders[i].accommodationIDs);
     }
     setState(() {
@@ -47,7 +48,7 @@ class _ViewListAccommodationsState extends State<ViewListAccommodations> {
       //print(favoriteAccommodationIDs);
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
@@ -59,14 +60,18 @@ class _ViewListAccommodationsState extends State<ViewListAccommodations> {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
                 final data = snapshot.data!.docs[index];
+                debugPrint(data.toString());
                 return ListAccommodationTile(
+                  userId: data['userId'],
+                  hostName: data['hostName'],
                   accommodationID: data['id'],
                   imagePath: data['imagePath'],
                   country: data['country'],
                   city: data['city'],
                   address: data['address'],
                   name: data['name'],
-                  isFavorite: favoriteAccommodationIDs.contains(accommodationID),
+                  isFavorite:
+                      favoriteAccommodationIDs.contains(accommodationID),
                   price: data['price'] * 1.0,
                   rating: data['rating'] * 1.0,
                   category: intArrayToListCategory(data['category']),

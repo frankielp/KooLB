@@ -16,6 +16,28 @@ class Chat {
   }
 
   static Future<String> newChat(String user1Id, String user2Id) async {
+    await _chatCollection
+        .where('user1', isEqualTo: user1Id)
+        .where('user2', isEqualTo: user2Id)
+        .get()
+        .then((QuerySnapshot value) {
+      if (value.size > 0) {
+        final ref = value.docs.first;
+        return ref.id;
+      }
+    });
+
+    await _chatCollection
+        .where('user1', isEqualTo: user2Id)
+        .where('user2', isEqualTo: user1Id)
+        .get()
+        .then((QuerySnapshot value) {
+      if (value.size > 0) {
+        final ref = value.docs.first;
+        return ref.id;
+      }
+    });
+    
     final newChatRef = await _chatCollection.add({
       'id': '',
       'recentMessage': '',

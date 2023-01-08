@@ -30,37 +30,43 @@ class _ResultSearchState extends State<ResultSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 8,
-          child: ListView.builder(
-            padding: const EdgeInsets.all(10.0),
-            itemCount: show.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              final item = show[index];
-              return Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Name: ${item.name}'),
-                    Text('Price: ${item.price}'),
-                    Text('Rating: ${item.rating}'),
-                  ],
-                ),
-              );
-            },
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Result'),
+        centerTitle: true,
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 8,
+            child: ListView.builder(
+              padding: const EdgeInsets.all(10.0),
+              itemCount: show.length,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                final item = show[index];
+                return Card(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Name: ${item.name}'),
+                      Text('Price: ${item.price}'),
+                      Text('Rating: ${item.rating}'),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-        TextButton(
-          onPressed: () {
-            _getDataFromFilter();
-          },
-          child: Text('Filter'),
-        ),
-      ],
+          TextButton(
+            onPressed: () {
+              _getDataFromFilter();
+            },
+            child: Text('Filter'),
+          ),
+        ],
+      ),
     );
   }
 

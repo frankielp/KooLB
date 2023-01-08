@@ -25,6 +25,8 @@ class ListAccommodationTile extends StatefulWidget {
   final String country;
   final String city;
   final List<Category> category;
+  final String userId;
+  final String hostName;
   bool isFavorite;
   ListAccommodationTile({
     super.key,
@@ -42,6 +44,8 @@ class ListAccommodationTile extends StatefulWidget {
     required this.guests,
     required this.children,
     required this.category,
+    required this.userId,
+    required this.hostName,
   });
 
   @override
@@ -72,6 +76,8 @@ class _ListAccommodationTileState extends State<ListAccommodationTile> {
                         rating: widget.rating,
                         room: widget.room,
                         children: widget.children,
+                        userId: widget.userId,
+                        hostName: widget.hostName,
                       )));
         },
         child: Padding(
@@ -103,10 +109,10 @@ class _ListAccommodationTileState extends State<ListAccommodationTile> {
           children: [
             _imageContainer(),
             Positioned(
-              right: 5,
-              top: 5,
-              child: HeartIcon(this.widget.accommodationID, this.widget.isFavorite, this.widget.imagePath)
-            ),
+                right: 5,
+                top: 5,
+                child: HeartIcon(this.widget.accommodationID,
+                    this.widget.isFavorite, this.widget.imagePath)),
           ],
         ),
         Row(

@@ -8,6 +8,7 @@ import 'package:koolb/component/list_accommodation_item.dart';
 import 'package:koolb/decoration/color.dart';
 import 'package:koolb/ui/list_accommodations/view_list_accommodations.dart';
 import 'package:koolb/ui/renter/pages/accommodation_detail.dart';
+import 'package:koolb/ui/renter/pages/search/search.dart';
 
 import '../../../data/global_data.dart';
 import '../../../wishlist/wishlist.dart';
@@ -21,10 +22,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static final _accommodationCollection =
-  FirebaseFirestore.instance.collection('accommodation');
+      FirebaseFirestore.instance.collection('accommodation');
 
   Stream<QuerySnapshot> _queryListAccommodation =
-  _accommodationCollection.snapshots();
+      _accommodationCollection.snapshots();
 
   List<String> categories = [
     "All",
@@ -43,88 +44,6 @@ class _HomePageState extends State<HomePage> {
     "assets/icons/hotel.png",
     "assets/icons/homestay.png"
   ];
-
-  List<String> images = [
-    "https://pbs.twimg.com/media/FhrWVV6aAAAQvkf?format=jpg&name=large",
-    "https://pbs.twimg.com/media/FiE26JbacAAVWQq?format=jpg&name=large",
-    "https://pbs.twimg.com/media/FiE27l3aEAA2wTZ?format=jpg&name=large",
-    "https://pbs.twimg.com/media/FiE27mragAIblmC?format=jpg&name=large",
-  ];
-
-  List<Accommodation> accommodations = [];
-  //   Accommodation(
-  //       category: <Category.Category> [Category.Category.Hotel, Category.Category.BreakfastIncluded],
-  //       price: 0.5,
-  //       guests: 1,
-  //       children: 1,
-  //       room: 1,
-  //       country: 'Việt Nam',
-  //       city: 'An Giang',
-  //       title: 'a1',
-  //       location: GeoPoint(16.456661, 107.5960929), address: 'address 1', description: 'description 1',),
-  //   Accommodation(
-  //       category: [Category.Category.Hotel],
-  //       price: 0.5,
-  //       guests: 1,
-  //       children: 1,
-  //       room: 1,
-  //       country: 'Việt Nam',
-  //       city: 'An Giang',
-  //       title: 'a2',
-  //       location: GeoPoint(16.456661, 107.5960929), address: 'address 2', description: 'description 2'),
-  //   Accommodation(
-  //       [Category.Category.Hotel],
-  //       0.5,
-  //       4.5,
-  //       1,
-  //       1,
-  //       1,
-  //       [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-  //       [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-  //       'Việt Nam',
-  //       'An Giang',
-  //       'a2',
-  //       GeoPoint(16.456661, 107.5960929)),
-  //   Accommodation(
-  //       [Category.Category.Hotel],
-  //       0.5,
-  //       4.5,
-  //       1,
-  //       1,
-  //       1,
-  //       [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-  //       [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-  //       'Việt Nam',
-  //       'An Giang',
-  //       'a2',
-  //       GeoPoint(16.456661, 107.5960929)),
-  //   Accommodation(
-  //       [Category.Category.Hotel],
-  //       0.5,
-  //       4.5,
-  //       1,
-  //       1,
-  //       1,
-  //       [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-  //       [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-  //       'Việt Nam',
-  //       'An Giang',
-  //       'a2',
-  //       GeoPoint(16.456661, 107.5960929)),
-  //   Accommodation(
-  //       [Category.Category.Hotel],
-  //       0.5,
-  //       4.5,
-  //       1,
-  //       1,
-  //       1,
-  //       [DateTime(2022, 12, 12, 0, 0), DateTime(2023, 1, 12, 0, 0)],
-  //       [DateTime(2022, 12, 14, 0, 0), DateTime(2023, 1, 14, 0, 0)],
-  //       'Việt Nam',
-  //       'An Giang',
-  //       'a2',
-  //       GeoPoint(16.456661, 107.5960929))
-  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                               alignment: Alignment.centerLeft,
                               margin: const EdgeInsets.symmetric(vertical: 15),
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 20),
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               decoration: BoxDecoration(
                                   color: cardColor,
                                   borderRadius: BorderRadius.circular(29.5)),
@@ -219,7 +138,13 @@ class _HomePageState extends State<HomePage> {
                                         color: LightBlue,
                                       ),
                                     ),
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const Search()));
+                                    },
                                   ),
                                 ],
                               ),
@@ -258,7 +183,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: Container(
                 margin:
-                const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: SizedBox(
                   height: size.height * 0.52,
                   child: ViewListAccommodations(
@@ -276,7 +201,7 @@ class _HomePageState extends State<HomePage> {
   Set<Accommodation> filterResult(
       Set<Accommodation> accommodation, List<Category.Category> requirement) {
     accommodation.retainWhere(
-            (element) => filterRequirement(element, requirement) == true);
+        (element) => filterRequirement(element, requirement) == true);
     return accommodation;
   }
 
@@ -293,17 +218,17 @@ class _HomePageState extends State<HomePage> {
   listCategories() {
     List<Widget> lists = List.generate(
         categories.length,
-            (index) => CategoryItem(
-          icon: icons[index],
-          data: categories[index],
-          selected: index == selectedCategory,
-          onTap: () {
-            setState(() {
-              selectedCategory = index;
-            });
-            _displayByCategory(selectedCategory);
-          },
-        ));
+        (index) => CategoryItem(
+              icon: icons[index],
+              data: categories[index],
+              selected: index == selectedCategory,
+              onTap: () {
+                setState(() {
+                  selectedCategory = index;
+                });
+                _displayByCategory(selectedCategory);
+              },
+            ));
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.only(bottom: 5, left: 15),
