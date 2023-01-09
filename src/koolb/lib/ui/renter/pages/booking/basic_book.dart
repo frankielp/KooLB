@@ -422,6 +422,17 @@ class _BasicBookState extends State<BasicBook> {
                       );
 
                       booking.addInfoToFirebase();
+
+                      showDialog(
+                          context: context,
+                          builder: ((context) => AlertDialog(actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('Ok')),
+                              ], title: Text('Book complete'))));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
