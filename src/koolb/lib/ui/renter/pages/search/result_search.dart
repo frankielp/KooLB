@@ -24,7 +24,7 @@ class _ResultSearchState extends State<ResultSearch> {
 
   @override
   void initState() {
-    fetchLocation();
+    // fetchLocation();
     super.initState();
   }
 
@@ -34,6 +34,12 @@ class _ResultSearchState extends State<ResultSearch> {
       appBar: AppBar(
         title: Text('Result'),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

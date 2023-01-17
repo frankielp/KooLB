@@ -10,21 +10,19 @@ import 'detail_folder_page.dart';
 
 const renterID = 'HgvSKaOM6uSLK9qrH2ZL';
 
-class FolderList extends StatefulWidget{
+class FolderList extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _FolderList();
   }
 
-  onTapFolder(WishlistFolder folder, BuildContext context){
+  onTapFolder(WishlistFolder folder, BuildContext context) {
     Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => DetailFolder(folder)));
+        context, MaterialPageRoute(builder: (context) => DetailFolder(folder)));
   }
 }
 
-
-class _FolderList extends State<FolderList>{
+class _FolderList extends State<FolderList> {
   List<WishlistFolder> _folders = [];
 
   @override
@@ -36,71 +34,73 @@ class _FolderList extends State<FolderList>{
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      body: FutureBuilder(
-        future: getUserFoldersList(),
-        builder: (context, data) {
-          if (data.hasError){
-          return Center(child: Text("${data.error}"),);}
-          else if (data.hasData){
-            setState(() {
-              _folders = data.data as List<WishlistFolder>;
-            });
-          }
-          return ListView.builder(
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
-              itemCount: _folders.length,
-              itemBuilder: (context, index) {
-                WishlistFolder folder = _folders[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          folder.folderName.toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20
-                          ),),
-                        leading: (folder.accommodationIDs != null && folder.accommodationIDs.length > 0)
-                        ? _imageContainer(folder.accommodationIDs[0])
-                        : Icon(Icons.houseboat_outlined),
-                        // leading: ClipRRect(
-                        //   borderRadius: BorderRadius.circular(5.0),
-                        //   child: Image.network(folder.leadingUrl.toString(),
-                        //     height: 100.0,
-                        //     width: 60.0,
-                        //     fit: BoxFit.fill,
-                        //   ),
-                        // ),
-                        onTap: () {
-                          this.widget.onTapFolder(folder, context);
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(builder: (context) => DetailFolder(folder)));
-                        },
-                      ),
-                      Divider()
-                    ],
-                  ),
+    return Scaffold(
+        body: FutureBuilder(
+            future: getUserFoldersList(),
+            builder: (context, data) {
+              if (data.hasError) {
+                return Center(
+                  child: Text("${data.error}"),
                 );
+              } else if (data.hasData) {
+                setState(() {
+                  _folders = data.data as List<WishlistFolder>;
+                });
               }
-          );
-        }));
-
+              return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  itemCount: _folders.length,
+                  itemBuilder: (context, index) {
+                    WishlistFolder folder = _folders[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            title: Text(
+                              folder.folderName.toString(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20),
+                            ),
+                            leading: (folder.accommodationIDs != null &&
+                                    folder.accommodationIDs.length > 0)
+                                ? _imageContainer(folder.accommodationIDs[0])
+                                : const Icon(Icons.houseboat_outlined),
+                            // leading: ClipRRect(
+                            //   borderRadius: BorderRadius.circular(5.0),
+                            //   child: Image.network(folder.leadingUrl.toString(),
+                            //     height: 100.0,
+                            //     width: 60.0,
+                            //     fit: BoxFit.fill,
+                            //   ),
+                            // ),
+                            onTap: () {
+                              this.widget.onTapFolder(folder, context);
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(builder: (context) => DetailFolder(folder)));
+                            },
+                          ),
+                          const Divider()
+                        ],
+                      ),
+                    );
+                  });
+            }));
   }
 
   // LẤY LIST FOLDER VỚI THÔNG TIN
-  Future getUserFoldersList() async{
+  Future getUserFoldersList() async {
     var snapshot = await FirebaseFirestore.instance
         .collection('wishlist')
         .doc(wishlistID)
         .get();
 
     setState(() {
-      _folders = List.from(snapshot.data()?['folders'].map((doc) => WishlistFolder.fromSnapshot(doc)));
+      _folders = List.from(snapshot
+          .data()?['folders']
+          .map((doc) => WishlistFolder.fromSnapshot(doc)));
     });
     // print(_folders);
     // print("yesssss");
@@ -145,8 +145,7 @@ class _FolderList extends State<FolderList>{
   }
 }
 
-
-class WishlistPage extends StatefulWidget{
+class WishlistPage extends StatefulWidget {
   const WishlistPage({super.key});
   @override
   State<StatefulWidget> createState() {
@@ -154,55 +153,41 @@ class WishlistPage extends StatefulWidget{
   }
 }
 
-class _WishlistPage extends State<WishlistPage>{
-
+class _WishlistPage extends State<WishlistPage> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: customAppBar(context, 'Your Wish List'),
-        body: Column(
-            children: <Widget>[
-              Expanded(
-                  child: Padding(
-                      padding: const EdgeInsets.only(top: 30, left: 8.0, right: 8.0, bottom: 8.0),
-                      child: FolderList()
-                  )
-              )
-            ]
-        )
+      appBar: customAppBar(context, 'Your Wish List'),
+      body: const Center(
+        child: Text('Wishlist Page'),
+      ),
     );
   }
 }
 
-
-AppBar customAppBar(BuildContext context, String title){
+AppBar customAppBar(BuildContext context, String title) {
   return AppBar(
     toolbarHeight: 150,
-
     title: Container(
       alignment: Alignment.centerLeft,
       child: Padding(
         padding: const EdgeInsets.only(top: 80),
         child: Text(
           title,
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 45,
-              color: Colors.white
-          ),
+          style: const TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 45, color: Colors.white),
         ),
       ),
     ),
     flexibleSpace: Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(28), bottomRight: Radius.circular(28)),
+      decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(28),
+              bottomRight: Radius.circular(28)),
           gradient: LinearGradient(
               colors: [Turquois, sky],
               begin: Alignment.topCenter,
-              end: Alignment.bottomCenter
-          )
-      ),
+              end: Alignment.bottomCenter)),
     ),
   );
 }

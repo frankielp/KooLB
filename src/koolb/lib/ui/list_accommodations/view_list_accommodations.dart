@@ -27,7 +27,7 @@ class _ViewListAccommodationsState extends State<ViewListAccommodations> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    getUserFavoriteListIDs();
+    // getUserFavoriteListIDs();
   }
 
   Future getUserFavoriteListIDs() async {
@@ -70,8 +70,7 @@ class _ViewListAccommodationsState extends State<ViewListAccommodations> {
                   city: data['city'],
                   address: data['address'],
                   name: data['name'],
-                  isFavorite:
-                      favoriteAccommodationIDs.contains(accommodationID),
+                  isFavorite: false,
                   price: data['price'] * 1.0,
                   rating: data['rating'] * 1.0,
                   category: intArrayToListCategory(data['category']),
